@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../style.css">
+    <title>Title</title>
+</head>
+<body>
+    <header>
+        <h1>Karcianki</h1>
+    </header>
+    <div class="game_form">
+        <div class="game_name">
+            <h2>Poker</h2>
+        </div>
+        <form>
+            <label for="gamers_number">Podaj liczbę graczy (od 2 do 10):</label><br>
+            <input type="number" id="gamers_number" name="gamers_number" min="2" max="10" placeholder="4" required><br>
+            <label for="chip_number">Podaj liczbę żetonów na gracza:</label><br>
+            <input type="number" id="chip_number" name="chip_number" placeholder="100" required><br>
+            <label for="nick">Podaj swój nick:</label><br>
+            <input type="text" id="nick" name="nick" pattern="[A-Za-z0-9]{4,20}" placeholder="Nick gracza" required><br>
+            <p>Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 20 znaków</p>
+            <input type="submit" value="Stwórz grę" class="submit">
+        </form>
+    </div>
+    <div class="game_info">
+        Twój numer gry to:
+        <h1>1234567890</h1>
+        Twój nick to:<br>
+        <h3>xyz</h3>
+        Podaj numer pozostałym graczom, aby dołączyli do gry<br><br>
+        Gracze:
+        <div class="gamers">
+            <div class="gamer_nick">abc</div>
+            <div class="gamer_nick">def</div>
+            <div class="gamer_nick">ghi</div>
+        </div>
+    </div>
+</body>
+</html>
