@@ -19,4 +19,6 @@ jobs:
         done;
     - name: validate CSS
       run: |
-        yarn run stylelint style.css
+        for f in $(find . -name '*.css'); do
+          yarn run stylelint $f
+        done;
