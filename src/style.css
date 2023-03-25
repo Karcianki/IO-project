@@ -14,14 +14,12 @@ header h1 {
     width: 100%;
     height: 100%;
     display: grid;
+    position: absolute;
     grid-template-areas:
     "header header header"
     "poker tysiac brydz";
     grid-template-rows: 1fr 9fr;
-    /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
     grid-template-columns: 1fr 1fr 1fr;
-    align-content: center;
-    justify-content: center;
 }
 
 
@@ -39,54 +37,45 @@ header {
 
 .poker{
     grid-area: poker;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    align-content: center;
-    justify-content: center;
 }
-
 .srodek{
-    width: 100%;
-    height: 100%;
-    background-color: red;
+  
     display: flex;
-    grid-area: "teskt"
-    "przycisk"
-    "przycisk";
-    grid-template-rows: 1fr,1fr,1fr;
-    align-content: center;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width:max-content;
+    height: max-content;
+    padding: 1em;
 }
-
 .przycisk{
-    grid-area: przycisk;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    align-content: center;
-    justify-content: center;
+    margin:10%;
+    background-color: #04AA6D;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    cursor: pointer;
 }
-
 .tysiac{
     background-color: yellow;
     grid-area: tysiac;
-    width: 100%;
-    height: 100%;
-    display: flex;
+}
+.tekst{
+    grid-area: tekst;
     align-content: center;
     justify-content: center;
+    font-size: 213.7%;
 }
-
 .brydz{
+    background-color: brown;
     grid-area: brydz;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-content: center;
-    justify-content: center;
+    z-index: 10;
 }
-
 .game_form {
     text-align: center;
     position: fixed;
@@ -132,7 +121,6 @@ header {
     padding: 3em;
     display: none;
 }
-
 .gamers {
     display: flex;
     align-content: center;
