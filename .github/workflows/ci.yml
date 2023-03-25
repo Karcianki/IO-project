@@ -12,6 +12,9 @@ jobs:
     - name: yarn install
       run: |
         yarn install
-    - name: lint
+    - name: validate HTML
+      run: |
+        find . -name "*.html" -exec sh -c 'html-validate {}' \;
+    - name: validate CSS
       run: |
         npx stylelint style.css
