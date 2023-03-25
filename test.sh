@@ -8,7 +8,7 @@ export REPORT="${REPORT:-0}"
 cd "${0%/*}"
 
 # activating python virtualenv
-source .venv/bin/activate
+# source .venv/bin/activate
 
 echo "Running pytest tests suite"
 pytest tests --capture=sys

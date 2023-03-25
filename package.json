@@ -7,17 +7,19 @@
   "author": "piter12345 <piotrek.blinowski@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "./test.sh"
+    "test": "pytest tests"
   },
   "dependencies": {
     "firefox": "^0.0.1",
     "html-validate": "^7.13.3",
     "pytest": "^1.0.0",
     "selenium": "^2.20.0",
+    "selenium-webdriver": "^4.8.2",
     "stylelint": "^15.3.0"
   },
   "devDependencies": {
     "stylelint-config-recommended": "^11.0.0",
     "stylelint-config-standard": "^31.0.0"
-  }
+  },
+  "private": true
 }
