@@ -19,7 +19,7 @@ jobs:
         done;
     - name: install pytest
       run: |
-        pip install pytest
+        python -m pip install pytest
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
