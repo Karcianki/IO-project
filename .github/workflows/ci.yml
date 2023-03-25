@@ -21,6 +21,7 @@ jobs:
       run: |
         python -m pip install pytest
         python -m pip install selenium
+        python -m pip install webdriver_manager
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
