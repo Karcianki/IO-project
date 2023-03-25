@@ -22,3 +22,7 @@ jobs:
         for f in $(find . -name '*.css'); do
           yarn run stylelint $f
         done;
+    - name: run tests
+    - uses: browser-actions/setup-firefox@v1
+      run: |
+        yarn test
