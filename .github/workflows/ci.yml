@@ -14,7 +14,9 @@ jobs:
         yarn install
     - name: validate HTML
       run: |
-        find . -name "*.html" | xargs -L 1 -d '\n' html-validate
+        for f in $(find . -name '*.html'); do
+          html-validate $f;
+        done;
     - name: validate CSS
       run: |
         npx stylelint style.css
