@@ -15,8 +15,8 @@ jobs:
     - name: validate HTML
       run: |
         for f in $(find . -name '*.html'); do
-          html-validate $f;
+          yarn run html-validate $f;
         done;
     - name: validate CSS
       run: |
-        npx stylelint style.css
+        yarn run stylelint style.css
