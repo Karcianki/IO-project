@@ -23,4 +23,4 @@ jobs:
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
-        yarn run python -m pytest tests --capture=sys
+        python -m pytest tests --capture=sys
