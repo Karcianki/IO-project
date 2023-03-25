@@ -19,10 +19,13 @@ jobs:
         done;
     - name: install dependencies
       run: |
+        python3 -m virtualenv .venv
+        source .venv/bin/activate
         python -m pip install pytest
         python -m pip install selenium
         python -m pip install webdriver_manager
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
+        source .venv/bin/activate
         python -m pytest tests --capture=sys
