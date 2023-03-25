@@ -19,7 +19,7 @@ jobs:
         done;
     - name: install dependencies
       run: |
-        python3 -m virtualenv .venv
+        python -m virtualenv .venv
         source .venv/bin/activate
         python -m pip install pytest
         python -m pip install selenium
