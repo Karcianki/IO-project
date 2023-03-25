@@ -7,6 +7,7 @@
   "author": "piter12345 <piotrek.blinowski@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "html-validate": "^7.13.3",
     "stylelint": "^15.3.0"
   },
   "devDependencies": {
