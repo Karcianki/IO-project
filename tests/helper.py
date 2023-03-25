@@ -5,7 +5,7 @@ import subprocess
 from sys import stderr
 import tempfile
 
-PROJECT_PATH = os.environ.get('PROJECT_PATH', '../grader/project')
+PROJECT_PATH = os.environ.get('PROJECT_PATH', '../src')
 # Make tilde in path work:
 PROJECT_PATH = os.path.expanduser(PROJECT_PATH)
 
