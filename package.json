@@ -1,0 +1,12 @@
+{
+  "name": "IO-project",
+  "version": "1.0.0",
+  "description": "IO project",
+  "main": "src/index.js",
+  "repository": "https://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@github.com/WeronikaPiecuch/IO-project.git",
+  "author": "piter12345 <piotrek.blinowski@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "stylelint": "^15.3.0"
+  }
+}
