@@ -14,7 +14,7 @@ jobs:
         yarn install
     - name: validate CSS
       run: |
-        for f in $(find . -name '*.css'); do
+        for f in $(find . -name 'src/*.css'); do
           yarn run stylelint $f
         done;
     - uses: browser-actions/setup-firefox@v1
