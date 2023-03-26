@@ -9,18 +9,15 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: yarn install
+    - name: install dependencies
       run: |
-        yarn install
+        pip install -r requirements
     - name: validate CSS
       run: |
         for f in $(find . -name 'src/*.css'); do
-          yarn run stylelint $f
+          stylelint $f
         done;
-    - name: install dependencies
-      run: |
-        pip install webdriver_manager
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
-        yarn test
+        pytest tests
