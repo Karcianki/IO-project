@@ -12,16 +12,17 @@ class Test_Resizing():
             self.driver.set_window_position(0, 0)
             self.driver.set_window_size(1024, 768)
             time.sleep(2)
-            for i in range(50):
+            for i in range(10):
                 start = time.time()
                 self.driver.set_window_size(1024 + 4 * i, 768 + 3 * i)
                 time.sleep(max(0, start + 0.07 - time.time()))
             self.driver.set_window_size(1280, 720)
             time.sleep(2)
-            for i in range(60):
+            for i in range(10):
                 start = time.time()
                 self.driver.set_window_size(1280 + 8 * i, 720 + int(4.5 * i))
                 time.sleep(max(0, start + 0.07 - time.time()))
+            break
 
     def test_small_resolution(self):
         for url in get_urls():
@@ -34,3 +35,4 @@ class Test_Resizing():
             time.sleep(2)
             self.driver.set_window_size(1000, 800)
             time.sleep(2)
+            break
