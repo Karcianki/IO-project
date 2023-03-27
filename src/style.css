@@ -21,8 +21,76 @@ header h1 {
     grid-template-rows: 1fr 9fr;
     grid-template-columns: 1fr 1fr 1fr;
 }
-
-
+.strona{
+    width: 100%;
+    height: 100%;
+}
+.gra{
+    width: 100%;
+    height: 3em;
+    font-size: 2em;
+}
+.gra .tekst{
+    margin: 0;
+    display: flex;
+    /* width: 80%; */
+}
+.gra input{
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 69px;
+    height: 42px;
+}
+.stol{
+    
+}
+.stolik{
+    width:80%;
+    height: 40%;
+    background-color: green;
+    border-radius: 100%/100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.informacja{
+    width: max-content;
+    height: max-content;
+    background-color: aqua;
+    position: absolute;
+    top: 20%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+}
+.pozycja{
+    width: 80px;
+    height: 80px;
+    background-color: black;
+    border-radius: 50%;
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+}
+.opcje{
+    height: 20%;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    background-color: #04AA6D;
+    gap:21.37px;
+}
+.opcje #last {
+    margin-right: 21.37%;
+}
+.opcje .przycisk_opcje{
+    height: 40px;
+}
 header {
     width: 100%;
     height: max-content;
