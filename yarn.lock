@@ -990,9 +990,10 @@ punycode@^2.1.0:
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.3.0.tgz"
   integrity sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==
 
-"pytest@https://github.com/pytest-dev/pytest":
-  version "0.0.0"
-  resolved "https://github.com/pytest-dev/pytest#a3b39069bc44774206c7bd682e0ca253d5f74efc"
+pytest@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/pytest/-/pytest-1.0.0.tgz#5fa23778c77a937209b5d2560e1246dda9507fe6"
+  integrity sha512-nh2Z5MFd6WyMqUYvLoTrbGpkcI1Gb2GQ2HmdaGZ0h4lCc8FENRhSr5lcHKSK9KIQ9gfrUT5zJaxRbaA/1XjLlA==
 
 queue-microtask@^1.2.2:
   version "1.2.3"
