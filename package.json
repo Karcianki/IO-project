@@ -10,9 +10,9 @@
     "test": "pytest tests"
   },
   "dependencies": {
+    "b9": "https://files.pythonhosted.org/packages/b9/29/311895d9cd3f003dd58e8fdea36dd895ba2da5c0c90601836f7de79f76fe/pytest-7.2.2.tar.gz",
     "firefox": "^0.0.1",
     "html-validate": "^7.13.3",
-    "pytest": "^7.2.2",
     "selenium": "^2.20.0",
     "selenium-webdriver": "^4.8.2",
     "stylelint": "^15.3.0"
