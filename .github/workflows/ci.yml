@@ -19,9 +19,9 @@ jobs:
         done;
     - name: install dependencies
       run: |
-        pip install pytest
-        pip install selenium
-        pip install webdriver_manager
+        # pip install pytest
+        # pip install selenium
+        # pip install webdriver_manager
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
