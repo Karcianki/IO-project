@@ -6,24 +6,259 @@
     <title>Title</title>
 </head>
 <body>
+    <div class="gra">
+        <div class="tekst"> Tysiąc</div>
+        <input type="submit" value="Zasady">            
+    </div>
     <div class="strona">
-        <div class="gra">
-            <div class="tekst"> Tysiąc</div>
-            <input type="submit" value="Zasady">            
-        </div>
-        <div class="stol">
-            <div class="stolik"></div>
-            <div class="informacja"><p>nazwa</p> <p>Szymon</p> <p> liczba punktów</p><p>2137</p></div>
-            <div class="pozycja"></div>
-        </div>
-        <div class ="opcje">
-            <input type="submit" value="Pass" class="przycisk_opcje">
-            <form>
-            <input type="number" class ="licytuj" >
-            <input type="submit" value= "licytuj" class="przycisk_opcje">
-            </form>
-            <input type="submit" value="Wyjdź" class="przycisk_opcje" id="last">
+        
+        <div class="plansza">
+                <div class ="Armia_Szymona">
+                    <div class="gracz" id="gracz1"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Krzysio
+                            <br>
+                            830
+                        </div>
+                    </div>
+                    <div class="gracz" id="gracz2"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Asia
+                            <br>
+                            678
+                        </div>
+                    </div>               
+                    <div class="gracz" id="gracz3"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Maciek
+                            <br>
+                            4567
+                        </div>
+                    </div> 
+                    <div class="gracz" id="gracz4"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Michał
+                            <br>
+                            2800
+                        </div>
+                    </div> 
+                </div>
+                <div class ="Armia_Szymona">
+                    <div class="gracz" id="gracz5"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Mikołaj
+                            <br>
+                            1000
+                        </div>
+                    </div>
+                    <img src="stol.png" class="stol">
+                    <div class="gracz" id="gracz6"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Karol
+                            <br>
+                            400
+                        </div>
+                    </div> 
+                </div>
+                <div class ="Armia_Szymona">
+                    <div class="gracz" id="gracz7"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Mateusz
+                            <br>
+                            0
+                        </div>
+                    </div>
+                    <div class="gracz" id="gracz8"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Weronika
+                            <br>
+                            600
+                        </div>
+                    </div>               
+                    <div class="gracz" id="gracz9"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Szymon
+                            <br>
+                            2000
+                        </div>
+                    </div> 
+                    <div class="gracz" id="gracz10"> 
+                        <img src="ikona.png" class="ikona">
+                        <div class="dane">
+                            Piotrek
+                            <br>
+                            400
+                        </div>
+                    </div> 
+                </div>
+                    
+                </div>
+ 
+            <div class="zasady">
+                <ol>
+                    <li>
+                        Meldunek to król i dama jednego koloru. Wartości meldunku:
+                        <table>
+                            <tr>
+                                <th>
+                                    meldunek
+                                </th>
+                                <th>
+                                    wartość
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    pik
+                                </td>
+                                <td>
+                                    40
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    trefl
+                                </td>
+                                <td>
+                                    60
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    karo
+                                </td>
+                                <td>
+                                    80
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    kier
+                                </td>
+                                <td>
+                                    100
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <li>Gdy nie masz meldunku, ale masz cztery dziewiątki lub suma oczek Twoich kart wynosi mniej niż 16 to możesz poprosić o kolejne rozdanie.
+                    </li>
+                    <li>
+                        Licytacja jest co 5 oczek.
+                    </li>
+                    <li>
+                        Nie można licytować bez meldunku powyżej 120 oczek.
+                    </li>
+                    <li>
+                        Jeżeli masz meldunek inny niż w piku, to musisz licytować.
+                    </li>
+                    Jeżeli jest as, to dostaje 50 punktów. Jeżeli jest meldunek, to zapisywana jest
+                    wartość meldunku. W przeciwnym przypadku, nie dostaje żadnych punktów.
+                    <li>
+                        Suma oczek zaokrągla się w dół do piątek.
+                    </li>
+                    <li>
+                        W czterosobowej wersji osoba rozdająca dostaje punkty z musiku:
+                        <ul>
+                            <li>
+                                jeżeli jest as, to dostaje 50 punktów;
+                            </li>
+                            <li>
+                                jeżeli jest meldunek, to zapisywana jest
+                        wartość meldunku;
+                            </li>
+                            <li>
+                                w przeciwnym przypadku, nie dostaje żadnych punktów.
+                            </li>
+                        </ul>
+                    </li>
+                <li>
+                    Starszeństwo kart i ich wartości punktowe:
+                <table>
+                    <tr>
+                        <th>
+                            karta
+                        </th>
+                        <th>
+                            punkty
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            as
+                        </td>
+                        <td>
+                            11
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            10
+                        </td>
+                        <td>
+                            10
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            król
+                        </td>
+                        <td>
+                            4
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            dama
+                        </td>
+                        <td>
+                            3
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            walet
+                        </td>
+                        <td>
+                            2
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            9
+                        </td>
+                        <td>
+                            0
+                        </td>
+                    </tr>
+                </table>
+                </li>
+                </ol>
+            </div> 
         </div>
     </div>
+        <div class ="opcje">
+            <button class="przycisk_opcje">Pass</button>
+            <form>
+            <input type="number" step="5" class ="licytuj" >
+            <button class="przycisk_opcje">licytuj</button>
+            </form>
+            <button class="przycisk_opcje" id="last">Wyjdź</button>
+        </div>
 </body>
 </html>
+
+<!--
+    faza gry
+    czyj musik
+    host wpisze punkty
+-->
