@@ -1,5 +1,10 @@
 @import "style.css";
 
+.opcje {
+    padding-right: 21.37%;
+    box-sizing: border-box;
+}
+
 .opcje button {
     border-radius: 5px;
     font-size: 2em;
@@ -21,3 +26,12 @@
     height: 100%;
     align-items: stretch;
 }
+
+@media only screen and (max-width: 768px) {
+    .opcje {
+        overflow: scroll;
+        padding-right: 0;
+        justify-content: center;
+    }
+}
+
