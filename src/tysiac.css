@@ -1,0 +1,15 @@
+@import "gry.css";
+
+.opcje button{
+    height: 50px;
+    width: 100px;
+}
+
+.opcje #last {
+    margin-right: 20%;
+}
+.opcje form{
+    display: flex;
+    height:100%;
+    gap:20px
+}

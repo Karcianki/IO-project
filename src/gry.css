@@ -1,0 +1,137 @@
+@import "style.css";
+
+header {
+    position: absolute;
+}
+header button{
+    float: right;
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    top: 0.2em;
+    right: 0.2em;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+}
+header button span{
+    display: flex;
+    font-size: 50%;
+}
+
+.page{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: block;
+}
+
+.plansza{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80%;
+    width: 100%;
+    max-width: 100%;
+    gap: 5%;
+    margin: 0;
+
+}
+
+.gracz{
+    display: flex;
+    margin: 0;
+    height: 3em;
+    align-items: center;
+    width: 8em;
+}
+.gracz .dane {
+    text-align: center;
+    width: 100%;
+}
+.gracz span {
+    font-size: 2em;
+    border-radius: 50%;
+    height: 30px;
+}
+
+.opcje{
+    height: max-content;
+    padding-top: 10px ;
+    padding-bottom: 10px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+    background-color: var(--theme-color);
+    gap:20px;
+}
+
+
+
+.zasady{
+    display:none;
+    position: absolute;
+    background-color: var(--theme-color);
+    border-radius:2em ;
+    padding: 1em;
+    max-height: 40%;
+    text-align: justify;
+    overflow-x: hidden;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.zasady table{
+    text-align: center;
+    width: 100%;
+}
+.zasady ol li{
+    margin: 0;
+    padding: 0;
+
+}
+
+.stol {
+    object-fit: contain;
+    width: 60%;
+    max-width: 1000px;
+    height: auto;
+    max-height: 100%;
+    aspect-ratio: 2 / 1;
+}
+
+.rzad{
+    display: flex;
+    justify-content:center;
+    gap: 1em;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+#ze_stolem {
+    max-height: 60%;
+}
+
+button {
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    font-size: 1em;
+    background-color: var(--second-color);
+    margin: 0;
+    padding: 0;
+}
+
+

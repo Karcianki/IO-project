@@ -2,27 +2,31 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../login.css">
     <meta name="viewport" content="width=device-width">
     <title>Title</title>
 </head>
 <body>
     <header>
-        <h1>Karcianki</h1>
+        KARCIANKI
     </header>
-    <div class="game_form">
-        <div class="game_name">
-            <h2>Brydż</h2>
+    <div id = "brydz"> 
+        <div class="game_form">
+            <div class="game_name">
+                BRYDŻ
+            </div>
+            <form>
+                <label for="game_number">Podaj numer gry:</label><br>
+                <input type="number" id="game_number" name="game_number" pattern="[0-9]{10}" placeholder="##########" required><br>
+                <label for="nick">Podaj swój nick:</label><br>
+                <input type="text" id="nick" name="nick" pattern="[A-Za-z0-9]{4,10}" placeholder="Nick gracza" required><br>
+                <p>Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 10 znaków</p>
+                <button>Dołącz do gry</button>
+            </form>
         </div>
-        <form>
-            <label for="game_number">Podaj numer gry:</label><br>
-            <input type="number" id="game_number" name="game_number" pattern="[0-9]{10}" placeholder="##########" required><br>
-            <label for="nick">Podaj swój nick:</label><br>
-            <input type="text" id="nick" name="nick" pattern="[A-Za-z0-9]{4,20}" placeholder="Nick gracza" required><br>
-            <p>Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 20 znaków</p>
-            <input type="submit" value="Stwórz grę" class="submit">
-        </form>
     </div>
+
+    
     <div class="game_info">
         Dołączyłeś do gry o numerze:
         <h1>1234567890</h1>

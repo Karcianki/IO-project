@@ -2,28 +2,30 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../login.css">
     <meta name="viewport" content="width=device-width">
     <title>Title</title>
 </head>
 <body>
     <header>
-        <h1>Karcianki</h1>
+        KARCIANKI
     </header>
-    <div class="game_form">
-        <div class="game_name">
-            <h2>Poker</h2>
+    <div id="poker">
+        <div class="game_form">
+            <div class="game_name">
+                POKER
+            </div>
+            <form>
+                <label for="gamers_number">Podaj liczbę graczy (od 2 do 10):</label><br>
+                <input type="number" id="gamers_number" name="gamers_number" min="2" max="10" placeholder="4" required><br>
+                <label for="chip_number">Podaj liczbę żetonów na gracza:</label><br>
+                <input type="number" id="chip_number" name="chip_number" placeholder="100" required><br>
+                <label for="nick">Podaj swój nick:</label><br>
+                <input type="text" id="nick" name="nick" pattern="[A-Za-z0-9]{4,10}" placeholder="Nick gracza" required><br>
+                <p>Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 10 znaków</p>
+                <button>Stwórz grę</button>
+            </form>
         </div>
-        <form>
-            <label for="gamers_number">Podaj liczbę graczy (od 2 do 10):</label><br>
-            <input type="number" id="gamers_number" name="gamers_number" min="2" max="10" placeholder="4" required><br>
-            <label for="chip_number">Podaj liczbę żetonów na gracza:</label><br>
-            <input type="number" id="chip_number" name="chip_number" placeholder="100" required><br>
-            <label for="nick">Podaj swój nick:</label><br>
-            <input type="text" id="nick" name="nick" pattern="[A-Za-z0-9]{4,20}" placeholder="Nick gracza" required><br>
-            <p>Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 20 znaków</p>
-            <input type="submit" value="Stwórz grę" class="submit">
-        </form>
     </div>
     <div class="game_info">
         Twój numer gry to:

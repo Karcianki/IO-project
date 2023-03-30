@@ -1,36 +1,30 @@
+:root{
+    --theme-color: #116030;
+    --second-color: #D9961A
+}
+
 body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
+    Font-family: Segoe UI, Frutiger, Dejavu Sans, Helvetica Neue, Arial, sans-serif;
+    font-weight: 400;
+    color: #000;
+    font-optical-sizing: auto;
 }
 
-header h1 {
-    margin: 0;
-    padding: 0.5em;
-}
 
 .page{
     width: 100%;
     height: 100%;
     display: grid;
     position: absolute;
-    /* grid-template-areas:
+    grid-template-areas:
     "header header header"
     "poker tysiac brydz";
-    grid-template-rows: 1fr 9fr;
-    grid-template-columns: 1fr 1fr 1fr; */
-}
-.strona{
-    /* display: grid;
-    grid-template-areas: "nazwa"
-    "stol";
-    grid-template-rows: 1fr 9fr; */
-    /* overflow: hidden; */
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    /* background-color: aqua; */
+    grid-template-rows: max-content auto;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 .gra{
     /* grid-area: nazwa; */
@@ -38,145 +32,57 @@ header h1 {
     top: 0;
     width: 100%;
     /* height: 3em; */
-    font-size: 2em;
     z-index: 1;
+    text-align: center;
+    font-size: 2.5em;
+    background-color: var(--theme-color);
 }
-.gra .tekst{
-    margin: 0;
-    display: flex;
-    /* width: 80%; */
+.tekst{
+    align-content: center;
+    justify-content: center;
+    padding: 0.2em;
+    font-weight: 700;
+    font-stretch: 1000%;
+    text-shadow: 0px 0px 20px black;
 }
-.gra input{
-    display: flex;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 69px;
-    height: 69px;
-    font-size: 50%;
+.nazwa{
+    align-content: center;
+    justify-content: center;
+    padding: 0.2em;
+    font-weight: 300;
+    font-stretch: 1000%;
+    color: white;
+    text-shadow: 0px 0px 20px black;
 }
-.stolik{
-    width:80%;
-    height: 40%;
-    background-color: green;
-    border-radius: 100%/100%;
-    position: absolute;
-    display: none;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+
 .informacja{
     width: max-content;
     height: max-content;
-    background-color: aqua;
+    /* background-color: aqua; */
     position: absolute;
     display: none;
     top: 20%;
     left: 40%;
     transform: translate(-50%, -50%);
 }
-.opcje{
-    height: max-content;
-    padding-top: 10px ;
-    padding-bottom: 10px;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    align-items: stretch;
-    /* display: none; */
-    justify-content: flex-end;
-    background-color: #04AA6D;
-    gap:21.37px;
-}
-.zasady{
-    /* display:none */
-    position: absolute;
-    background-color: #04AA6D;
-    border-radius:2em ;
-    padding: 1em;
-    max-height: 40%;
-    /* overflow-x: scroll; */
-    text-align: justify;
-    overflow-x: hidden;
-    z-index: 2;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.zasady table{
-    /* border: 1px solid; */
-    text-align: center;
-    width: 100%;
-}
-.opcje * {
-    align-self: center;
-    height: max-content;
-}
-.opcje #last {
-    margin-right: 21.37%;
-}
-.opcje form{
-    display: flex;
-    height:100%;
-    gap:10px
-}
-.ikona{
-    border-radius: 50%;
-    height: 30px;
-}
-.plansza{
-    /* grid-area: stol; */
-    /* text-align: center; */
-    /* align-items: center; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    height: 80%;
-    width: 100%;
-    /* align-content: center; */
-    gap: 5%;
 
-    /* width: fit-content; */
-    /* height: fit-content; */
-    /* background-color: blueviolet; */
-    margin: 0;
-    /* background-color: #04AA6D; */
-    /* background-image: url(stol.png); */
-    /* background-repeat: no-repeat; */
-    /* background-size: auto; */
-}
 .gracz{
     display: flex;
     margin: 0;
+    height: 3em;
+    align-items: center;
+    width: 8em;
     /* background-color: blue; */
     /* position: absolute; */
     /* top:30%; */
     /* left:50%; */
 }
-.stol {
-    object-fit: contain;
-    /* position: absolute; */
-    /* top: 50%; */
-    /* left:50%; */
-    /* transform: translate(-50%, -50%); */
-    /* vertical-align: middle; */
-    /* object-position: 50% 50%; */
-    /* object-fit: cover; */
-    /* margin-left: auto; */
-    /* max-width: 100%; */
-    /* margin-right: auto; */
-    /* margin-top: auto; */
-    /* margin-bottom: auto; */
-    /* display: block; */
-    max-height: 100%;
-    width: 60%;
+.gracz .dane {
+    text-align: center;
+    width: 100%;
+    /* background-color: azure; */
 }
+
 
 .opcje .przycisk_opcje{
     /* height: 30%; */
@@ -187,15 +93,30 @@ header {
     width: 100%;
     height: max-content;
     text-align: center;
-    background-color: aquamarine;
+    background-color: var(--theme-color);
+    color: white;
+    font-size: 2em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    font-weight: lighter;
+    z-index: 3;
 }
 
 .page header {
     grid-area: header;
     height: auto;
 }
-.poker{
+#poker{
     grid-area: poker;
+    color: white;
+    /* background-color: rgba(255,255,255,.7);
+    background-blend-mode: lighten; */
+    background-color: rgba(0,0,0,.7);
+    background-blend-mode: darken;
+    background-image: url("../images/poker.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 .srodek{
   
@@ -211,99 +132,40 @@ header {
     height: max-content;
     padding: 1em;
 }
-.przycisk{
+button{
     margin:10%;
-    background-color: #04AA6D;
+    background-color: var(--theme-color);
     border: none;
     color: white;
     padding: 16px 32px;
     text-decoration: none;
     cursor: pointer;
 }
-.tysiac{
-    background-color: yellow;
+#tysiac{
+    color: white;
+    /* background-color: rgba(255,255,255,.7);
+    background-blend-mode: lighten; */
+    background-color: rgba(0,0,0,.7);
+    background-blend-mode: darken;
+    background-image: url("../images/tysiac.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     grid-area: tysiac;
 }
-.tekst{
-    align-content: center;
-    justify-content: center;
-    font-size: 213.7%;
-}
-.brydz{
-    background-color: brown;
+
+#brydz{
+    color: white;
+    /* background-color: rgba(255,255,255,.7);
+    background-blend-mode: lighten; */
+    background-color: rgba(0,0,0,.7);
+    background-blend-mode: darken;
+    background-image: url("../images/brydz.png");
+    background-repeat: no-repeat;
+    background-size: cover;
     grid-area: brydz;
-    z-index: 10;
-}
-.game_form {
-    text-align: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: aquamarine;
-    padding: 1em;
+    background-position: center;
 }
 
-.game_form h2 {
-    margin: 0;
-    padding: 0.5em;
-}
 
-.game_form input {
-    margin: 0.5em;
-    height: 1.5em;
-    width: 300px;
-}
 
-.game_form p{
-    padding: 0;
-    color: gray;
-}
-
-.game_form .submit {
-    margin: 0.5em;
-    height: 2em;
-    width: 100px;
-}
-
-.game_info {
-    z-index: 1;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: max-content;
-    height: max-content;
-    background-color: grey;
-    text-align: center;
-    padding: 3em;
-    display: none;
-}
-.gamers {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-}
-
-.gamer_nick {
-    width:max-content;
-    height: max-content;
-    background-color: white;
-    margin: 5px;
-    padding: 0.5em;
-}
-.Armia_Szymona{
-    display: flex;
-    justify-content:space-evenly;
-    align-items: center;
-    width: 100%;
-    margin: 0;
-}
-
-#gracz1{
-    /* display: none; */
-}
-
-#gracz10{
-    /* display: none; */
-}
