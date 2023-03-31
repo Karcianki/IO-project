@@ -3,7 +3,8 @@
 header {
     position: absolute;
 }
-header button{
+
+header button {
     float: right;
     display: flex;
     position: absolute;
@@ -15,19 +16,20 @@ header button{
     height: 1em;
     border-radius: 50%;
 }
-header button span{
+
+header button span {
     display: flex;
     font-size: 50%;
 }
 
-.page{
+.page {
     width: 100%;
     height: 100%;
     position: absolute;
     display: block;
 }
 
-.plansza{
+.plansza {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -42,26 +44,28 @@ header button span{
     margin: 0;
 }
 
-.gracz{
+.gracz {
     display: flex;
     margin: 0;
     height: 3em;
     align-items: center;
     width: 8em;
 }
+
 .gracz .dane {
     text-align: center;
     width: 100%;
 }
+
 .gracz span {
     font-size: 2em;
     border-radius: 50%;
     height: 30px;
 }
 
-.opcje{
+.opcje {
     height: max-content;
-    padding-top: 10px ;
+    padding-top: 10px;
     padding-bottom: 10px;
     width: 100%;
     position: absolute;
@@ -70,19 +74,19 @@ header button span{
     align-items: stretch;
     justify-content: flex-end;
     background-color: var(--theme-color);
-    gap:20px;
+    gap: 20px;
     box-shadow: 0px 0px 5px black;
 }
 
 
 
-.zasady{
+.zasady {
     color: white;
     font-weight: 100;
-    display:none;
+    display: none;
     position: absolute;
     background-color: var(--theme-color);
-    border-radius:2em ;
+    border-radius: 2em;
     padding: 1em;
     max-height: 60%;
     max-width: 100%;
@@ -94,19 +98,23 @@ header button span{
     left: 50%;
     transform: translate(-50%, -50%);
 }
-.zasady table{
+
+.zasady table {
     text-align: center;
     width: 100%;
 }
-.zasady ol li{
+
+.zasady ol li {
     margin: 0;
     padding: 0;
 
 }
+
 .zasady p {
     text-align: center;
     font-weight: bolder;
 }
+
 .stol {
     object-fit: contain;
     width: 60%;
@@ -116,9 +124,9 @@ header button span{
     aspect-ratio: 2 / 1;
 }
 
-.rzad{
+.rzad {
     display: flex;
-    justify-content:center;
+    justify-content: center;
     gap: 1em;
     align-items: center;
     width: 100%;
@@ -141,7 +149,7 @@ button {
     padding: 0;
 }
 
-.zasady.show{
+.zasady.show {
     display: block;
 }
 
@@ -150,7 +158,36 @@ button {
     margin-right: 10%;
 }
 
-@media only screen and ((max-width: 800px) or (max-height: 800px)){
+
+.wyniki {
+    color: white;
+    font-weight: 100;
+    display: none;
+    position: absolute;
+    background-color: var(--second-color);
+    border-radius: 2em;
+    padding: 3em;
+    max-height: 60%;
+    max-width: 100%;
+    text-align: center;
+    overflow-x: hidden;
+    box-shadow: 0px 0px 5px black;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wyniki .wygrany {
+    font-size: 2em;
+    font-weight: bolder;
+}
+
+.wyniki.show {
+    display: block;
+}
+
+@media only screen and ((max-width: 800px) or (max-height: 800px)) {
     .opcje {
         overflow: auto;
         padding-right: 0;
@@ -191,4 +228,3 @@ button {
         gap: 5px;
     }
 }
-

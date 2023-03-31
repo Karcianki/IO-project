@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="brydz.css">
@@ -8,6 +9,7 @@
     <script src="https://kit.fontawesome.com/f741e76120.js" crossorigin="anonymous"></script>
     <title>Brydż</title>
 </head>
+
 <body>
 
     <header>
@@ -15,81 +17,88 @@
         <button><span class="fa-solid fa-question"></span></button>
     </header>
 
-        <div class="page">
-            <div class="plansza">
-                <div class ="rzad">
-                    <div class="gracz" id="gracz3"> 
-                        <span class="fa-solid fa-circle-user" class="ikona"></span>
-                        <div class="dane">
-                            Krzysio
-                            <br>
-                            830
-                        </div>
+    <div class="page">
+        <div class="plansza">
+            <div class="rzad">
+                <div class="gracz" id="gracz3">
+                    <span class="fa-solid fa-circle-user" class="ikona"></span>
+                    <div class="dane">
+                        Krzysio
+                        <br>
+                        830
                     </div>
+                </div>
 
-                </div>
-                <div class ="rzad" id="ze_stolem">
-                    <div class="gracz" id="gracz1"> 
-                        <span class="fa-solid fa-circle-user" class="ikona"></span>
-                        <div class="dane">
-                            Mikołaj
-                            <br>
-                            1000
-                        </div>
+            </div>
+            <div class="rzad" id="ze_stolem">
+                <div class="gracz" id="gracz1">
+                    <span class="fa-solid fa-circle-user" class="ikona"></span>
+                    <div class="dane">
+                        Mikołaj
+                        <br>
+                        1000
                     </div>
-                    <img src="../images/stol.png" class="stol">
-                    <div class="gracz" id="gracz2"> 
-                        <span class="fa-solid fa-circle-user" class="ikona"></span>
-                        <div class="dane">
-                            Karol
-                            <br>
-                            400
-                        </div>
-                    </div> 
                 </div>
-                <div class ="rzad">
-                    <div class="gracz" id="gracz4"> 
-                        <span class="fa-solid fa-circle-user" class="ikona"></span>
-                        <div class="dane">
-                            Mateusz
-                            <br>
-                            0
-                        </div>
+                <img src="../images/stol.png" class="stol">
+                <div class="gracz" id="gracz2">
+                    <span class="fa-solid fa-circle-user" class="ikona"></span>
+                    <div class="dane">
+                        Karol
+                        <br>
+                        400
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="zasady">
-            Zasady
-        </div>
-        <div class="opcje">
-            <div class="pass">
-                <button> Pass </button>
-            </div>
-            <div class="wybor">
-                <div class="lewy">
-                    <button> 1 </button>
-                    <button> 2 </button>
-                    <button> 3 </button>
-                    <button> 4 </button>
-                    <button> 5 </button>
-                    <button> 6 </button>
-                    <button> 7 </button>
-                </div>
-                <div class="atut">
-                    <button> <img src="../images/clubs.png" width="30" height="30"> </button>
-                    <button> <img src="../images/diamonds.png" width="30" height="30"> </button>
-                    <button> <img src="../images/hearts.png" width="30" height="30"> </button>
-                    <button> <img src="../images/spades.png" width="30" height="30"> </button>
-                    <button> BA </button>
+            <div class="rzad">
+                <div class="gracz" id="gracz4">
+                    <span class="fa-solid fa-circle-user" class="ikona"></span>
+                    <div class="dane">
+                        Mateusz
+                        <br>
+                        0
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="zasady">
+        Zasady
+    </div>
+    <div class="opcje">
+        <div class="pass">
+            <button> Pass </button>
+        </div>
+        <div class="wybor">
+            <div class="lewy">
+                <button> 1 </button>
+                <button> 2 </button>
+                <button> 3 </button>
+                <button> 4 </button>
+                <button> 5 </button>
+                <button> 6 </button>
+                <button> 7 </button>
+            </div>
+            <div class="atut">
+                <button> <img src="../images/clubs.png" width="30" height="30"> </button>
+                <button> <img src="../images/diamonds.png" width="30" height="30"> </button>
+                <button> <img src="../images/hearts.png" width="30" height="30"> </button>
+                <button> <img src="../images/spades.png" width="30" height="30"> </button>
+                <button> BA </button>
+            </div>
+        </div>
+    </div>
+    <div class="wyniki">
+        Zwycięzca:
+        <div class="wygrany">
+            Imię
+        </div>
+    </div>
 
-        <script>
-            $('header button').click(function () {
-                $('.zasady').toggleClass("show");
-            });
-        </script>
+    <script>
+        $('header button').click(function () {
+            $('.zasady').toggleClass("show");
+        });
+    </script>
 </body>
+
 </html>
