@@ -1,3 +1,6 @@
 {
-    "extends": "stylelint-config-recommended"
+    "extends": "stylelint-config-recommended",
+    "media-feature-name-allowed-list": [
+      "max-width"
+      ]
   }
