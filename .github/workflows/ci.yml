@@ -14,12 +14,12 @@ jobs:
         yarn install
     - name: validate CSS
       run: |
-        for f in $(find . -name 'src/*.css'); do
+        for f in $(find . -name '*.css'); do
           yarn run stylelint $f
         done;
     - name: validate HTML
       run: |
-        for f in $(find . -name 'src/*.html'); do
+        for f in $(find . -name '*.html'); do
           yarn run html-validate $f
         done;
     - name: install dependencies
