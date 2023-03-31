@@ -51,6 +51,14 @@ img {
     object-fit: scale-down;
 }
 
+a {
+    color: var(--second-color);
+}
+
+ol.etapy{
+    list-style-type: upper-alpha;
+}
+
 @media only screen and ((max-width: 800px) or (max-height: 800px)) {
     .opcje {
         gap: 25px;
