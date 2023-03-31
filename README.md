@@ -1,7 +1,5 @@
 # Aplikacja do przeprowadzania gier karcianych
 
-[![codecov](https://codecov.io/gh/poker-io/pokerio-server/branch/main/graph/badge.svg?token=4QCZNOWFZJ)](https://codecov.io/gh/poker-io/pokerio-server)
-
 ## Opis projektu:
   Aplikacja ma na celu umożliwić bezproblemowe przeprowadzanie rozgrywki w sytuacji, gdy mamy dostęp wyłącznie do kart i internetu. Jej zadaniem będzie przeprowadzać grę, tzn. informować użytkownika o jego turze, a następnie przetwarzać jego decyzję, informując o tym pozostałych graczy. Przez cały czas trwania rozgrywki będzie monitorowany jej bilans (między innymi liczba punktów każdego z graczy).
 
