@@ -84,7 +84,8 @@ header button span{
     background-color: var(--theme-color);
     border-radius:2em ;
     padding: 1em;
-    max-height: 40%;
+    max-height: 60%;
+    max-width: 100%;
     text-align: justify;
     overflow-x: hidden;
     box-shadow: 0px 0px 5px black;
@@ -146,7 +147,7 @@ button {
     margin-right: 10%;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and ((max-width: 800px) or (max-height: 800px)){
     .opcje {
         overflow: auto;
         padding-right: 0;
@@ -163,6 +164,15 @@ button {
 
     body {
         font-size: 0.5em;
+    }
+
+    .zasady {
+        font-size: 1.5em;
+    }
+
+    .zasady img {
+        width: auto;
+        height: 1.5em;
     }
 
     header {
