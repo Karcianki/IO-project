@@ -7,7 +7,7 @@
   "author": "piter12345 <piotrek.blinowski@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "pytest tests"
+    "test": "pytest --coverage tests"
   },
   "dependencies": {
     "firefox": "^0.0.1",
