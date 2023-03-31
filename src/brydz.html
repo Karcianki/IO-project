@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="brydz.css">
     <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://kit.fontawesome.com/f741e76120.js" crossorigin="anonymous"></script>
     <title>Title</title>
 </head>
@@ -57,9 +58,10 @@
                     </div>
                 </div>
             </div>
-     
         </div>
-
+        <div class="zasady">
+            Zasady
+        </div>
         <div class="opcje">
             <div class="pass">
                 <button> Pass </button>
@@ -84,6 +86,10 @@
             </div>
         </div>
 
-    
+        <script>
+            $('header button').click(function () {
+                $('.zasady').toggleClass("show");
+            });
+        </script>
 </body>
 </html>

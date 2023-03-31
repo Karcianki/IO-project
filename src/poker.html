@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="poker.css">
     <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://kit.fontawesome.com/f741e76120.js" crossorigin="anonymous"></script>
     <title>Poker</title>
 </head>
+
 <body>
     <header>
         POKER
-        <button><span class="fa-solid fa-question"></span></button>         
+        <button><span class="fa-solid fa-question"></span></button>
     </header>
     <div class="page">
         <div class="plansza">
-            <div class ="rzad">
-                <div class="gracz" id="gracz3"> 
+            <div class="rzad">
+                <div class="gracz" id="gracz3">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Krzysio
@@ -23,33 +26,33 @@
                         830
                     </div>
                 </div>
-                <div class="gracz" id="gracz5"> 
+                <div class="gracz" id="gracz5">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Asia
                         <br>
                         678
                     </div>
-                </div>               
-                <div class="gracz" id="gracz7"> 
+                </div>
+                <div class="gracz" id="gracz7">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Maciek
                         <br>
                         4567
                     </div>
-                </div> 
-                <div class="gracz" id="gracz9"> 
+                </div>
+                <div class="gracz" id="gracz9">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Michał
                         <br>
                         2800
                     </div>
-                </div> 
+                </div>
             </div>
-            <div class ="rzad" id="ze_stolem">
-                <div class="gracz" id="gracz1"> 
+            <div class="rzad" id="ze_stolem">
+                <div class="gracz" id="gracz1">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Mikołaj
@@ -58,17 +61,17 @@
                     </div>
                 </div>
                 <img src="../images/stol.png" class="stol">
-                <div class="gracz" id="gracz2"> 
+                <div class="gracz" id="gracz2">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Karol
                         <br>
                         400
                     </div>
-                </div> 
+                </div>
             </div>
-            <div class ="rzad">
-                <div class="gracz" id="gracz4"> 
+            <div class="rzad">
+                <div class="gracz" id="gracz4">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Mateusz
@@ -76,43 +79,51 @@
                         0
                     </div>
                 </div>
-                <div class="gracz" id="gracz6"> 
+                <div class="gracz" id="gracz6">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Weronika
                         <br>
                         600
                     </div>
-                </div>               
-                <div class="gracz" id="gracz8"> 
+                </div>
+                <div class="gracz" id="gracz8">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Szymon
                         <br>
                         2000
                     </div>
-                </div> 
-                <div class="gracz" id="gracz10"> 
+                </div>
+                <div class="gracz" id="gracz10">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Piotrek
                         <br>
                         400
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
- 
-            
     </div>
-    <div class ="opcje">
-        <button class="przycisk_opcje">Fold</button>
-        <button class="przycisk_opcje">Check/Call</button>
+    <div class="zasady">
+        Zasady
+    </div>
+    <div class="opcje">
+        <button>Fold</button>
+        <button>Check/Call</button>
         <form>
-        <input type="number" step="5" class ="licytuj" >
-        <button class="przycisk_opcje">Bet</button>
+            <input type="number" step="5" class="licytuj">
+            <button>Bet</button>
         </form>
-        <button class="przycisk_opcje" id="last">Quit</button>
+        <button id="last">Quit</button>
     </div>
+
+    <script>
+        $('header button').click(function () {
+            $('.zasady').toggleClass("show");
+        });
+    </script>
 </body>
+
 </html>

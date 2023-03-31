@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="tysiac.css">
     <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://kit.fontawesome.com/f741e76120.js" crossorigin="anonymous"></script>
-    <title>Title</title>
+    <title>Tysiąc</title>
 </head>
+
 <body>
     <header>
         TYSIĄC
@@ -14,8 +17,8 @@
     </header>
     <div class="page">
         <div class="plansza">
-            <div class ="rzad">
-                <div class="gracz" id="gracz3"> 
+            <div class="rzad">
+                <div class="gracz" id="gracz3">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Krzysio
@@ -25,8 +28,8 @@
                 </div>
 
             </div>
-            <div class ="rzad" id="ze_stolem">
-                <div class="gracz" id="gracz1"> 
+            <div class="rzad" id="ze_stolem">
+                <div class="gracz" id="gracz1">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Mikołaj
@@ -35,17 +38,17 @@
                     </div>
                 </div>
                 <img src="../images/stol.png" class="stol">
-                <div class="gracz" id="gracz2"> 
+                <div class="gracz" id="gracz2">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Karol
                         <br>
                         400
                     </div>
-                </div> 
+                </div>
             </div>
-            <div class ="rzad">
-                <div class="gracz" id="gracz4"> 
+            <div class="rzad">
+                <div class="gracz" id="gracz4">
                     <span class="fa-solid fa-circle-user" class="ikona"></span>
                     <div class="dane">
                         Mateusz
@@ -56,8 +59,8 @@
 
             </div>
         </div>
- 
-            
+
+
     </div>
 
     <div class="zasady">
@@ -107,7 +110,8 @@
                     </tr>
                 </table>
             </li>
-            <li>Gdy nie masz meldunku, ale masz cztery dziewiątki lub suma oczek Twoich kart wynosi mniej niż 16 to możesz poprosić o kolejne rozdanie.
+            <li>Gdy nie masz meldunku, ale masz cztery dziewiątki lub suma oczek Twoich kart wynosi mniej niż 16 to
+                możesz poprosić o kolejne rozdanie.
             </li>
             <li>
                 Licytacja jest co 5 oczek.
@@ -131,89 +135,91 @@
                     </li>
                     <li>
                         jeżeli jest meldunek, to zapisywana jest
-                wartość meldunku;
+                        wartość meldunku;
                     </li>
                     <li>
                         w przeciwnym przypadku, nie dostaje żadnych punktów.
                     </li>
                 </ul>
             </li>
-        <li>
-            Starszeństwo kart i ich wartości punktowe:
-        <table>
-            <tr>
-                <th>
-                    karta
-                </th>
-                <th>
-                    punkty
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    as
-                </td>
-                <td>
-                    11
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    10
-                </td>
-                <td>
-                    10
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    król
-                </td>
-                <td>
-                    4
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    dama
-                </td>
-                <td>
-                    3
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    walet
-                </td>
-                <td>
-                    2
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    9
-                </td>
-                <td>
-                    0
-                </td>
-            </tr>
-        </table>
-        </li>
+            <li>
+                Starszeństwo kart i ich wartości punktowe:
+                <table>
+                    <tr>
+                        <th>
+                            karta
+                        </th>
+                        <th>
+                            punkty
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            as
+                        </td>
+                        <td>
+                            11
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            10
+                        </td>
+                        <td>
+                            10
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            król
+                        </td>
+                        <td>
+                            4
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            dama
+                        </td>
+                        <td>
+                            3
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            walet
+                        </td>
+                        <td>
+                            2
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            9
+                        </td>
+                        <td>
+                            0
+                        </td>
+                    </tr>
+                </table>
+            </li>
         </ol>
-    </div> 
-    <div class ="opcje">
+    </div>
+    <div class="opcje">
         <button>Pass</button>
         <form>
-        <input type="number" step="5" class ="licytuj" min="100" max="360" value="100" >
-        <button>Licytuj</button>
+            <input type="number" step="5" class="licytuj" min="100" max="360" value="100">
+            <button>Licytuj</button>
         </form>
         <button id="last">Wyjdź</button>
     </div>
-</body>
-</html>
 
-<!--
-    faza gry
-    czyj musik
-    host wpisze punkty
--->
+
+    <script>
+        $('header button').click(function () {
+            $('.zasady').toggleClass("show");
+        });
+    </script>
+</body>
+
+</html>

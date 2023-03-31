@@ -40,7 +40,6 @@ header button span{
     max-width: 100%;
     gap: 5%;
     margin: 0;
-
 }
 
 .gracz{
@@ -80,7 +79,7 @@ header button span{
 .zasady{
     color: white;
     font-weight: 100;
-    /* display:none; */
+    display:none;
     position: absolute;
     background-color: var(--theme-color);
     border-radius:2em ;
@@ -138,4 +137,45 @@ button {
     padding: 0;
 }
 
+.zasady.show{
+    display: block;
+}
+
+
+.opcje #last {
+    margin-right: 10%;
+}
+
+@media only screen and (max-width: 768px) {
+    .opcje {
+        overflow: auto;
+        padding-right: 0;
+        padding-left: 0;
+        justify-content: center;
+        max-height: 10%;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .opcje #last {
+        margin-right: 0;
+    }
+
+    body {
+        font-size: 0.5em;
+    }
+
+    header {
+        max-height: 10%;
+    }
+
+    .plansza {
+        height: 75%;
+        gap: 5px;
+    }
+
+    .rzad {
+        gap: 5px;
+    }
+}
 

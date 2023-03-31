@@ -12,6 +12,11 @@
     height: 30px;
 }
 
+.opcje button span {
+    font-size: 50%;
+    color: black;
+}
+
 .opcje .lewy button {
     width: 70px;
 }
@@ -30,6 +35,7 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
+    object-fit: scale-down;
 }
 
 .opcje .wybor >  div {
@@ -41,15 +47,44 @@
     gap: 5px;
 }
 
+img {
+    object-fit: scale-down;
+}
+
 @media only screen and (max-width: 768px) {
     .opcje {
-        overflow: scroll;
-        padding-right: 0;
+        gap: 25px;
+    }
+
+    .opcje .wybor button {
+        width: 25px;
+        height: 25px;
+    }
+    
+    img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .opcje .pass button {
+        height: 55px;
+        width: 50px;
+    }
+        
+    .opcje .wybor >  div {
         justify-content: center;
+        align-items: center;
     }
 }
 
-img {
-    object-fit: contain;
+@media only screen and (orientation:landscape) and (max-width: 768px) {
+    .opcje .wybor {
+        flex-direction: row;
+        gap: 25px;
+    }
+
+    .opcje .pass button {
+        height: 25px;
+    }
 }
 
