@@ -103,7 +103,10 @@ header button span{
     padding: 0;
 
 }
-
+.zasady p {
+    text-align: center;
+    font-weight: bolder;
+}
 .stol {
     object-fit: contain;
     width: 60%;
