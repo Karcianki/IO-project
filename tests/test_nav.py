@@ -15,7 +15,7 @@ class Test_Nav():
             for game in games:
                 for typelog in types:
                     find = self.driver.find_element(by=By.ID, value=game)
-                    button = find.find_element(by=By.ID, value=typelog)
+                    button = find.find_element(by=By.CLASS_NAME, value=typelog)
                     button.click()
                     self.driver.back()
             
