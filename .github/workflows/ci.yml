@@ -14,6 +14,12 @@ jobs:
     - name: yarn install
       run: |
         yarn install
+    - name: install dependencies
+      run: |
+        pip install pytest
+        pip install selenium
+        pip install webdriver_manager
+        pip install pytest-cov
     - name: validate CSS
       run: |
         for f in $(find src/ -name '*.css'); do
@@ -24,11 +30,6 @@ jobs:
         for f in $(find src/ -name '*.html'); do
           yarn run html-validate $f
         done;
-    - name: install dependencies
-      run: |
-        pip install pytest
-        pip install selenium
-        pip install webdriver_manager
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |

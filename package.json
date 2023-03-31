@@ -7,12 +7,14 @@
   "author": "piter12345 <piotrek.blinowski@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "pytest --coverage tests"
+    "test": "pytest --cov IO-project tests"
   },
   "dependencies": {
+    "codecov": "^3.8.3",
     "firefox": "^0.0.1",
     "html-validate": "^7.13.3",
     "pytest": "^1.0.0",
+    "pytest-cov": "^0.0.1",
     "selenium": "^2.20.0",
     "selenium-webdriver": "^4.8.2",
     "stylelint": "^15.3.0"
