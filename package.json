@@ -7,7 +7,7 @@
   "author": "piter12345 <piotrek.blinowski@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "pytest --cov=src/ tests"
+    "test": "pytest --cov=. tests"
   },
   "dependencies": {
     "codecov": "^3.8.3",
