@@ -1,6 +1,6 @@
 name: CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -12,12 +12,6 @@ jobs:
     - name: yarn install
       run: |
         yarn install
-    - name: install dependencies
-      run: |
-        pip install pytest
-        pip install selenium
-        pip install webdriver_manager
-        pip install pytest-cov
     - name: validate CSS
       run: |
         for f in $(find src/ -name '*.css'); do
