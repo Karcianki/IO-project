@@ -1,4 +1,4 @@
-@import "style.css";
+@import url("style.css");
 /* stylelint-disable media-feature-name-no-unknown */
 
 header {

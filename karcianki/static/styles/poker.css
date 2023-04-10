@@ -1,6 +1,5 @@
-@import "gry.css";
+@import url("gry.css");
 /* stylelint-disable media-feature-name-no-unknown */
-
 
 .opcje button{
     height: 50px;

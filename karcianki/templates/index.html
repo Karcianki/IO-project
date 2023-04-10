@@ -2,7 +2,8 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
     <meta name="viewport" content="width=device-width">
     <title>Strona główna</title>
 </head>
@@ -15,8 +16,13 @@
             <div class="srodek">
                 <div class="tekst">POKER</div>
                 <div>
-                    <button type="submit" class="login" onclick="window.location.href='logowanie/poker/login.html'">Dołącz do gry</button>
-                    <button type="submit" class="create" onclick="window.location.href='logowanie/poker/host.html'">Stwórz grę</button>
+                    <form>
+                        <button type="submit" class="login" onclick="window.location.href='logowanie/poker/login.html'">Dołącz do gry</button>
+                    </form>
+                    <form action="stworz/" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="create">Stwórz grę</button>
+                    </form>
                 </div>
             </div>
         </div>
