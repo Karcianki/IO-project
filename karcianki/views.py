@@ -19,6 +19,8 @@ def index(request):
     if redirect is not None:
         return redirect
     else:
+        if 'game_type' in request.session.keys():
+            del request.session['game_type']
         return render(request, 'index.html')
 
 def host(request):
@@ -43,6 +45,7 @@ def host(request):
             player.save()
             request.session['player_id'] = player.id
             request.session['game_type'] = game_type
+            request.session['is_host'] = True
 
             return HttpResponseRedirect(reverse('play'))
     else:
@@ -89,3 +92,22 @@ def play(request):
         'game_id': game_id
     }
     return render(request, f'{game_type}.html', context)
+
+def quit(request):
+    player = None
+    if 'player_id' in request.session.keys():
+        player_id = request.session['player_id']
+        del request.session['player_id']
+        if Player.objects.filter(id=player_id).exists():
+            player = Player.objects.get(id=player_id)
+
+    if 'is_host' in request.session.keys():
+        if player is not None:
+            game = player.game
+            game.delete()
+        del request.session['is_host']
+    
+    if 'game_type' in request.session.keys():
+        del request.session['game_type']
+    
+    return HttpResponseRedirect(reverse('index'))
