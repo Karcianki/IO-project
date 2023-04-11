@@ -8,10 +8,24 @@ from karcianki.forms import PokerHostForm, TysiacHostForm, BrydzHostForm, Player
 
 from karcianki.models import Game, Player
 
+def redirectInGame(request):
+    if 'player_id' in request.session:
+        return HttpResponseRedirect(reverse('play'))
+    else:
+        return None
+
 def index(request):
-    return render(request, 'index.html')
+    redirect = redirectInGame(request)
+    if redirect is not None:
+        return redirect
+    else:
+        return render(request, 'index.html')
 
 def host(request):
+    redirect = redirectInGame(request)
+    if redirect is not None:
+        return redirect
+
     game_type = request.GET['game']
 
     if request.method == 'POST':
@@ -46,17 +60,13 @@ def host(request):
         
     return render(request, f'logowanie/{game_type}/host.html', context)
 
-def play(request):
-    game_type = request.session['game_type']
-    player = Player.objects.get(id=request.session['player_id'])
-    game_id = player.game.game_id
-    context = {
-        'game_id': game_id
-    }
-    return render(request, f'{game_type}.html', context)
-
 def join(request):
+    redirect = redirectInGame(request)
+    if redirect is not None:
+        return redirect
+
     game_type = request.GET['game']
+
     if request.method == 'POST':
         form = PlayerForm(request.POST)
 
@@ -69,3 +79,13 @@ def join(request):
         'form': form,
     }
     return render(request, f'logowanie/{game_type}/login.html', context)
+
+def play(request):
+    game_type = request.session['game_type']
+
+    player = Player.objects.get(id=request.session['player_id'])
+    game_id = player.game.game_id
+    context = {
+        'game_id': game_id
+    }
+    return render(request, f'{game_type}.html', context)
