@@ -12,5 +12,4 @@ urlpatterns = [
     path('stworz/', views.host, name='host'),
     path('graj/', views.play, name='play'),
     path('dolacz/', views.join, name='join'),
-
 ]

@@ -1,3 +1,5 @@
 node_modules/
 .DS_Store
 tests/__pycache__/
+karcianki/__pycache__/
+db.sqlite5
