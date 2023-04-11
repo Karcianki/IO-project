@@ -11,10 +11,16 @@ from karcianki.models import Game, Player
 def index(request):
     return render(request, 'index.html')
 
-def pokerHost(request):
-    if request.method == 'POST':
-        form = PokerHostForm(request.POST)
+def host(request):
+    game_type = request.GET['game']
 
+    if request.method == 'POST':
+        forms = {
+            'poker': PokerHostForm(request.POST),
+            'brydz': BrydzHostForm(request.POST),
+            'tysiac': TysiacHostForm(request.POST),
+        }
+        form = forms[game_type]
         if form.is_valid():
             new_game = Game.create()
             new_game.save()
@@ -22,89 +28,44 @@ def pokerHost(request):
             player = Player(nickname=nickname, game=new_game)
             player.save()
             request.session['player_id'] = player.id
+            request.session['game_type'] = game_type
 
-            return HttpResponseRedirect(reverse('poker'))
+            return HttpResponseRedirect(reverse('play'))
     else:
-        form = PokerHostForm()
-    
+        forms = {
+            'poker': PokerHostForm(),
+            'brydz': BrydzHostForm(),
+            'tysiac': TysiacHostForm(),
+        }
+        form = forms[game_type]
+
+
     context = {
         'form': form,
     }
         
-    return render(request, 'logowanie/poker/host.html', context)
+    return render(request, f'logowanie/{game_type}/host.html', context)
 
-def poker(request):
+def play(request):
+    game_type = request.session['game_type']
     player = Player.objects.get(id=request.session['player_id'])
     game_id = player.game.game_id
     context = {
         'game_id': game_id
     }
-    return render(request, 'poker.html', context)
+    return render(request, f'{game_type}.html', context)
 
-def tysiacHost(request):
-    if request.method == 'POST':
-        form = TysiacHostForm(request.POST)
-
-        if form.is_valid():
-            return HttpResponseRedirect(reverse('tysiacHost'))
-    else:
-        form = TysiacHostForm()
-    
-    context = {
-        'form': form,
-    }
-    return render(request, 'logowanie/tysiac/host.html', context)
-
-def brydzHost(request):
-    if request.method == 'POST':
-        form = BrydzHostForm(request.POST)
-
-        if form.is_valid():
-             return HttpResponseRedirect(reverse('brydzHost'))
-    else:
-        form = BrydzHostForm()
-    
-    context = {
-        'form': form,
-    }
-    return render(request, 'logowanie/brydz/host.html', context)
-
-def pokerPlayer(request):
+def join(request):
+    game_type = request.GET['game']
     if request.method == 'POST':
         form = PlayerForm(request.POST)
 
         if form.is_valid():
-            return HttpResponseRedirect(reverse('pokerPlayer'))
+            return HttpResponseRedirect(reverse('join'))
     else:
         form = PlayerForm()
     
     context = {
         'form': form,
     }
-    return render(request, 'logowanie/poker/login.html', context)
-def tysiacPlayer(request):
-    if request.method == 'POST':
-        form = PlayerForm(request.POST)
-
-        if form.is_valid():
-            return HttpResponseRedirect(reverse('tysiacPlayer'))
-    else:
-        form = PlayerForm()
-    
-    context = {
-        'form': form,
-    }
-    return render(request, 'logowanie/tysiac/login.html', context)
-def brydzPlayer(request):
-    if request.method == 'POST':
-        form = PlayerForm(request.POST)
-
-        if form.is_valid():
-            return HttpResponseRedirect(reverse('brydzPlayer'))
-    else:
-        form = PlayerForm()
-    
-    context = {
-        'form': form,
-    }
-    return render(request, 'logowanie/brydz/login.html', context)
+    return render(request, f'logowanie/{game_type}/login.html', context)
