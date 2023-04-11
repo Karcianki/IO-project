@@ -50,3 +50,9 @@ class PlayerForm(AForm):
                                     attrs={'placeholder': 123456}
                                    ),
                                    help_text="Podaj numer gry")
+    
+    def clean_game_id(self):
+        data = self.cleaned_data['game_id']
+        if not Game.objects.filter(game_id=data):
+            raise ValidationError('Podana gra nie istnieje')
+        return data

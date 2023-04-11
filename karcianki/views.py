@@ -92,6 +92,10 @@ def join(request):
     return render(request, f'logowanie/{game_type}/login.html', context)
 
 def play(request):
+    if ('player_id' not in request.session.keys()) or \
+        (not Player.objects.filter(id=request.session['player_id'])):
+        return HttpResponseRedirect(reverse('quit'))
+
     game_type = request.session['game_type']
 
     player = Player.objects.get(id=request.session['player_id'])
