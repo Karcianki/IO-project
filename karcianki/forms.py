@@ -2,7 +2,7 @@ from django import forms
 
 from django.core.exceptions import ValidationError
 
-from karcianki.models import Game
+from karcianki.models import Game, Player
 
 class AForm(forms.Form):
     nickname = forms.CharField(min_length=4, max_length=10, 
@@ -10,7 +10,8 @@ class AForm(forms.Form):
                                widget=forms.TextInput(
                                 attrs={'placeholder': 'Nick gracza'}
                                ),
-                               help_text="Podaj swój nick")
+                               label="Podaj swój nick",
+                               help_text="Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 10 znaków",)
     
     def clean_nickname(self):
         data =  self.cleaned_data['nickname']
@@ -24,13 +25,15 @@ class PokerHostForm(AForm):
                                    widget=forms.NumberInput(
                                     attrs={'placeholder': 4}
                                    ),
-                                   help_text="Podaj liczbę graczy (od 2 do 10)")
+                                   label="Podaj liczbę graczy (od 2 do 10)")
     chips_per_player = forms.DecimalField(min_value=10, max_value=1000000, 
                                           required=True,
                                           widget=forms.NumberInput(
                                             attrs={'placeholder': 100}
                                           ),
-                                          help_text="Podaj liczbę żetonów na gracza")
+                                          label="Podaj liczbę żetonów na gracza")
+    
+    field_order = ['n_players', 'chips_per_player', 'nickname']
     
 class TysiacHostForm(AForm):
     n_players = forms.DecimalField(min_value=2, max_value=4, 
@@ -38,7 +41,9 @@ class TysiacHostForm(AForm):
                                    widget=forms.NumberInput(
                                     attrs={'placeholder': 2}
                                    ),
-                                   help_text="Podaj liczbę graczy (od 2 do 4)")
+                                   label="Podaj liczbę graczy (od 2 do 4)",)
+    
+    field_order = ['n_players', 'nickname']
     
 class BrydzHostForm(AForm):
     pass
@@ -49,10 +54,28 @@ class PlayerForm(AForm):
                                    widget=forms.NumberInput(
                                     attrs={'placeholder': 123456}
                                    ),
-                                   help_text="Podaj numer gry")
+                                   label="Podaj numer gry")
     
     def clean_game_id(self):
         data = self.cleaned_data['game_id']
         if not Game.objects.filter(game_id=data):
             raise ValidationError('Podana gra nie istnieje')
         return data
+    
+    def clean(self):
+        data = super().clean()
+
+        game_id = data.get('game_id')
+        nickname = data.get('nickname')
+
+        if game_id and nickname and \
+            Game.objects.filter(game_id=game_id).exists():
+
+            game = Game.objects.get(game_id=game_id)
+            if Player.objects.filter(game=game, nickname=nickname).exists():
+                raise ValidationError('Gracz o tej nazwie już dołączył do gry')
+
+        return data
+
+    
+    field_order = ['game_id', 'nickname']

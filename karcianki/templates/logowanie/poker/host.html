@@ -19,13 +19,21 @@
             </div>
             <form method="post">
                 {% csrf_token %}
-                <label for="gamers_number">Podaj liczbę graczy (od 2 do 10):</label><br>
-                {{ form.n_players}} <br>
-                <label for="chip_number">Podaj liczbę żetonów na gracza:</label><br>
-                {{ form.chips_per_player }} <br>
-                <label for="nick">Podaj swój nick:</label><br>
-                {{ form.nickname }} <br>
-                <p>Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 10 znaków</p>
+                
+                {% for field in form %}
+                    {% if field.errors %}
+                        <p> {{ field.errors}} </p> 
+                    {% endif %}
+
+                    {{ field.label_tag }} <br>
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <p> {{ field.help_text }} </p>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+
                 <button type="submit">Stwórz grę</button>
             </form>
         </div>

@@ -46,6 +46,11 @@
     width: 100px;
 }
 
+.game_form ul {
+    list-style: none;
+    color: red;
+}
+
 .game_info {
     z-index: 1;
     position: absolute;
