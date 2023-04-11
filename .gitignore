@@ -1,7 +1,7 @@
 node_modules/
 .DS_Store
 tests/__pycache__/
-db.sqlite5
+db.sqlite3
 .coverage
 ioproject/__pycache__/
 karcianki/__pycache__/
