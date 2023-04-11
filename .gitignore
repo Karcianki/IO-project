@@ -1,5 +1,8 @@
 node_modules/
 .DS_Store
 tests/__pycache__/
-karcianki/__pycache__/
 db.sqlite5
+.coverage
+ioproject/__pycache__/
+karcianki/__pycache__/
+karcianki/migrations/__pycache__/
