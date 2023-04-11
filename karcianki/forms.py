@@ -2,6 +2,8 @@ from django import forms
 
 from django.core.exceptions import ValidationError
 
+from karcianki.models import Game
+
 class AForm(forms.Form):
     nickname = forms.CharField(min_length=4, max_length=10, 
                                required=True,
@@ -42,9 +44,9 @@ class BrydzHostForm(AForm):
     pass
 
 class PlayerForm(AForm):
-    board_number = forms.DecimalField(min_value=2, max_value=4, 
+    game_id = forms.DecimalField(min_value=0, max_value=Game.MAX_ID, 
                                    required=True, 
                                    widget=forms.NumberInput(
-                                    attrs={'placeholder': 2}
+                                    attrs={'placeholder': 123456}
                                    ),
-                                   help_text="Podaj sześciocyfrowy numer gry")
+                                   help_text="Podaj numer gry")

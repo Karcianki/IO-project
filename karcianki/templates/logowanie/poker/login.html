@@ -20,7 +20,7 @@
             <form method="post">
                 {% csrf_token %}
                 <label for="game_number">Podaj numer gry:</label><br>
-                {{form.board_number}} <br>
+                {{form.game_id}} <br>
                 <!-- <input type="number" id="game_number" name="game_number" placeholder="##########" required><br> -->
                 <label for="nick">Podaj swój nick:</label><br>
                 {{ form.nickname }} <br>

@@ -74,7 +74,15 @@ def join(request):
         form = PlayerForm(request.POST)
 
         if form.is_valid():
-            return HttpResponseRedirect(reverse('join'))
+            game_id = form.cleaned_data['game_id']
+            game = get_object_or_404(Game, game_id=game_id)
+            nickname = form.cleaned_data['nickname']
+            player = Player(nickname=nickname, game=game)
+            player.save()
+            request.session['player_id'] = player.id
+            request.session['game_type'] = game_type
+
+            return HttpResponseRedirect(reverse('play'))
     else:
         form = PlayerForm()
     
@@ -95,6 +103,7 @@ def play(request):
 
 def quit(request):
     player = None
+
     if 'player_id' in request.session.keys():
         player_id = request.session['player_id']
         del request.session['player_id']
