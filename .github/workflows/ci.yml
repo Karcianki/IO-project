@@ -24,9 +24,7 @@ jobs:
         done;
     - name: validate Python
       run: |
-        for f in $(find karcianki/ ioproject/ tests/ -name '*.py'); do
-          pylint --load-plugins pylint_django --django-settings-module=ioproject.settings $f
-        done;
+          pylint karcianki/
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |

@@ -1,3 +1,5 @@
 [MASTER]
 
-ignore=migrations
+ignore=migrate
+load-plugins=pylint_django
+django-settings-module=ioproject.settings
