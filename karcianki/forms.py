@@ -54,7 +54,7 @@ class BrydzHostForm(AForm):
 
 class PlayerForm(AForm):
     """Form for joining game."""
-    game_id = forms.DecimalField(min_value=0, max_value=Game.MAX_ID,
+    game_id = forms.DecimalField(min_value=100000, max_value=Game.MAX_ID,
                                    required=True,
                                    widget=forms.NumberInput(
                                     attrs={'placeholder': 123456}
