@@ -12,21 +12,20 @@ jobs:
     - name: yarn install
       run: |
         yarn install
-    - name: install dependencies
-      run: |
-        pip install pytest
-        pip install selenium
-        pip install webdriver_manager
-        pip install pytest-cov
     - name: validate CSS
       run: |
-        for f in $(find src/ -name '*.css'); do
+        for f in $(find . -name '*.css'); do
           yarn run stylelint $f
         done;
     - name: validate HTML
       run: |
-        for f in $(find src/ -name '*.html'); do
+        for f in $(find . -name '*.html'); do
           yarn run html-validate $f
+        done;
+    - name: validate Python
+      run: |
+        for f in $(find . -name '*.py'); do
+          yarn run pylint $f
         done;
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
