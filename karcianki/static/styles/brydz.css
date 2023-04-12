@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
 }
-.opcje .pass {
+.opcje .duzy {
     height: 100%;
 }
 .opcje button{
@@ -26,8 +26,7 @@
     width: 100px;
 }
 
-.opcje .pass button {
-    background-color: red;
+.opcje .duzy button {
     height: 65px;
     width: 100px;
 }
@@ -62,7 +61,7 @@ ol.etapy{
 
 @media only screen and ((max-width: 800px) or (max-height: 800px)) {
     .opcje {
-        gap: 25px;
+        gap: 10px;
     }
 
     .opcje .wybor button {
@@ -75,7 +74,7 @@ ol.etapy{
         height: 100%;
     }
 
-    .opcje .pass button {
+    .opcje .duzy button {
         height: 55px;
         width: 50px;
     }
@@ -87,12 +86,16 @@ ol.etapy{
 }
 
 @media only screen and (orientation:landscape) and ((max-width: 800px) or (max-height: 800px)){
+    .opcje {
+        gap: 25px;
+    }
+    
     .opcje .wybor {
         flex-direction: row;
         gap: 25px;
     }
 
-    .opcje .pass button {
+    .opcje .duzy button {
         height: 25px;
     }
 }

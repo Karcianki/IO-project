@@ -96,6 +96,22 @@ header {
     box-shadow: 0px 0px 5px black;
 }
 
+button{
+    background-color: var(--theme-color);
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0px 0px 5px black;
+    object-fit: contain;
+}
+button:hover{
+    background-color: var(--second-color);
+    color: black;
+    box-shadow: 0px 0px 10px black;
+}
+
 .page header {
     grid-area: header;
     height: auto;
@@ -120,23 +136,6 @@ header {
     justify-content: center;
     align-items: stretch;
     gap: 20px;
-}
-
-button{
-    background-color: var(--theme-color);
-    border: none;
-    color: white;
-    padding: 16px 32px;
-    text-decoration: none;
-    cursor: pointer;
-    box-shadow: 0px 0px 5px black;
-    object-fit: contain;
-}
-
-button:hover{
-    background-color: var(--second-color);
-    color: black;
-    box-shadow: 0px 0px 10px black;
 }
 
 .srodek div form button{
