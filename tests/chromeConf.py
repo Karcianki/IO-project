@@ -8,10 +8,9 @@ from selenium.webdriver.chrome.options import Options
 @pytest.fixture(scope="class")
 def chrome_driver_init(request):
     options = Options()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     chrome_driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-    # chrome_driver = webdriver.Chrome(ChromeDriverManager().install())
     request.cls.driver = chrome_driver
     yield
     chrome_driver.close()
