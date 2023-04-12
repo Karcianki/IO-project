@@ -152,12 +152,6 @@ header button span {
     display: block;
 }
 
-
-.opcje #last {
-    margin-right: 10%;
-}
-
-
 .wyniki {
     color: white;
     font-weight: 100;
@@ -199,10 +193,6 @@ header button span {
         max-height: 10%;
         align-items: center;
         gap: 10px;
-    }
-
-    .opcje #last {
-        margin-right: 0;
     }
 
     body {
