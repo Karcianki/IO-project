@@ -1,5 +1,4 @@
-from django.shortcuts import render
-
+"""Django views module for karcianki application."""
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -8,23 +7,24 @@ from karcianki.forms import PokerHostForm, TysiacHostForm, BrydzHostForm, Player
 
 from karcianki.models import Game, Player
 
-def redirectInGame(request):
+def redirect_in_game(request):
+    """Function redirects to joined game if saved in session."""
     if 'player_id' in request.session:
         return HttpResponseRedirect(reverse('play'))
-    else:
-        return None
+    return None
 
 def index(request):
-    redirect = redirectInGame(request)
+    """Main page of application."""
+    redirect = redirect_in_game(request)
     if redirect is not None:
         return redirect
-    else:
-        if 'game_type' in request.session.keys():
-            del request.session['game_type']
-        return render(request, 'index.html')
+    if 'game_type' in request.session.keys():
+        del request.session['game_type']
+    return render(request, 'index.html')
 
 def host(request):
-    redirect = redirectInGame(request)
+    """Host a new game."""
+    redirect = redirect_in_game(request)
     if redirect is not None:
         return redirect
 
@@ -60,11 +60,12 @@ def host(request):
     context = {
         'form': form,
     }
-        
+
     return render(request, f'logowanie/{game_type}/host.html', context)
 
 def join(request):
-    redirect = redirectInGame(request)
+    """Join a game."""
+    redirect = redirect_in_game(request)
     if redirect is not None:
         return redirect
 
@@ -85,13 +86,14 @@ def join(request):
             return HttpResponseRedirect(reverse('play'))
     else:
         form = PlayerForm()
-    
+
     context = {
         'form': form,
     }
     return render(request, f'logowanie/{game_type}/login.html', context)
 
 def play(request):
+    """Game view."""
     if ('player_id' not in request.session.keys()) or \
         (not Player.objects.filter(id=request.session['player_id'])):
         return HttpResponseRedirect(reverse('quit'))
@@ -105,7 +107,8 @@ def play(request):
     }
     return render(request, f'{game_type}.html', context)
 
-def quit(request):
+def quit_game(request):
+    """Quit game and clear session."""
     player = None
 
     if 'player_id' in request.session.keys():
@@ -119,8 +122,8 @@ def quit(request):
             game = player.game
             game.delete()
         del request.session['is_host']
-    
+
     if 'game_type' in request.session.keys():
         del request.session['game_type']
-    
+
     return HttpResponseRedirect(reverse('index'))

@@ -1,1 +1,2 @@
-from django.test import TestCase
+"""Module responsible for testing"""
+# from django.test import TestCase
