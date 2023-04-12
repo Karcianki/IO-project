@@ -1,18 +1,13 @@
-# Django
 from django.test import LiveServerTestCase
 
-# Selenium
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 from .conf import getDriver
 
-# Create your tests here.
 class Test_Nav(LiveServerTestCase):
-  def test_nav_from_main(self):
+    def test_nav_from_main(self):
         driver = getDriver()
-        driver.get('http://127.0.0.1:8000/')
+        driver.get(self.live_server_url)
 
         games = ["poker", "brydz", "tysiac"]
         types = ["login", "create"]

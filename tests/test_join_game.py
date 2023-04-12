@@ -3,34 +3,28 @@ from django.test import LiveServerTestCase
 from selenium.webdriver.common.by import By
 
 from .conf import getDriver
-from karcianki.models import Player
+from karcianki.models import Player, Game
 
-class Test_Join_Game(LiveServerTestCase):
-    def test_join_game(self):
+class Test_Create_Game(LiveServerTestCase):
+    def test_create_game(self):
         driver = getDriver()
         driver.get(self.live_server_url)
+
+        Game.objects.create(game_id=123456)
 
         games = ["poker", "brydz", "tysiac"]
         for game in games:
             find = driver.find_element(By.ID, value=game)
-            button = find.find_element(By.CLASS_NAME, "create")
+            button = find.find_element(By.CLASS_NAME, "login")
             button.click()
 
             submit = driver.find_element(By.ID, "s_button")
 
-            if (game != "brydz"):
-                n_players = driver.find_element(By.ID, "id_n_players")
-                for i in [1, 11, 3]:
-                    n_players.clear()
-                    n_players.send_keys(i)
-                    submit.click()
-
-            if (game == "poker"):
-                chips = driver.find_element(By.ID, "id_chips_per_player")
-                for i in [9, 1000000002, 11]:
-                    chips.clear()
-                    chips.send_keys(i)
-                    submit.click()
+            gameId = driver.find_element(By.ID, "id_game_id")
+            for i in [99999, 1000000, 654321, 123456]:
+                gameId.clear()
+                gameId.send_keys(i)
+                submit.click()
 
             nickname = driver.find_element(By.ID, "id_nickname")
 
