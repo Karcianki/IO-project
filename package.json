@@ -7,8 +7,8 @@
   "author": "piter12345 <piotrek.blinowski@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "nohup python3 manage.py runserver & python3 manage.py test",
-    "postinstall": "pip install pytest && pip install selenium && pip install webdriver_manager && pip install pytest-cov && pip install django && pip install pylint && pip install pylint-django"
+    "test": "python3 manage.py test",
+    "postinstall": "pip install pytest && pip install selenium && pip install webdriver_manager && pip install pytest-cov && pip install django && pip install pylint && pip install pylint-django && pip install django-nose"
   },
   "dependencies": {
     "codecov": "^3.8.3",
