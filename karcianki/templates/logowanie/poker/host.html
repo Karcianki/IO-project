@@ -19,10 +19,10 @@
             </div>
             <form method="post">
                 {% csrf_token %}
-                
+
                 {% for field in form %}
                     {% if field.errors %}
-                        <p> {{ field.errors}} </p> 
+                        <p> {{ field.errors}} </p>
                     {% endif %}
 
                     {{ field.label_tag }} <br>

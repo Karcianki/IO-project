@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -105,7 +103,7 @@ def play(request):
     }
     return render(request, f'{game_type}.html', context)
 
-def quit(request):
+def quit_game(request):
     player = None
 
     if 'player_id' in request.session.keys():
