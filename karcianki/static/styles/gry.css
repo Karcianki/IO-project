@@ -85,7 +85,7 @@ header button span {
     bottom: 0;
     display: flex;
     align-items: stretch;
-    justify-content: flex-end;
+    justify-content: center;
     background-color: var(--theme-color);
     gap: 20px;
     box-shadow: 0px 0px 5px black;
@@ -186,6 +186,10 @@ header button span {
     display: block;
 }
 
+#quit {
+    background-color: red;
+}
+
 @media only screen and ((max-width: 800px) or (max-height: 800px)) {
     .opcje {
         overflow: auto;
@@ -215,7 +219,7 @@ header button span {
     }
 
     header {
-        max-height: 10%;
+        max-height: 15%;
     }
 
     .plansza {
@@ -225,5 +229,11 @@ header button span {
 
     .rzad {
         gap: 5px;
+    }
+}
+
+@media only screen and (orientation:landscape) and ((max-width: 800px) or (max-height: 800px)) {
+    .plansza {
+        top: 52.5%;
     }
 }
