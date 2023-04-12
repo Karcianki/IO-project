@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../login.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
+    <!-- <link rel="stylesheet" href="../login.css"> -->
     <meta name="viewport" content="width=device-width">
     <title>Tysiąc - dołącz</title>
 </head>
@@ -17,14 +19,27 @@
             <div class="game_name">
                 TYSIĄC
             </div>
-            <form>
-                <label for="game_number">Podaj numer gry:</label><br>
-                <input type="number" id="game_number" name="game_number" placeholder="##########"
-                    required><br>
-                <label for="nick">Podaj swój nick:</label><br>
-                <input type="text" id="nick" name="nick" pattern="[A-Za-z0-9]{4,10}" placeholder="Nick gracza"
-                    required><br>
-                <p>Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 10 znaków</p>
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <p class="error"> {{ form.non_field_errors }} </p>
+                {% endif %}
+                
+                {% for field in form %}
+                    {% if field.errors %}
+                        <p> {{ field.errors}} </p> 
+                    {% endif %}
+
+                    {{ field.label_tag }} <br>
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <p> {{ field.help_text }} </p>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+
                 <button type="submit">Dołącz do gry</button>
             </form>
         </div>

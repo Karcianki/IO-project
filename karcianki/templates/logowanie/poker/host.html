@@ -2,7 +2,8 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../login.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
     <meta name="viewport" content="width=device-width">
     <title>Poker - stwórz grę</title>
 </head>
@@ -10,19 +11,29 @@
     <header>
         KARCIANKI
     </header>
+
     <div class="panel" id="poker">
         <div class="game_form">
             <div class="game_name">
                 POKER
             </div>
-            <form>
-                <label for="gamers_number">Podaj liczbę graczy (od 2 do 10):</label><br>
-                <input type="number" id="gamers_number" name="gamers_number" min="2" max="10" placeholder="4" required><br>
-                <label for="chip_number">Podaj liczbę żetonów na gracza:</label><br>
-                <input type="number" id="chip_number" name="chip_number" placeholder="100" required><br>
-                <label for="nick">Podaj swój nick:</label><br>
-                <input type="text" id="nick" name="nick" pattern="[A-Za-z0-9]{4,10}" placeholder="Nick gracza" required><br>
-                <p>Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 10 znaków</p>
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    {% if field.errors %}
+                        <p> {{ field.errors}} </p> 
+                    {% endif %}
+
+                    {{ field.label_tag }} <br>
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <p> {{ field.help_text }} </p>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+
                 <button type="submit">Stwórz grę</button>
             </form>
         </div>

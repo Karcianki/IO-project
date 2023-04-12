@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="brydz.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/brydz.css' %}">
     <meta name="viewport" content="width=device-width">
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://kit.fontawesome.com/f741e76120.js" crossorigin="anonymous"></script>
@@ -13,7 +14,8 @@
 <body>
 
     <header>
-        BRYDŻ
+        BRYDŻ<br>
+        Numer gry: {{ game_id }}
         <button type="submit" aria-label="info"><span class="fa-solid fa-question"></span></button>
     </header>
 
@@ -39,7 +41,7 @@
                         1000
                     </div>
                 </div>
-                <img src="../images/stol.png" class="stol" alt="">
+                <img src="{% static 'images/stol.png' %}" class="stol" alt="">
                 <div class="gracz" id="gracz2">
                     <span class="fa-solid fa-circle-user ikona"></span>
                     <div class="dane">
@@ -117,10 +119,10 @@
                 <button type="submit"> 7 </button>
             </div>
             <div class="atut">
-                <button type="submit"> <img src="../images/clubs.png" alt="trefl" width="30" height="30"> </button>
-                <button type="submit"> <img src="../images/diamonds.png" alt="karo" width="30" height="30"> </button>
-                <button type="submit"> <img src="../images/hearts.png" alt="kier" width="30" height="30"> </button>
-                <button type="submit"> <img src="../images/spades.png" alt="pik" width="30" height="30"> </button>
+                <button type="submit"> <img src="{% static 'images/clubs.png' %}" alt="trefl" width="30" height="30"> </button>
+                <button type="submit"> <img src="{% static 'images/diamonds.png' %}" alt="karo" width="30" height="30"> </button>
+                <button type="submit"> <img src="{% static 'images/hearts.png' %}" alt="kier" width="30" height="30"> </button>
+                <button type="submit"> <img src="{% static 'images/spades.png' %}" alt="pik" width="30" height="30"> </button>
                 <button type="submit"> BA </button>
             </div>
         </div>

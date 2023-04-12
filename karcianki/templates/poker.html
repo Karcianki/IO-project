@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="poker.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/poker.css' %}">
     <meta name="viewport" content="width=device-width">
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://kit.fontawesome.com/f741e76120.js" crossorigin="anonymous"></script>
@@ -12,7 +13,8 @@
 
 <body>
     <header>
-        POKER
+        POKER <br>
+        Numer gry: {{ game_id }}
         <button type="submit" aria-label="info"><span class="fa-solid fa-question"></span></button>
     </header>
     <div class="page">
@@ -60,7 +62,7 @@
                         1000
                     </div>
                 </div>
-                <img src="../images/stol.png" alt="" class="stol">
+                <img src="{% static 'images/stol.png' %}" alt="" class="stol">
                 <div class="gracz" id="gracz2">
                     <span class="fa-solid fa-circle-user ikona"></span>
                     <div class="dane">
@@ -124,7 +126,7 @@
                     poker królewski
                 </td>
                 <td>
-                    <img src="../images/poker_hands/Royal_Flush.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/Royal_Flush.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             <tr>
@@ -132,7 +134,7 @@
                     poker
                 </td>
                 <td>
-                    <img src="../images/poker_hands/Straight_Flush.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/Straight_Flush.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             <tr>
@@ -140,7 +142,7 @@
                     kareta
                 </td>
                 <td>
-                    <img src="../images/poker_hands/Poker.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/Poker.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             <tr>
@@ -148,7 +150,7 @@
                     full
                 </td>
                 <td>
-                    <img src="../images/poker_hands/Full.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/Full.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             <tr>
@@ -156,7 +158,7 @@
                     kolor
                 </td>
                 <td>
-                    <img src="../images/poker_hands/Flush.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/Flush.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             <tr>
@@ -164,7 +166,7 @@
                     strit
                 </td>
                 <td>
-                    <img src="../images/poker_hands/Straight.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/Straight.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             <tr>
@@ -172,7 +174,7 @@
                     trójka
                 </td>
                 <td>
-                    <img src="../images/poker_hands/Three_of_a_kind.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/Three_of_a_kind.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             <tr>
@@ -180,7 +182,7 @@
                     dwie pary
                 </td>
                 <td>
-                    <img src="../images/poker_hands/Two_Pairs.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/Two_Pairs.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             <tr>
@@ -188,7 +190,7 @@
                     para
                 </td>
                 <td>
-                    <img src="../images/poker_hands/One_Pair.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/One_Pair.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             <tr>
@@ -196,7 +198,7 @@
                     wysoka karta
                 </td>
                 <td>
-                    <img src="../images/poker_hands/No_Pair.png" alt="Błąd w załadowaniu zdjęcia">
+                    <img src="{% static 'images/poker_hands/No_Pair.png' %}" alt="Błąd w załadowaniu zdjęcia">
                 </td>
             </tr>
             </tbody>

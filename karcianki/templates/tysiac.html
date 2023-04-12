@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="tysiac.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/tysiac.css' %}">
     <meta name="viewport" content="width=device-width">
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="https://kit.fontawesome.com/f741e76120.js" crossorigin="anonymous"></script>
@@ -12,7 +13,8 @@
 
 <body>
     <header>
-        TYSIĄC
+        TYSIĄC<br>
+        Numer gry: {{ game_id }}
         <button type="submit" aria-label="info"><span class="fa-solid fa-question"></span></button>
     </header>
     <div class="page">
@@ -37,7 +39,7 @@
                         1000
                     </div>
                 </div>
-                <img src="../images/stol.png" class="stol" alt="">
+                <img src="{% static 'images/stol.png' %}" class="stol" alt="">
                 <div class="gracz" id="gracz2">
                     <span class="fa-solid fa-circle-user ikona"></span>
                     <div class="dane">

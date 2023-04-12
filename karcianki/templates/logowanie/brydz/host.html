@@ -2,7 +2,9 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../login.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
+    <!-- <link rel="stylesheet" href="../login.css"> -->
     <meta name="viewport" content="width=device-width">
     <title>Brydż - stwórz grę</title>
 </head>
@@ -17,10 +19,23 @@
             </div>
             Liczba graczy:<br><br>
             4<br><br>
-            <form>
-                <label for="nick">Podaj swój nick:</label><br>
-                <input type="text" id="nick" name="nick" pattern="[A-Za-z0-9]{4,10}" placeholder="Nick gracza" required><br>
-                <p>Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do 10 znaków</p>
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    {% if field.errors %}
+                        <p> {{ field.errors}} </p> 
+                    {% endif %}
+                    
+                    {{ field.label_tag }} <br>
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <p> {{ field.help_text }} </p>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+
                 <button type="submit">Stwórz grę</button>
             </form>
         </div>

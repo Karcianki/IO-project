@@ -1,5 +1,5 @@
 /* stylelint-disable media-feature-name-no-unknown */
-@import "../style.css";
+@import url("style.css");
 
 .game_form {
     text-align: center;
@@ -44,6 +44,11 @@
     margin: 0.5em;
     height: 2em;
     width: 100px;
+}
+
+.game_form ul {
+    list-style: none;
+    color: red;
 }
 
 .game_info {
