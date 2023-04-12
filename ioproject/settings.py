@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'karcianki.apps.KarciankiConfig',
-    'django_nose',
 ]
 
 MIDDLEWARE = [
