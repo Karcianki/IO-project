@@ -25,7 +25,7 @@ jobs:
     - name: validate Python
       run: |
         for f in $(find karcianki/ ioproject/ tests/ -name '*.py'); do
-          yarn run pylint $f
+          pylint --load-plugins pylint_django $f
         done;
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
