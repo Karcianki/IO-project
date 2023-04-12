@@ -121,9 +121,7 @@ header {
     align-items: stretch;
     gap: 20px;
 }
-.srodek div form button{
-    width: 100%;
-}
+
 button{
     background-color: var(--theme-color);
     border: none;
@@ -134,11 +132,17 @@ button{
     box-shadow: 0px 0px 5px black;
     object-fit: contain;
 }
+
 button:hover{
     background-color: var(--second-color);
     color: black;
     box-shadow: 0px 0px 10px black;
 }
+
+.srodek div form button{
+    width: 100%;
+}
+
 .panel {
     color: white;
     background-color: rgba(0,0,0,.7);
