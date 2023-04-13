@@ -103,7 +103,9 @@ def play(request):
     player = Player.objects.get(id=request.session['player_id'])
     game_id = player.game.game_id
     context = {
-        'game_id': game_id
+        'nicknames': ['sobczak', 'maciek', 'piotrek'],
+        'game_id': game_id,
+        'chips_per_player' : [300, 300, 300],
     }
     return render(request, f'{game_type}.html', context)
 
