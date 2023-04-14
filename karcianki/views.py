@@ -76,8 +76,10 @@ def join(request):
             game_id = form.cleaned_data['game_id']
             game = get_object_or_404(Game, game_id=game_id)
             nickname = form.cleaned_data['nickname']
-            players_in_game = Player.objects.filter(game=game).count()
-            player = Player(nickname=nickname, game=game, player_number=players_in_game)
+            player_number = 0
+            while Player.objects.filter(game=game, player_number=player_number).exists():
+                player_number += 1
+            player = Player(nickname=nickname, game=game, player_number=player_number)
             player.save()
             request.session['player_id'] = player.id
             request.session['game_type'] = game_type
@@ -132,6 +134,9 @@ def quit_game(request):
             game = player.game
             game.delete()
         del request.session['is_host']
+
+    if player is not None:
+        player.delete()
 
     if 'game_type' in request.session.keys():
         del request.session['game_type']
