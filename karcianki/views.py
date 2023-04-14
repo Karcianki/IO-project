@@ -18,8 +18,6 @@ def index(request):
     redirect = redirect_in_game(request)
     if redirect is not None:
         return redirect
-    if 'game_type' in request.session.keys():
-        del request.session['game_type']
     return render(request, 'index.html')
 
 def host(request):
