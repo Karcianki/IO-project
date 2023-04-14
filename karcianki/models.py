@@ -36,12 +36,15 @@ class Player(models.Model):
                                     MinLengthValidator(4),
                                 ])
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    player_number = models.IntegerField(default=0)
 
     class Meta:
         "Metadata class."
         constraints = [
             models.UniqueConstraint(
-                fields=['nickname', 'game_id'], name='unique nickname in game')
+                fields=['nickname', 'game_id'], name='unique nickname in game'),
+            models.UniqueConstraint(
+                fields=['player_number', 'game_id'], name='unique player number in game'),
         ]
 
     def __str__(self):

@@ -18,8 +18,6 @@ def index(request):
     redirect = redirect_in_game(request)
     if redirect is not None:
         return redirect
-    if 'game_type' in request.session.keys():
-        del request.session['game_type']
     return render(request, 'index.html')
 
 def host(request):
@@ -41,7 +39,7 @@ def host(request):
             new_game = Game.create()
             new_game.save()
             nickname = form.cleaned_data['nickname']
-            player = Player(nickname=nickname, game=new_game)
+            player = Player(nickname=nickname, game=new_game, player_number=0)
             player.save()
             request.session['player_id'] = player.id
             request.session['game_type'] = game_type
@@ -78,7 +76,8 @@ def join(request):
             game_id = form.cleaned_data['game_id']
             game = get_object_or_404(Game, game_id=game_id)
             nickname = form.cleaned_data['nickname']
-            player = Player(nickname=nickname, game=game)
+            players_in_game = Player.objects.filter(game=game).count()
+            player = Player(nickname=nickname, game=game, player_number=players_in_game)
             player.save()
             request.session['player_id'] = player.id
             request.session['game_type'] = game_type
@@ -102,8 +101,19 @@ def play(request):
 
     player = Player.objects.get(id=request.session['player_id'])
     game_id = player.game.game_id
+
+    game = Game.objects.get(game_id=game_id)
+
+    players = Player.objects.filter(game = game).order_by('player_number')
+
+    nicknames = players.values_list('nickname', flat=True)
+
+    chips = []
+
     context = {
-        'game_id': game_id
+        'game_id': game_id,
+        'nicknames': nicknames,
+        'chips_per_player': chips,
     }
     return render(request, f'{game_type}.html', context)
 

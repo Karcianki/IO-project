@@ -6,3 +6,4 @@ db.sqlite3
 ioproject/__pycache__/
 karcianki/__pycache__/
 karcianki/migrations/__pycache__/
+__pycache__/
