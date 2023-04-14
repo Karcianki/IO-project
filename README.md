@@ -2,9 +2,9 @@
 
 ## Sposób uruchomienia:
 
-1. ''' yarn install '''
-2. ''' python3 manage.py runserver '''
-3. Wejść na stronę domową: ''' 127.0.0.1:8000 '''
+1. ` yarn install `
+2. ` python3 manage.py runserver `
+3. Wejść na stronę domową: ` 127.0.0.1:8000 `
 
 ## Opis projektu:
   Aplikacja ma na celu umożliwić bezproblemowe przeprowadzanie rozgrywki w sytuacji, gdy mamy dostęp wyłącznie do kart i internetu. Jej zadaniem będzie przeprowadzać grę, tzn. informować użytkownika o jego turze, a następnie przetwarzać jego decyzję, informując o tym pozostałych graczy. Przez cały czas trwania rozgrywki będzie monitorowany jej bilans (między innymi liczba punktów każdego z graczy).
