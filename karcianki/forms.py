@@ -64,7 +64,7 @@ class PlayerForm(AForm):
     def clean_game_id(self):
         """Cleaning game_id field."""
         data = self.cleaned_data['game_id']
-        if not Game.objects.filter(game_id=data):
+        if not Game.objects.filter(game_id=data).exists():
             raise ValidationError('Podana gra nie istnieje')
         return data
 
