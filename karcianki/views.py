@@ -133,6 +133,9 @@ def quit_game(request):
             game.delete()
         del request.session['is_host']
 
+    if player is not None:
+        player.delete()
+
     if 'game_type' in request.session.keys():
         del request.session['game_type']
 

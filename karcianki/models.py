@@ -9,6 +9,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator, MinLeng
 
 class Game(models.Model):
     """Class Game provides database model for created games."""
+    MIN_ID = 100000
     MAX_ID = 999999
     DIGITS = int(math.log10(MAX_ID)) + 1
     game_id = models.DecimalField(max_digits=DIGITS, decimal_places=0, primary_key=True,
@@ -21,7 +22,7 @@ class Game(models.Model):
     @classmethod
     def create(cls):
         """Function create creates new game with unique game_id."""
-        new_id = randint(0, Game.MAX_ID)
+        new_id = randint(Game.MIN_ID, Game.MAX_ID)
         game = Game(game_id=new_id)
         return game
 
