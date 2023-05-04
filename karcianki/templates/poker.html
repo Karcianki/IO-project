@@ -12,13 +12,15 @@
 </head>
 
 <body>
+
+
     <header>
         POKER <br>
         Numer gry: {{ game_id }}
         <button type="submit" aria-label="info"><span class="fa-solid fa-question"></span></button>
     </header>
     <div class="page">
-        <div class="plansza">
+        <div class="plansza" id="game_board" game_id={{game_id}}>
             <div class="rzad">
                 <div class="gracz" id="gracz2">
                     <span class="fa-solid fa-circle-user ikona"></span>
@@ -257,6 +259,9 @@
             $('.zasady').toggleClass("show");
         });
     </script>
+
+
+    <script src = "{% static 'js/game.js' %}"></script>
 </body>
 
 </html>
