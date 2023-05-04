@@ -41,6 +41,7 @@ def host(request):
             nickname = form.cleaned_data['nickname']
             player = Player(nickname=nickname, game=new_game, player_number=0)
             player.save()
+            request.session['game_id'] = new_game.game_id
             request.session['player_id'] = player.id
             request.session['game_type'] = game_type
             request.session['is_host'] = True
@@ -81,6 +82,7 @@ def join(request):
                 player_number += 1
             player = Player(nickname=nickname, game=game, player_number=player_number)
             player.save()
+            request.session['game_id'] = game_id
             request.session['player_id'] = player.id
             request.session['game_type'] = game_type
 

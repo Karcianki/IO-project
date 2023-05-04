@@ -1,13 +1,11 @@
 var game_id = document.getElementById("game_board").getAttribute("game_id");
 
-var connectionString = 'wss://' + window.location.host + '/ws/play/' + game_id + '/';
-console.log(connectionString);
+var connectionString = 'ws://' + window.location.host + '/ws/karcianki/' + game_id + '/';
 var gameSocket = new WebSocket(connectionString);
 
 // Main function which handles the connection
 // of websocket.
 function connect() {
-    console.log("connect");
     gameSocket.onopen = function open() {
         console.log('WebSockets connection created.');
         // on websocket open, send the START event.
@@ -19,6 +17,7 @@ function connect() {
 
     gameSocket.onclose = function (e) {
         console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+        console.log(gameSocket.onclose)
         setTimeout(function () {
             connect();
         }, 1000);
@@ -39,13 +38,9 @@ function connect() {
                 console.log("No event");
         }
     };
-    console.log(gameSocket.readyState);
-    console.log(WebSocket.OPEN);
     if (gameSocket.readyState == WebSocket.OPEN) {
-        console.log("something");
         gameSocket.onopen();
     }
-    while ()
 }
 
 //call the connect function at the start.

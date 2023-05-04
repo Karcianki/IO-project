@@ -7,11 +7,12 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
         # self.room_name = self.scope['url_route'\]['kwargs']['room_code']
         # self.room_group_name = 'room_%s' % self.room_name
         self.game_id = self.scope['session']['game_id']
+        self.game_name = 'game_%s' % self.game_id
 
         # Join room group
         await self.channel_layer.group_add(
             # self.room_group_name,
-            self.game_id,
+            self.game_name,
             self.channel_name
         )
         await self.accept()
@@ -21,7 +22,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
         # Leave room group
         await self.channel_layer.group_discard(
             # self.room_group_name,
-            self.game_id,
+            self.game_name,
             self.channel_name
         )
 
@@ -36,7 +37,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
         if event == 'JOIN':
             # Send message to room group
             # await self.channel_layer.group_send(self.room_group_name, {
-            await self.channel_layer.group_send(self.game_id, {
+            await self.channel_layer.group_send(self.game_name, {
                 'type': 'send_message',
                 'message': message,
                 "event": "JOIN"
