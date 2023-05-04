@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "test": "pytest --cov=karcianki/",
-    "postinstall": "pip install pytest && pip install selenium && pip install webdriver_manager && pip install pytest-cov && pip install django && pip install pylint && pip install pylint-django && pip install pytest-django && pip install djangorestframework && npm install bootstrap reactstrap axios --save && pip install channels==3.0 && pip install channels_redis==3.2"
+    "postinstall": "pip install pytest && pip install selenium && pip install webdriver_manager && pip install pytest-cov && pip install django && pip install pylint && pip install pylint-django && pip install pytest-django && pip install djangorestframework && npm install bootstrap reactstrap axios --save && pip install channels==3.0.5 && pip install channels_redis==3.2"
   },
   "dependencies": {
     "codecov": "^3.8.3",

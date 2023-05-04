@@ -25,13 +25,13 @@ class AForm(forms.Form):
 
 class PokerHostForm(AForm):
     """Form for hosting poker game."""
-    n_players = forms.DecimalField(min_value=2, max_value=10,
+    n_players = forms.IntegerField(min_value=2, max_value=10,
                                    required=True,
                                    widget=forms.NumberInput(
                                     attrs={'placeholder': 4}
                                    ),
                                    label="Podaj liczbę graczy (od 2 do 10)")
-    chips_per_player = forms.DecimalField(min_value=10, max_value=1000000,
+    chips_per_player = forms.IntegerField(min_value=10, max_value=1000000,
                                           required=True,
                                           widget=forms.NumberInput(
                                             attrs={'placeholder': 100}
@@ -41,7 +41,7 @@ class PokerHostForm(AForm):
 
 class TysiacHostForm(AForm):
     """Form for hosting thousand game."""
-    n_players = forms.DecimalField(min_value=2, max_value=4,
+    n_players = forms.IntegerField(min_value=2, max_value=4,
                                    required=True,
                                    widget=forms.NumberInput(
                                     attrs={'placeholder': 2}
@@ -54,7 +54,7 @@ class BrydzHostForm(AForm):
 
 class PlayerForm(AForm):
     """Form for joining game."""
-    game_id = forms.DecimalField(min_value=100000, max_value=Game.MAX_ID,
+    game_id = forms.IntegerField(min_value=100000, max_value=Game.MAX_ID,
                                    required=True,
                                    widget=forms.NumberInput(
                                     attrs={'placeholder': 123456}
