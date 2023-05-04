@@ -12,11 +12,10 @@ class Game(models.Model):
     MIN_ID = 100000
     MAX_ID = 999999
     DIGITS = int(math.log10(MAX_ID)) + 1
-    game_id = models.DecimalField(max_digits=DIGITS, decimal_places=0, primary_key=True,
+    game_id = models.IntegerField(primary_key=True,
                                   validators=[
-                                      MinValueValidator(decimal.Decimal(0)),
-                                      MaxValueValidator(
-                                          decimal.Decimal(MAX_ID))
+                                      MinValueValidator(MIN_ID),
+                                      MaxValueValidator(MAX_ID)
                                   ],)
 
     @classmethod

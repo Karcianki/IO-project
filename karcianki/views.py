@@ -7,6 +7,12 @@ from karcianki.forms import PokerHostForm, TysiacHostForm, BrydzHostForm, Player
 
 from karcianki.models import Game, Player
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+
+from karcianki.serializers import *
+
 def redirect_in_game(request):
     """Function redirects to joined game if saved in session."""
     if 'player_id' in request.session:
@@ -144,3 +150,21 @@ def quit_game(request):
         del request.session['game_type']
 
     return HttpResponseRedirect(reverse('index'))
+
+
+@api_view(['GET'])
+def game_data(request, game_id):
+    game = get_object_or_404(Game, game_id=game_id)
+
+    if request.method == 'GET':
+        serializer = GameSerializer(game)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def players_data(request, game_id):
+    game = get_object_or_404(Game, game_id=game_id)
+
+    if request.method == 'GET':
+        players = Player.objects.filter(game=game)
+        serializer = PlayerSerializer(players, many=True)
+        return Response(serializer.data)
