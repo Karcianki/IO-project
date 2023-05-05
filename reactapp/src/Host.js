@@ -5,7 +5,6 @@ const Host = () => {
     const [chips, setChips] = useState("");
     const [nickname, setNickname] = useState("");
     const [isValid, setIsValid] = useState(true);
-    const [gameId, setGameId] = useState("");
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -36,8 +35,7 @@ const Host = () => {
             })
             .then((response) => response.json())
             .then((data) => {
-                setGameId(data.game_id);
-                history.push("/game");
+                window.location.href = `/poker?game_id=${data.game_id}`;
             })
             .catch((error) => {
                 console.error("Error:", error);
