@@ -4,15 +4,15 @@ import { Link } from 'react-router-dom';
 class Game extends Component {
     render() {
         return (
-            <div class="panel" id={this.props.id}>
-                <div class="srodek">
-                    <div class="tekst">{this.props.name}</div>
+            <div className="panel" id={this.props.id}>
+                <div className="srodek">
+                    <div className="tekst">{this.props.name}</div>
                     <div>
-                        <Link to='/join'>
-                            <button type="submit" class="login" name="game" value="poker">Dołącz do gry</button>
+                        <Link to='/login'>
+                            <button type="submit" className="login" name="game" value="poker">Dołącz do gry</button>
                         </Link>
                         <Link to='/host'>
-                            <button type="submit" class="create" name="game" value="poker">Stwórz grę</button>
+                            <button type="submit" className="create" name="game" value="poker">Stwórz grę</button>
                         </Link>
                     </div>
                 </div>
@@ -24,11 +24,9 @@ class Game extends Component {
 class App extends Component {
     render () {
         return (
-            <div class="page">
+            <div className="page">
                 <header> KARCIANKI </header>
                 <Game id="poker" name="POKER"/>
-                <Game id="brydz" name="BRYDŻ"/>
-                <Game id="tysiac" name="TYSIĄC"/>
             </div> 
         );
     }
