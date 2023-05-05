@@ -42,6 +42,14 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 'message': message,
                 "event": "JOIN"
             })
+        elif event == 'QUIT':
+            # Send message to room group
+            # await self.channel_layer.group_send(self.room_group_name, {
+            await self.channel_layer.group_send(self.game_name, {
+                'type': 'send_message',
+                'message': message,
+                "event": "QUIT"
+            })
 
     async def send_message(self, res):
         """ Receive message from room group """

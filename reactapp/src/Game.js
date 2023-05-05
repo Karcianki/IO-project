@@ -40,7 +40,7 @@ const Game = () => {
             console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
             console.log(gameSocket.onclose)
             gameSocket.send(JSON.stringify({
-                "event": "LEAVE",
+                "event": "QUIT",
                 "message": ""
             }));
             setTimeout(function () {
@@ -56,11 +56,11 @@ const Game = () => {
             let message = data['message'];
             let event = data["event"];
             switch (event) {
-                case "LEAVE":
-                    console.log("LEAVE");
-                    break;
                 case "JOIN":
                     console.log("JOIN");
+                    break;
+                case "QUIT":
+                    console.log("QUIT");
                     break;
                 default:
                     console.log("No event");
@@ -81,7 +81,7 @@ const Game = () => {
     const quit = () => {
         alert("sending quit");
         gameSocket.send(JSON.stringify({
-            "event": "LEAVE",
+            "event": "QUIT",
             "message": ""
         })); 
         alert("quit sent");
