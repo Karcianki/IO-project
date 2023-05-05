@@ -171,9 +171,9 @@ def players_data(request, game_id):
         return Response(serializer.data)
     
 @api_view(['GET'])
-def player_data(request, game_id, nickname):
+def player_data(request, game_id, player_id):
     game = get_object_or_404(Game, game_id=game_id)
-    player = get_object_or_404(Player, game=game, nickname=nickname)
+    player = get_object_or_404(Player, game=game, player_number=player_id)
 
     if request.method == 'GET':
         serializer = PlayerSerializer(player)

@@ -29,7 +29,7 @@ urlpatterns = [
     path('karcianki/', include('karcianki.urls')),
     re_path(r'^api/karcianki/game/(?P<game_id>[0-9]{6})/$', game_data),
     re_path(r'^api/karcianki/players/(?P<game_id>[0-9]{6})/$', players_data),
-    re_path(r'^api/karcianki/player/(?P<game_id>[0-9]{6})/(?P<nickname>[a-z]{4,10})$', player_data),
+    re_path(r'^api/karcianki/player/(?P<game_id>[0-9]{6})/(?P<player_id>[0-9]{1,2})$', player_data),
     re_path(r'^api/karcianki/create/$', create_game),
     re_path(r'^api/karcianki/join/$', join_game),
     re_path(r'^api/karcianki/quit/$', delete_player),
