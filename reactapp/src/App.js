@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 
-class Game extends Component {
+class GameMenu extends Component {
     render() {
         return (
             <div className="panel" id={this.props.id}>
@@ -26,7 +26,7 @@ class App extends Component {
         return (
             <div className="page">
                 <header> KARCIANKI </header>
-                <Game id="poker" name="POKER"/>
+                <GameMenu id="poker" name="POKER"/>
             </div> 
         );
     }
