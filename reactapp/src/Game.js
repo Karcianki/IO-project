@@ -6,10 +6,12 @@ import { Link, useSearchParams, useLocation } from 'react-router-dom';
 class Player extends Component {
     render() {
         return (
-            <div className={this.props.class} id={this.props.id}>
+            <div className={ JSON.parse(this.props.data).class } id={this.props.id}>
                 <span className="fa-solid fa-circle-user ikona"></span>
                 <div className="dane">
-                    { this.props.name }
+                    
+                    <div>{ JSON.parse(this.props.data).nickname }</div>
+                    <div>{ JSON.parse(this.props.data).chips }</div>
                 </div>
             </div>
         )
@@ -18,17 +20,29 @@ class Player extends Component {
 
 const Game = () => {
     const [showRules, setShowRules] = useState(false);
-    const [players, setPlayers] = useState([]);
-
+    
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
     const nickname = searchParams.get('nickname');
 
+    const MAX_PLAYERS=10; 
+    const chips_per_player = 100;
+
+    const [players, setPlayers] = useState([]);
+    const [playerData, setPlayerData] = useState(
+        Array(MAX_PLAYERS).fill(JSON.stringify({
+            class: "gracz",
+            nickname: "",
+            chips: chips_per_player,
+        }))
+    );
+
     const django_host = 'localhost:8000'
     const connectionString = 'ws://' + django_host + '/ws/karcianki/' + game_id + '/';
-    const gameSocket = new WebSocket(connectionString);
+    let gameSocket;
 
-    function connect() {
+    useEffect(() => {
+        gameSocket = new WebSocket(connectionString);
         gameSocket.onopen = function open() {
             console.log('WebSockets connection created.');
             // on websocket open, send the START event.
@@ -40,9 +54,6 @@ const Game = () => {
 
         gameSocket.onclose = function (e) {
             console.log('Socket is closed.', e.reason);
-            // setTimeout(function () {
-            //     connect();
-            // }, 1000);
         };
         // Sending the info about the room
         gameSocket.onmessage = function (e) {
@@ -55,11 +66,9 @@ const Game = () => {
             switch (event) {
                 case "JOIN":
                     console.log("JOIN");
-                    window.location.reload();
                     break;
                 case "QUIT":
                     console.log("QUIT");
-                    window.location.reload();
                     break;
                 default:
                     console.log("No event");
@@ -68,10 +77,32 @@ const Game = () => {
         if (gameSocket.readyState === WebSocket.OPEN) {
             gameSocket.onopen();
         }
-    }
+    }, [])
 
-    //call the connect function at the start.
-    connect();
+    const updatePlayerData = (player_number) => {
+        let newData = playerData;
+        let player_data = JSON.parse(newData[player_number]);
+        fetch(`http://localhost:8000/api/karcianki/player/${game_id}/${player_number}`, {
+
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then((response) => {
+            if (response.status === 404) {
+                player_data.class = "gracz hide";
+            } else {
+                player_data.class = "gracz";
+                player_data.nickname = response.json().nickname;
+                player_data.chips = response.json().chips;
+            }
+        })
+        .then(() => {
+            newData[player_number] = JSON.stringify(player_data);
+            setPlayerData(newData);    
+        })
+    } 
 
     const toggleRules = () => {
         setShowRules(!showRules);
@@ -97,66 +128,6 @@ const Game = () => {
         })
     };
 
-    const update = () => {
-        fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-        .then(response => response.json())
-        .then(data => setPlayers(data));
-    }
-
-    useEffect(() => {
-        fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-            .then(response => response.json())
-            .then(data => setPlayers(data));
-    }, [game_id]);
-
-    function makePlayers() {
-        const playersDisplay = [];
-        var pls = [];
-        for (let i = 0; i < 10; i++) {
-            if (i < players.length) {
-                pls.push(<Player id={`gracz${i}`} name={players[i].nickname}></Player>);
-            } else {
-                pls.push("");
-            }
-        }
-
-        playersDisplay.push(
-        <div className="rzad">
-            {pls[0]}
-            {pls[1]}
-            {pls[2]}
-            {pls[3]}
-        </div>
-        );
-
-        playersDisplay.push(
-            <div className="rzad" id="ze_stolem">
-            {pls[4]}
-            <img src={table} alt="" className="stol"/>
-            {pls[5]}
-        </div>);
-
-        playersDisplay.push(
-        <div className="rzad">
-            {pls[6]}
-            {pls[7]}
-            {pls[8]}
-            {pls[9]}
-        </div>);
-
-        return playersDisplay;
-    }
-
     return (
         <div>
             <header>
@@ -171,7 +142,23 @@ const Game = () => {
 
             <div className="page">
                 <div className="plansza" id="game_board" game_id={game_id}>
-                    {makePlayers()}
+                    <div className="rzad">
+                        <Player id="gracz1" name="chuj" data={playerData[1]} /> 
+                        <Player id="gracz4" name="siur" data={playerData[4]} />
+                        <Player id="gracz6" name="parówa" data={playerData[6]} />
+                        <Player id="gracz8" name="kutas" data={playerData[8]} />
+                    </div>
+                    <div className="rzad" id="ze_stolem">
+                        <Player id="gracz0" name="fiut" data={playerData[0]} />
+                        <img src={table} alt="" className="stol"/>
+                        <Player id="gracz1" name="idk" data={playerData[1]} />
+                    </div>
+                    <div className="rzad">
+                        <Player id="gracz3" name="idk" data={playerData[3]} />
+                        <Player id="gracz5" name="idk" data={playerData[5]} />
+                        <Player id="gracz7" name="idk" data={playerData[7]} />
+                        <Player id="gracz9" name="idk" data={playerData[9]} />
+                    </div>
                 </div>
 
                 <div className={showRules? "zasady show" : "zasady"}>
