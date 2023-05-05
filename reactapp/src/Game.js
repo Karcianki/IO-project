@@ -22,18 +22,19 @@ const Game = () => {
     
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
-    const nickname = searchParams.get('nickname');
-    const player_number = 0;
+    const player_number = searchParams.get('player_number');
 
     const MAX_PLAYERS=10; 
     const chips_per_player = 100;
 
+    const default_player_data = {
+        class: "gracz hide",
+        nickname: "",
+        chips: chips_per_player,
+    }
+
     const [playerData, setPlayerData] = useState(
-        Array(MAX_PLAYERS).fill(JSON.stringify({
-            class: "gracz hide",
-            nickname: "",
-            chips: chips_per_player,
-        }))
+        Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data))
     );
 
     const django_host = 'localhost:8000'
@@ -66,9 +67,11 @@ const Game = () => {
                 case "JOIN":
                     console.log("JOIN");
                     console.log(message);
+                    updatePlayers();
                     break;
                 case "QUIT":
                     console.log("QUIT");
+                    updatePlayers();
                     break;
                 default:
                     console.log("No event");
@@ -79,10 +82,8 @@ const Game = () => {
         }
     }, [])
 
-    const updatePlayerData = (player_number) => {
-        let newData = { ...playerData};
-        let player_data = JSON.parse(newData[player_number]);
-        fetch(`http://localhost:8000/api/karcianki/player/${game_id}/${player_number}`, {
+    const updatePlayers = () => {
+        fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {
 
             method: "GET",
             headers: {
@@ -91,32 +92,33 @@ const Game = () => {
         })
         .then((response) => {
             if (response.status === 404) {
-                player_data.class = "gracz hide";
                 return null;
             } else {
                 return response.json();
             }
         })
         .then((data) => {
+            let newData = Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data)); 
             if(data) {
-                player_data.class = "gracz";
-                player_data.nickname = data.nickname;
-                player_data.chips = data.chips;
-                newData[player_number] = JSON.stringify(player_data);
-                setPlayerData(newData);    
+                for (let i = 0; i < data.length; i++) {
+                    let player_data = {
+                        "class": "gracz",
+                        "nickname": data[i].nickname,
+                        "chips": data[i].chips,
+                    }
+                    newData[data[i].player_number] = JSON.stringify(player_data);
+                }
             }
-        })
-    } 
+            setPlayerData(newData);    
+        })  
+    }
 
     useEffect(() => {
-        for (let i = 0; i < MAX_PLAYERS; i++) {
-            updatePlayerData(i);
-        }
+        updatePlayers();
     }, [])
 
     const toggleRules = () => {
         setShowRules(!showRules);
-        updatePlayerData(0);
     };
 
     const quit = () => {
@@ -126,16 +128,18 @@ const Game = () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                nickname: nickname,
-                game_id: game_id
+                player_number: player_number,
+                game_id: game_id,
             }),
         })
         .then(() => {
-            gameSocket.send(JSON.stringify({
-                "event": "QUIT",
-                "message": player_number,
-            })); 
-            gameSocket.close();
+            if (gameSocket) {
+                gameSocket.send(JSON.stringify({
+                    "event": "QUIT",
+                    "message": player_number,
+                })); 
+                gameSocket.close();
+            }
         })
     };
 
@@ -154,7 +158,7 @@ const Game = () => {
             <div className="page">
                 <div className="plansza" id="game_board" game_id={game_id}>
                     <div className="rzad">
-                        <Player id="gracz1" name="chuj" data={playerData[1]} /> 
+                        <Player id="gracz1" name="chuj" data={playerData[2]} /> 
                         <Player id="gracz4" name="siur" data={playerData[4]} />
                         <Player id="gracz6" name="parówa" data={playerData[6]} />
                         <Player id="gracz8" name="kutas" data={playerData[8]} />
