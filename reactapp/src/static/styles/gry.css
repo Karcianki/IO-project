@@ -70,6 +70,10 @@ header button span {
     width: 100%;
 }
 
+.gracz.hide {
+    display: none;
+}
+
 .gracz span {
     font-size: 2em;
     border-radius: 50%;

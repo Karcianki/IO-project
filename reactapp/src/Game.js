@@ -6,10 +6,10 @@ import { Link, useSearchParams, useLocation } from 'react-router-dom';
 class Player extends Component {
     render() {
         return (
-            <div className="gracz" id={this.props.id}>
+            <div className={this.props.class} id={this.props.id}>
                 <span className="fa-solid fa-circle-user ikona"></span>
                 <div className="dane">
-                    {this.props.name}
+                    { this.props.name }
                 </div>
             </div>
         )
@@ -18,6 +18,7 @@ class Player extends Component {
 
 const Game = () => {
     const [showRules, setShowRules] = useState(false);
+    const [playerClass, setPlayerClass] = useState("gracz");
 
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
@@ -37,15 +38,10 @@ const Game = () => {
         };
 
         gameSocket.onclose = function (e) {
-            console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
-            console.log(gameSocket.onclose)
-            gameSocket.send(JSON.stringify({
-                "event": "QUIT",
-                "message": ""
-            }));
-            setTimeout(function () {
-                connect();
-            }, 1000);
+            console.log('Socket is closed.', e.reason);
+            // setTimeout(function () {
+            //     connect();
+            // }, 1000);
         };
         // Sending the info about the room
         gameSocket.onmessage = function (e) {
@@ -76,15 +72,15 @@ const Game = () => {
 
     const toggleRules = () => {
         setShowRules(!showRules);
+        setPlayerClass("gracz hide");
     };
 
     const quit = () => {
-        alert("sending quit");
         gameSocket.send(JSON.stringify({
             "event": "QUIT",
             "message": ""
         })); 
-        alert("quit sent");
+        gameSocket.close();
     };
 
     return (
@@ -100,24 +96,23 @@ const Game = () => {
             </header>
 
             <div className="page">
-
                 <div className="plansza" id="game_board" game_id={game_id}>
                     <div className="rzad">
-                        <Player id="gracz1" name="chuj" /> 
-                        <Player id="gracz4" name="siur" />
-                        <Player id="gracz6" name="parówa" />
-                        <Player id="gracz8" name="kutas" />
+                        <Player id="gracz1" name="chuj" class={playerClass}/> 
+                        <Player id="gracz4" name="siur" class="gracz"/>
+                        <Player id="gracz6" name="parówa" class="gracz"/>
+                        <Player id="gracz8" name="kutas" class="gracz"/>
                     </div>
                     <div className="rzad" id="ze_stolem">
-                        <Player id="gracz0" name="fiut" />
+                        <Player id="gracz0" name="fiut" class="gracz"/>
                         <img src={table} alt="" className="stol"/>
-                        <Player id="gracz1" name="idk" />
+                        <Player id="gracz1" name="idk" class="gracz"/>
                     </div>
                     <div className="rzad">
-                        <Player id="gracz3" name="idk" />
-                        <Player id="gracz5" name="idk" />
-                        <Player id="gracz7" name="idk" />
-                        <Player id="gracz9" name="idk" />
+                        <Player id="gracz3" name="idk" class="gracz"/>
+                        <Player id="gracz5" name="idk" class="gracz"/>
+                        <Player id="gracz7" name="idk" class="gracz"/>
+                        <Player id="gracz9" name="idk" class="gracz"/>
                     </div>
                 </div>
 
