@@ -211,7 +211,7 @@ def join_game(request):
     player.save()
 
     if request.method == 'POST':
-        return Response()
+        return Response(PlayerSerializer(player).data)
     
 @api_view(['POST'])
 def delete_player(request):

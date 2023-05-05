@@ -52,8 +52,9 @@ const Login = () => {
                             game_id: game_id
                         }),
                     })
-                    .then(() => {
-                        window.location.href = `/poker?game_id=${game_id}&nickname=${nickname}`;
+                    .then((response) => response.json())
+                    .then((data) => {
+                        window.location.href = `/poker?game_id=${game_id}&player_number=${data.player_number}`;
                     })
                 }
             });
