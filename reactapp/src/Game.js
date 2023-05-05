@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import "./static/styles/poker.css";
 import table from './static/images/stol.png';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
@@ -18,7 +18,7 @@ class Player extends Component {
 
 const Game = () => {
     const [showRules, setShowRules] = useState(false);
-    const [playerClass, setPlayerClass] = useState("gracz");
+    const [players, setPlayers] = useState([]);
 
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
@@ -83,6 +83,55 @@ const Game = () => {
         gameSocket.close();
     };
 
+    useEffect(() => {
+        fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(response => response.json())
+            .then(data => setPlayers(data));
+    }, [game_id]);
+
+    function makePlayers() {
+        const playersDisplay = [];
+        var pls = [];
+        for (let i = 0; i < 10; i++) {
+            if (i < players.length) {
+                pls.push(<Player id={`gracz${i}`} name={players[i].nickname}></Player>);
+            } else {
+                pls.push("");
+            }
+        }
+
+        playersDisplay.push(
+        <div className="rzad">
+            {pls[0]}
+            {pls[1]}
+            {pls[2]}
+            {pls[3]}
+        </div>
+        );
+
+        playersDisplay.push(
+            <div className="rzad" id="ze_stolem">
+            {pls[4]}
+            <img src={table} alt="" className="stol"/>
+            {pls[5]}
+        </div>);
+
+        playersDisplay.push(
+        <div className="rzad">
+            {pls[6]}
+            {pls[7]}
+            {pls[8]}
+            {pls[9]}
+        </div>);
+
+        return playersDisplay;
+    }
+
     return (
         <div>
             <header>
@@ -97,23 +146,7 @@ const Game = () => {
 
             <div className="page">
                 <div className="plansza" id="game_board" game_id={game_id}>
-                    <div className="rzad">
-                        <Player id="gracz1" name="chuj" class={playerClass}/> 
-                        <Player id="gracz4" name="siur" class="gracz"/>
-                        <Player id="gracz6" name="parówa" class="gracz"/>
-                        <Player id="gracz8" name="kutas" class="gracz"/>
-                    </div>
-                    <div className="rzad" id="ze_stolem">
-                        <Player id="gracz0" name="fiut" class="gracz"/>
-                        <img src={table} alt="" className="stol"/>
-                        <Player id="gracz1" name="idk" class="gracz"/>
-                    </div>
-                    <div className="rzad">
-                        <Player id="gracz3" name="idk" class="gracz"/>
-                        <Player id="gracz5" name="idk" class="gracz"/>
-                        <Player id="gracz7" name="idk" class="gracz"/>
-                        <Player id="gracz9" name="idk" class="gracz"/>
-                    </div>
+                    {makePlayers()}
                 </div>
 
                 <div className={showRules? "zasady show" : "zasady"}>
