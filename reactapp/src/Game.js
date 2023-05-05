@@ -40,6 +40,10 @@ const Game = () => {
     let gameSocket;
 
     useEffect(() => {
+        // for (let i = 0; i < MAX_PLAYERS; i++) {
+        //     updatePlayerData(i);
+        // }
+
         gameSocket = new WebSocket(connectionString);
         gameSocket.onopen = function open() {
             console.log('WebSockets connection created.');
@@ -78,7 +82,7 @@ const Game = () => {
     }, [])
 
     const updatePlayerData = (player_number) => {
-        let newData = playerData;
+        let newData = { ...playerData};
         let player_data = JSON.parse(newData[player_number]);
         fetch(`http://localhost:8000/api/karcianki/player/${game_id}/${player_number}`, {
 
@@ -100,7 +104,6 @@ const Game = () => {
                 player_data.class = "gracz";
                 player_data.nickname = data.nickname;
                 player_data.chips = data.chips;
-                alert(player_data.nickname);
                 newData[player_number] = JSON.stringify(player_data);
                 setPlayerData(newData);    
             }
