@@ -35,7 +35,7 @@ const Host = () => {
             })
             .then((response) => response.json())
             .then((data) => {
-                window.location.href = `/poker?game_id=${data.game_id}`;
+                window.location.href = `/poker?game_id=${data.game_id}&nickname=${nickname}`;
             })
         }
     };

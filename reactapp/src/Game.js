@@ -55,9 +55,11 @@ const Game = () => {
             switch (event) {
                 case "JOIN":
                     console.log("JOIN");
+                    window.location.reload();
                     break;
                 case "QUIT":
                     console.log("QUIT");
+                    window.location.reload();
                     break;
                 default:
                     console.log("No event");
@@ -94,6 +96,17 @@ const Game = () => {
             gameSocket.close();
         })
     };
+
+    const update = () => {
+        fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then(response => response.json())
+        .then(data => setPlayers(data));
+    }
 
     useEffect(() => {
         fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {

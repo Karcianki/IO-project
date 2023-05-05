@@ -53,7 +53,7 @@ const Login = () => {
                         }),
                     })
                     .then(() => {
-                        window.location.href = `/poker?game_id=${game_id}`;
+                        window.location.href = `/poker?game_id=${game_id}&nickname=${nickname}`;
                     })
                 }
             });
