@@ -185,3 +185,17 @@ def create_game(request):
     if request.method == 'POST':
         serializer = GameSerializer(game)
         return Response(serializer.data)
+    
+@api_view(['POST'])
+def join_game(request):
+    body = json.loads(request.body.decode('utf-8'))
+    game_id = body['game_id']
+    nickname = body['nickname']
+
+    game = get_object_or_404(Game, game_id=game_id)
+    players = Player.objects.filter(game=game).count()
+    player = Player(nickname=nickname, game=game, player_number=players)
+    player.save()
+
+    if request.method == 'POST':
+        return Response()

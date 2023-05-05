@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import "./static/styles/login.css";
 
 const Login = () => {
-    const [game_id, setGameId] = useState("");
-    const [nickname, setNickname] = useState("");
-    const [is_valid, setIsValid] = useState(true);
+    const [game_id, setGameId]        = useState("");
+    const [nickname, setNickname]     = useState("");
+    const [is_valid, setIsValid]      = useState(true);
+    const [inGame, setInGame]         = useState(false);
+    const [gameExists, setGameExists] = useState(true);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -23,7 +25,39 @@ const Login = () => {
         if (!gameReg.test(game_id) || !nickReg.test(nickname)) {
             setIsValid(false);
         } else {
-            setIsValid(true);
+            fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then((response) => {
+                if (response.status === 404) {
+                    setGameExists(false);
+                } else {
+                    return response.json()
+                }
+            })
+            .then((data) => {
+                if (gameExists) 
+                    setInGame(data.some(player => player.nickname === nickname));
+            })
+        }
+
+        if (gameExists) {
+            fetch(`http://localhost:8000/api/karcianki/join/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nickname: nickname,
+                    game_id: game_id
+                }),
+            })
+            .then(() => {
+                window.location.href = `/poker?game_id=${game_id}`;
+            })
         }
     };
 
@@ -63,6 +97,8 @@ const Login = () => {
                     10 znaków
                 </p>
                 {is_valid ? <p></p> : <p style={{color:"red"}}>Podałeś niepoprawne dane</p>}
+                {inGame ? <p style={{color:"red"}}>Podany gracz jest już w grze</p> : <p></p>}
+                {gameExists ? <p></p> : <p style={{color:"red"}}>Podana gra nie istnieje</p>}
                 </div>
                 <button type="submit">Dołącz do gry</button>
             </form>

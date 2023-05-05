@@ -37,9 +37,6 @@ const Host = () => {
             .then((data) => {
                 window.location.href = `/poker?game_id=${data.game_id}`;
             })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
         }
     };
 
