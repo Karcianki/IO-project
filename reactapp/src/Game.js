@@ -23,6 +23,7 @@ const Game = () => {
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
     const nickname = searchParams.get('nickname');
+    const player_number = 0;
 
     const MAX_PLAYERS=10; 
     const chips_per_player = 100;
@@ -40,17 +41,13 @@ const Game = () => {
     let gameSocket;
 
     useEffect(() => {
-        // for (let i = 0; i < MAX_PLAYERS; i++) {
-        //     updatePlayerData(i);
-        // }
-
         gameSocket = new WebSocket(connectionString);
         gameSocket.onopen = function open() {
             console.log('WebSockets connection created.');
             // on websocket open, send the START event.
             gameSocket.send(JSON.stringify({
                 "event": "JOIN",
-                "message": ""
+                "message": player_number,
             }));
         };
 
@@ -68,6 +65,7 @@ const Game = () => {
             switch (event) {
                 case "JOIN":
                     console.log("JOIN");
+                    console.log(message);
                     break;
                 case "QUIT":
                     console.log("QUIT");
@@ -114,7 +112,7 @@ const Game = () => {
         for (let i = 0; i < MAX_PLAYERS; i++) {
             updatePlayerData(i);
         }
-    })
+    }, [])
 
     const toggleRules = () => {
         setShowRules(!showRules);
@@ -135,7 +133,7 @@ const Game = () => {
         .then(() => {
             gameSocket.send(JSON.stringify({
                 "event": "QUIT",
-                "message": ""
+                "message": player_number,
             })); 
             gameSocket.close();
         })
