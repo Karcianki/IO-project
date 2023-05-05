@@ -6,12 +6,7 @@ import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
   const App = () => (
     <div>
       <h1>React Router Example</h1>
-        <div>
-        <Routes>
-            <Route path='/client' component={<Client/>} />
-            <Route path='/server' component={<Server/>} />
-        </Routes>       
-      </div>       
+               
       <ul>
         <li><Link to="/client">Client Side</Link></li>
         <li><Link to="/server">Server Side</Link></li>
@@ -36,9 +31,15 @@ import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
   const root = ReactDOM.createRoot(document.getElementById('root'))
   root.render(
     <div>
-    <div>chuj</div>
     <BrowserRouter>
-      <App/>
+    <div>
+        <Routes>
+            <Route path='/client' element={<Client/>} />
+            <Route path='/server' element={<Server/>} />
+            <Route path='' element={<App/>} />
+        </Routes>       
+      </div>
+    <div>chuj</div>
     </BrowserRouter>
     </div>
   )
