@@ -22,6 +22,7 @@ const Game = () => {
 
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
+    const nickname = searchParams.get('nickname');
 
     const django_host = 'localhost:8000'
     const connectionString = 'ws://' + django_host + '/ws/karcianki/' + game_id + '/';
@@ -72,15 +73,26 @@ const Game = () => {
 
     const toggleRules = () => {
         setShowRules(!showRules);
-        setPlayerClass("gracz hide");
     };
 
     const quit = () => {
-        gameSocket.send(JSON.stringify({
-            "event": "QUIT",
-            "message": ""
-        })); 
-        gameSocket.close();
+        fetch(`http://localhost:8000/api/karcianki/quit/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nickname: nickname,
+                game_id: game_id
+            }),
+        })
+        .then(() => {
+            gameSocket.send(JSON.stringify({
+                "event": "QUIT",
+                "message": ""
+            })); 
+            gameSocket.close();
+        })
     };
 
     useEffect(() => {
