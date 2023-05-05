@@ -6,7 +6,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         # self.room_name = self.scope['url_route'\]['kwargs']['room_code']
         # self.room_group_name = 'room_%s' % self.room_name
-        self.game_id = self.scope['session']['game_id']
+        self.game_id = self.scope['url_route']['kwargs']['game_id']
         self.game_name = 'game_%s' % self.game_id
 
         # Join room group

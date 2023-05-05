@@ -22,8 +22,69 @@ const Game = () => {
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
 
+    const django_host = 'localhost:8000'
+    const connectionString = 'ws://' + django_host + '/ws/karcianki/' + game_id + '/';
+    const gameSocket = new WebSocket(connectionString);
+
+    function connect() {
+        gameSocket.onopen = function open() {
+            console.log('WebSockets connection created.');
+            // on websocket open, send the START event.
+            gameSocket.send(JSON.stringify({
+                "event": "JOIN",
+                "message": ""
+            }));
+        };
+
+        gameSocket.onclose = function (e) {
+            console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+            console.log(gameSocket.onclose)
+            gameSocket.send(JSON.stringify({
+                "event": "LEAVE",
+                "message": ""
+            }));
+            setTimeout(function () {
+                connect();
+            }, 1000);
+        };
+        // Sending the info about the room
+        gameSocket.onmessage = function (e) {
+            // On getting the message from the server
+            // Do the appropriate steps on each event.
+            let data = JSON.parse(e.data);
+            data = data["payload"];
+            let message = data['message'];
+            let event = data["event"];
+            switch (event) {
+                case "LEAVE":
+                    console.log("LEAVE");
+                    break;
+                case "JOIN":
+                    console.log("JOIN");
+                    break;
+                default:
+                    console.log("No event");
+            }
+        };
+        if (gameSocket.readyState === WebSocket.OPEN) {
+            gameSocket.onopen();
+        }
+    }
+
+    //call the connect function at the start.
+    connect();
+
     const toggleRules = () => {
         setShowRules(!showRules);
+    };
+
+    const quit = () => {
+        alert("sending quit");
+        gameSocket.send(JSON.stringify({
+            "event": "LEAVE",
+            "message": ""
+        })); 
+        alert("quit sent");
     };
 
     return (
@@ -72,7 +133,7 @@ const Game = () => {
                         <button type="submit">Postaw</button>
                     </form>
                     <Link to='../'>
-                        <button type="submit" id="quit">Wyjdź</button>
+                        <button onClick={quit} type="submit" id="quit">Wyjdź</button>
                     </Link>
                 </div>
             </div>
