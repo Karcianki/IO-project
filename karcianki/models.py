@@ -9,20 +9,23 @@ from django.core.validators import MaxValueValidator, MinValueValidator, MinLeng
 
 class Game(models.Model):
     """Class Game provides database model for created games."""
-    MIN_ID = 100000
-    MAX_ID = 999999
-    DIGITS = int(math.log10(MAX_ID)) + 1
+    MIN_ID  = 100000
+    MAX_ID  = 999999
+    DIGITS  = int(math.log10(MAX_ID)) + 1
     game_id = models.IntegerField(primary_key=True,
                                   validators=[
                                       MinValueValidator(MIN_ID),
                                       MaxValueValidator(MAX_ID)
                                   ],)
+    start_chips  = models.IntegerField(default=100)
+    player_count = models.IntegerField(default=1)
 
     @classmethod
-    def create(cls):
+    def create(cls, chips):
         """Function create creates new game with unique game_id."""
         new_id = randint(Game.MIN_ID, Game.MAX_ID)
         game = Game(game_id=new_id)
+        game.start_chips = chips
         return game
 
     def __str__(self):
@@ -37,6 +40,7 @@ class Player(models.Model):
                                 ])
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     player_number = models.IntegerField(default=0)
+    chips = models.IntegerField(default=100)
 
     class Meta:
         "Metadata class."

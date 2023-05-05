@@ -170,16 +170,26 @@ def players_data(request, game_id):
         serializer = PlayerSerializer(players, many=True)
         return Response(serializer.data)
     
+@api_view(['GET'])
+def player_data(request, game_id, nickname):
+    game = get_object_or_404(Game, game_id=game_id)
+    player = get_object_or_404(Player, game=game, nickname=nickname)
+
+    if request.method == 'GET':
+        serializer = PlayerSerializer(player)
+        return Response(serializer.data)
+    
+    
 @api_view(['POST'])
 def create_game(request):
     body = json.loads(request.body.decode('utf-8'))
     nickname = body['nickname']
     chips = body['chips']
 
-    game = Game.create()
+    game = Game.create(chips=chips)
     game.save()
 
-    player = Player(nickname=nickname, game=game, player_number=0)
+    player = Player(nickname=nickname, game=game, player_number=0, chips=game.start_chips)
     player.save()
 
     if request.method == 'POST':
@@ -193,8 +203,11 @@ def join_game(request):
     nickname = body['nickname']
 
     game = get_object_or_404(Game, game_id=game_id)
+    game.player_count = game.player_count + 1
+    game.save()
+
     players = Player.objects.filter(game=game).count()
-    player = Player(nickname=nickname, game=game, player_number=players)
+    player = Player(nickname=nickname, game=game, player_number=players, chips=game.start_chips)
     player.save()
 
     if request.method == 'POST':
@@ -209,6 +222,21 @@ def delete_player(request):
     game = get_object_or_404(Game, game_id=game_id)
     player = get_object_or_404(Player, game=game, nickname=nickname)
     player.delete()
+
+    if request.method == 'POST':
+        return Response()
+    
+@api_view(['POST'])
+def update_player(request):
+    body = json.loads(request.body.decode('utf-8'))
+    game_id  = body['game_id']
+    nickname = body['nickname']
+    chips    = body['chips']
+
+    game = get_object_or_404(Game, game_id=game_id)
+    player = get_object_or_404(Player, game=game, nickname=nickname)
+    player.chips = chips
+    player.save()
 
     if request.method == 'POST':
         return Response()
