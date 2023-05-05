@@ -66,7 +66,6 @@ const Game = () => {
             switch (event) {
                 case "JOIN":
                     console.log("JOIN");
-                    console.log(message);
                     updatePlayers();
                     break;
                 case "QUIT":
