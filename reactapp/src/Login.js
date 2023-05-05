@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import "./static/styles/login.css";
 
 const Login = () => {
-    const [game_id, setGameId]        = useState("");
-    const [nickname, setNickname]     = useState("");
-    const [is_valid, setIsValid]      = useState(true);
-    const [inGame, setInGame]         = useState(false);
+    const [game_id, setGameId]    = useState("");
+    const [nickname, setNickname] = useState("");
+    const [is_valid, setIsValid]  = useState(true);
+    const [inGame, setInGame]     = useState(false)
     const [gameExists, setGameExists] = useState(true);
 
     const handleInputChange = (event) => {
@@ -39,25 +39,24 @@ const Login = () => {
                 }
             })
             .then((data) => {
-                if (gameExists) 
+                if (gameExists && data) {
                     setInGame(data.some(player => player.nickname === nickname));
-            })
-        }
 
-        if (gameExists) {
-            fetch(`http://localhost:8000/api/karcianki/join/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    nickname: nickname,
-                    game_id: game_id
-                }),
-            })
-            .then(() => {
-                window.location.href = `/poker?game_id=${game_id}`;
-            })
+                    fetch(`http://localhost:8000/api/karcianki/join/`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            nickname: nickname,
+                            game_id: game_id
+                        }),
+                    })
+                    .then(() => {
+                        window.location.href = `/poker?game_id=${game_id}`;
+                    })
+                }
+            });
         }
     };
 
