@@ -199,3 +199,16 @@ def join_game(request):
 
     if request.method == 'POST':
         return Response()
+    
+@api_view(['POST'])
+def delete_player(request):
+    body = json.loads(request.body.decode('utf-8'))
+    game_id = body['game_id']
+    nickname = body['nickname']
+
+    game = get_object_or_404(Game, game_id=game_id)
+    player = get_object_or_404(Player, game=game, nickname=nickname)
+    player.delete()
+
+    if request.method == 'POST':
+        return Response()
