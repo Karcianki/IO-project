@@ -9,7 +9,6 @@ class Player extends Component {
             <div className={ JSON.parse(this.props.data).class } id={this.props.id}>
                 <span className="fa-solid fa-circle-user ikona"></span>
                 <div className="dane">
-                    
                     <div>{ JSON.parse(this.props.data).nickname }</div>
                     <div>{ JSON.parse(this.props.data).chips }</div>
                 </div>
@@ -28,10 +27,9 @@ const Game = () => {
     const MAX_PLAYERS=10; 
     const chips_per_player = 100;
 
-    const [players, setPlayers] = useState([]);
     const [playerData, setPlayerData] = useState(
         Array(MAX_PLAYERS).fill(JSON.stringify({
-            class: "gracz",
+            class: "gracz hide",
             nickname: "",
             chips: chips_per_player,
         }))
@@ -92,20 +90,32 @@ const Game = () => {
         .then((response) => {
             if (response.status === 404) {
                 player_data.class = "gracz hide";
+                return null;
             } else {
-                player_data.class = "gracz";
-                player_data.nickname = response.json().nickname;
-                player_data.chips = response.json().chips;
+                return response.json();
             }
         })
-        .then(() => {
-            newData[player_number] = JSON.stringify(player_data);
-            setPlayerData(newData);    
+        .then((data) => {
+            if(data) {
+                player_data.class = "gracz";
+                player_data.nickname = data.nickname;
+                player_data.chips = data.chips;
+                alert(player_data.nickname);
+                newData[player_number] = JSON.stringify(player_data);
+                setPlayerData(newData);    
+            }
         })
     } 
 
+    useEffect(() => {
+        for (let i = 0; i < MAX_PLAYERS; i++) {
+            updatePlayerData(i);
+        }
+    })
+
     const toggleRules = () => {
         setShowRules(!showRules);
+        updatePlayerData(0);
     };
 
     const quit = () => {
