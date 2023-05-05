@@ -1,68 +1,75 @@
-import React, { Component, useState } from "react";
-import "./static/styles/login.css"
+import React, { useState } from "react";
+import "./static/styles/login.css";
 
-class Login extends Component {
-    state = {
-        game_id: '',
-        nickname: '',
-        errors: {},
-      };
-    
-      handleChange = (event) => {
-        this.setState({ [event.target.name]: event.target.value });
-      };
-    
-      handleSubmit = (event) => {
-        
-      };
+const Login = () => {
+    const [game_id, setGameId] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [is_valid, setIsValid] = useState(true);
 
-    render () {
-        const { game_id, nickname } = this.state;
-        return (
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        if (name === "game_id") {
+            setGameId(value);
+        } else if (name === "nickname") {
+            setNickname(value);
+        }
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const gameReg = /^\d{6}$/;
+        const nickReg = /^[a-z]{4,10}$/;
+
+        if (!gameReg.test(game_id) || !nickReg.test(nickname)) {
+            setIsValid(false);
+        } else {
+            setIsValid(true);
+        }
+    };
+
+    return (
         <div>
-            <header>
-                Karcianki
-            </header>
-            <div class="panel" id="poker">
-                <div class="game_form">
-                    <div class="game_name">
-                        POKER
-                    </div>
-                    <form onSubmit={this.handleSubmit}>
-                        <div>
-                            <label htmlFor="game_id">Podaj numer gry:</label>
-                            <input
-                            type="number"
-                            id="game_id"
-                            name="game_id"
-                            placeholder="123456"
-                            value={game_id}
-                            onChange={this.handleChange}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="nickname">Podaj swój nick:</label>
-                            <input
-                            type="text"
-                            id="nickname"
-                            name="nickname"
-                            placeholder="Nick gracza"
-                            value={nickname}
-                            onChange={this.handleChange}
-                            />
-                            <p className="help-text">
-                            Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do
-                            10 znaków
-                            </p>
-                        </div>
-                        <button type="submit">Dołącz do gry</button>
-                    </form>
+        <header>Karcianki</header>
+        <div className="panel" id="poker">
+            <div className="game_form">
+            <div className="game_name">POKER</div>
+            <form onSubmit={handleSubmit}>
+                <div>
+                <label htmlFor="game_id">Podaj numer gry:</label>
+                <input
+                    type="number"
+                    id="game_id"
+                    name="game_id"
+                    placeholder="123456"
+                    value={game_id}
+                    onChange={handleInputChange}
+                />
                 </div>
+                <div>
+                <label htmlFor="nickname">Podaj swój nick:</label>
+                <input
+                    type="text"
+                    id="nickname"
+                    name="nickname"
+                    placeholder="Nick gracza"
+                    value={nickname}
+                    onChange={handleInputChange}
+                />
+                <p className="help-text">
+                    Numer gry powinien zawierać 6 cyfr.
+                </p>
+                <p className="help-text">
+                    Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do
+                    10 znaków
+                </p>
+                {is_valid ? <p></p> : <p style={{color:"red"}}>Podałeś niepoprawne dane</p>}
+                </div>
+                <button type="submit">Dołącz do gry</button>
+            </form>
             </div>
         </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default Login;
-

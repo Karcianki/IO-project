@@ -1,69 +1,93 @@
-import React, { Component, useState } from "react";
-import "./static/styles/login.css"
+import React, { useState } from "react";
+import "./static/styles/login.css";
 
-class Login extends Component {
-    state = {
-        game_id: '',
-        nickname: '',
-        errors: {},
-      };
-    
-      handleChange = (event) => {
-        this.setState({ [event.target.name]: event.target.value });
-      };
-    
-      handleSubmit = (event) => {
-        
-      };
+const Host = () => {
+    const [chips, setChips] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [isValid, setIsValid] = useState(true);
+    const [gameId, setGameId] = useState("");
 
-    render () {
-        const { game_id, nickname } = this.state;
-        return (
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        if (name === "chips") {
+            setChips(value);
+        } else if (name === "nickname") {
+            setNickname(value);
+        }
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const chipsReg = /^\d{2,6}$/;
+        const nickReg = /^[a-z]{4,10}$/;
+
+        if (!chipsReg.test(chips) || !nickReg.test(nickname)) {
+            setIsValid(false);
+        } else {
+            fetch(`http://localhost:8000/api/karcianki/create/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nickname: nickname,
+                    chips: chips
+                }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                setGameId(data.game_id);
+                history.push("/game");
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+        }
+    };
+
+    return (
         <div>
-            <header>
-                Karcianki
-            </header>
-            <div class="panel" id="poker">
-                <div class="game_form">
-                    <div class="game_name">
-                        POKER
-                    </div>
-                    <form onSubmit={this.handleSubmit}>
-                        <div>
-                            <label htmlFor="game_id">Podaj numer gry:</label>
-                            <input
-                            type="number"
-                            id="game_id"
-                            name="game_id"
-                            placeholder="123456"
-                            value={game_id}
-                            onChange={this.handleChange}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="nickname">Podaj swój nick:</label>
-                            <input
-                            type="text"
-                            id="nickname"
-                            name="nickname"
-                            placeholder="Nick gracza"
-                            value={nickname}
-                            onChange={this.handleChange}
-                            />
-                            <p className="help-text">
-                            Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do
-                            10 znaków
-                            </p>
-                        </div>
-                        <button type="submit">Dołącz do gry</button>
-                    </form>
+        <header>Karcianki</header>
+        <div className="panel" id="poker">
+            <div className="game_form">
+            <div className="game_name">POKER</div>
+            <form onSubmit={handleSubmit}>
+                <div>
+                <label htmlFor="chips">Podaj liczbę żetonów:</label>
+                <input
+                    type="number"
+                    id="chips"
+                    name="chips"
+                    placeholder="10"
+                    value={chips}
+                    onChange={handleInputChange}
+                />
                 </div>
+                <div>
+                <label htmlFor="nickname">Podaj swój nick:</label>
+                <input
+                    type="text"
+                    id="nickname"
+                    name="nickname"
+                    placeholder="Nick gracza"
+                    value={nickname}
+                    onChange={handleInputChange}
+                />
+                <p className="help-text">
+                    Liczba żetonów powinna być z zakresu od 10 do 1000000
+                </p>
+                <p className="help-text">
+                    Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do
+                    10 znaków
+                </p>
+                {isValid ? <p></p> : <p style={{color:"red"}}>Podałeś niepoprawne dane</p>}
+                </div>
+                <button type="submit">Stwórz grę</button>
+            </form>
             </div>
         </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
-export default Login;
-
-
+export default Host;
