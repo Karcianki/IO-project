@@ -2,6 +2,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+import json
 
 from karcianki.forms import PokerHostForm, TysiacHostForm, BrydzHostForm, PlayerForm
 
@@ -167,4 +168,20 @@ def players_data(request, game_id):
     if request.method == 'GET':
         players = Player.objects.filter(game=game)
         serializer = PlayerSerializer(players, many=True)
+        return Response(serializer.data)
+    
+@api_view(['POST'])
+def create_game(request):
+    body = json.loads(request.body.decode('utf-8'))
+    nickname = body['nickname']
+    chips = body['chips']
+
+    game = Game.create()
+    game.save()
+
+    player = Player(nickname=nickname, game=game, player_number=0)
+    player.save()
+
+    if request.method == 'POST':
+        serializer = GameSerializer(game)
         return Response(serializer.data)

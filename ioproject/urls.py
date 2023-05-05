@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 
 from karcianki.views import game_data
 from karcianki.views import players_data
+from karcianki.views import create_game
 
 urlpatterns = [
     # path('', views.index, name='index'),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('karcianki/', include('karcianki.urls')),
     re_path(r'^api/karcianki/game/(?P<game_id>[0-9]{6})/$', game_data),
     re_path(r'^api/karcianki/players/(?P<game_id>[0-9]{6})/$', players_data),
+    re_path(r'^api/karcianki/create/$', create_game)
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

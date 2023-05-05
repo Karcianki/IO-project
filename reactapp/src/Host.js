@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import "./static/styles/login.css";
 
-const Login = () => {
-    const [game_id, setGameId] = useState("");
+const Host = () => {
+    const [chips, setChips] = useState("");
     const [nickname, setNickname] = useState("");
-    const [is_valid, setIsValid] = useState(true);
+    const [isValid, setIsValid] = useState(true);
+    const [gameId, setGameId] = useState("");
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        if (name === "game_id") {
-            setGameId(value);
+        if (name === "chips") {
+            setChips(value);
         } else if (name === "nickname") {
             setNickname(value);
         }
@@ -17,13 +18,30 @@ const Login = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const gameReg = /^\d{6}$/;
+        const chipsReg = /^\d{2,6}$/;
         const nickReg = /^[a-z]{4,10}$/;
 
-        if (!gameReg.test(game_id) || !nickReg.test(nickname)) {
+        if (!chipsReg.test(chips) || !nickReg.test(nickname)) {
             setIsValid(false);
         } else {
-            setIsValid(true);
+            fetch(`http://localhost:8000/api/karcianki/create/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nickname: nickname,
+                    chips: chips
+                }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                setGameId(data.game_id);
+                history.push("/game");
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
         }
     };
 
@@ -35,13 +53,13 @@ const Login = () => {
             <div className="game_name">POKER</div>
             <form onSubmit={handleSubmit}>
                 <div>
-                <label htmlFor="game_id">Podaj numer gry:</label>
+                <label htmlFor="chips">Podaj liczbę żetonów:</label>
                 <input
                     type="number"
-                    id="game_id"
-                    name="game_id"
-                    placeholder="123456"
-                    value={game_id}
+                    id="chips"
+                    name="chips"
+                    placeholder="10"
+                    value={chips}
                     onChange={handleInputChange}
                 />
                 </div>
@@ -56,15 +74,15 @@ const Login = () => {
                     onChange={handleInputChange}
                 />
                 <p className="help-text">
-                    Numer gry powinien zawierać 6 cyfr.
+                    Liczba żetonów powinna być z zakresu od 10 do 1000000
                 </p>
                 <p className="help-text">
                     Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do
                     10 znaków
                 </p>
-                {is_valid ? <p></p> : <p style={{color:"red"}}>Podałeś niepoprawne dane</p>}
+                {isValid ? <p></p> : <p style={{color:"red"}}>Podałeś niepoprawne dane</p>}
                 </div>
-                <button type="submit">Dołącz do gry</button>
+                <button type="submit">Stwórz grę</button>
             </form>
             </div>
         </div>
@@ -72,4 +90,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Host;
