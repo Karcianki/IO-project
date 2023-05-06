@@ -64,9 +64,10 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             if data['type'] == "PASS":
                 player.last_bet = -1
             elif data['type'] == "BET":
-                game.pot += data['bet']
-                player.chips -= max(data['bet'], player.chips)
-                player.last_bet = max(data['bet'], player.chips)
+                bet = int(data['bet'])
+                game.pot += bet
+                player.chips -= max(bet, player.chips)
+                player.last_bet = max(bet, player.chips)
 
             await sync_to_async(player.save)()
 
