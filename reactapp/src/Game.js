@@ -92,6 +92,12 @@ const Game = () => {
                     setLastBet(info.last_bet);
                     updateState();
                     break;
+                case "NEXT":
+                    console.log("NEXT");
+                    updateState();
+                case "START":
+                    console.log("START");
+                    updateState();
                 default:
                     console.log("No event");
             }
@@ -138,9 +144,6 @@ const Game = () => {
                 "event": "NEXT",
                 "message": '',
             }));
-
-            gameSocket.addEventListener('message', function(event) {
-            });
         }
 
         const checkButton = document.getElementById('check');
