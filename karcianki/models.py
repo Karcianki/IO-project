@@ -8,6 +8,9 @@ class Game(models.Model):
     MAX_ID  = 999999
     game_id = models.IntegerField(primary_key=True)
     start_chips  = models.IntegerField(default=100)
+    pot = models.IntegerField(default=0)
+    last_raise = models.IntegerField(null=True)
+    stage = models.IntegerField(default=1)
 
     @classmethod
     def create(cls, chips):

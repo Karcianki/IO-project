@@ -1,14 +1,11 @@
 """Django views module for karcianki application."""
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.shortcuts import get_object_or_404
 import json
 
 from karcianki.models import Game, Player
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status
 
 from karcianki.serializers import *
 
@@ -28,16 +25,6 @@ def players_data(request, game_id):
         players = Player.objects.filter(game=game)
         serializer = PlayerSerializer(players, many=True)
         return Response(serializer.data)
-    
-@api_view(['GET'])
-def player_data(request, game_id, player_id):
-    game = get_object_or_404(Game, game_id=game_id)
-    player = get_object_or_404(Player, game=game, player_number=player_id)
-
-    if request.method == 'GET':
-        serializer = PlayerSerializer(player)
-        return Response(serializer.data)
-    
     
 @api_view(['POST'])
 def create_game(request):
@@ -78,43 +65,12 @@ def delete_player(request):
     player_number = body['player_number']
 
     game = get_object_or_404(Game, game_id=game_id)
-    player = get_object_or_404(Player, game=game, player_number=player_number)
-    player.delete()
 
-    if request.method == 'POST':
-        return Response()
-    
-@api_view(['POST'])
-def update_player(request):
-    body = json.loads(request.body.decode('utf-8'))
-    game_id  = body['game_id']
-    nickname = body['nickname']
-    chips    = body['chips']
-
-    game = get_object_or_404(Game, game_id=game_id)
-    player = get_object_or_404(Player, game=game, nickname=nickname)
-    player.chips = chips
-    player.save()
-
-    if request.method == 'POST':
-        return Response()
-
-@api_view(['POST'])
-def handle_turn(request, game_id, player_id):
-    body = json.loads(request.body.decode('utf-8'))
-    player_number = player_id
-    event         = body['event']
-    # chips    = body['chips']
-    # last_bid = body['last_bid']
-    game = get_object_or_404(Game, game_id=game_id)
-    player = get_object_or_404(Player, game=game, player_number=player_number)
-
-    if (event == 'pass'):
-        player.last_bet = 'PASS'
-        player.save()
-    elif (event == 'check'):
-        player.last_bet = 'CHECK'
-        player.save()
+    if (player_number == 0):
+        game.delete()
+    else:    
+        player = get_object_or_404(Player, game=game, player_number=player_number)
+        player.delete()
 
     if request.method == 'POST':
         return Response()

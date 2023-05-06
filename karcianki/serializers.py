@@ -7,7 +7,10 @@ class GameSerializer(serializers.ModelSerializer):
         model = Game
         fields = (
             'game_id',
-            'start_chips'   
+            'start_chips',
+            'pot',
+            'last_raise',
+            'stage'
             )
 
 class PlayerSerializer(serializers.ModelSerializer):
