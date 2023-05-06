@@ -95,9 +95,15 @@ const Game = () => {
                 case "NEXT":
                     console.log("NEXT");
                     updateState();
+                    break;
                 case "START":
                     console.log("START");
                     updateState();
+                    break;
+                case "END":
+                    console.log("END");
+                    updateState();
+                    break;
                 default:
                     console.log("No event");
             }
@@ -126,6 +132,7 @@ const Game = () => {
                 "message": JSON.stringify({
                     "player_number": player_number,
                     "type": "PASS",
+                    "bet": 0,
                 })
             }));
         }
@@ -148,6 +155,7 @@ const Game = () => {
 
         const checkButton = document.getElementById('check');
         checkButton.onclick = function() {
+            console.log("check clicked");
             if (whoseTurn !== player_number) {
                return; 
             }
@@ -163,6 +171,7 @@ const Game = () => {
 
         const betButton = document.getElementById('bet');
         betButton.onbet = function(value) {
+            console.log("onbet " + value)
             if (whoseTurn !== player_number) {
                 return;
             }
@@ -287,10 +296,10 @@ const Game = () => {
 
                 <div className="opcje">
                     <div className = "host" id="start">
-                       {player_number == 0 && isStarted == false && <button onClick={setStarted} type="submit" id="check">Start</button>}
+                       {player_number == 0 && isStarted == false && <button onClick={setStarted} type="submit" id="start">Start</button>}
                     </div>
                     <div className = "host_next" id="next">
-                    {player_number == 0 && isInTurn == false && <button onClick={setTurn} type="submit" id="check">Next</button>}
+                    {player_number == 0 && isInTurn == false && <button onClick={setTurn} type="submit" id="next">Next</button>}
                     </div>
                     <button type="submit" id="pass">Pass</button>
                     <button type="submit" id="check">Sprawdź</button>
