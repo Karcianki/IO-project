@@ -27,6 +27,7 @@ const Game = () => {
     const [whoseTurn, setWhoseTurn] = useState(3);
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
+    const [isStarted, setIsStarted] = useState(false);
 
     const MAX_PLAYERS=10; 
     const chips_per_player = 100;
@@ -76,11 +77,11 @@ const Game = () => {
             let event = data["event"];
             switch (event) {
                 case "JOIN":
-                    console.log("JOIN " + message);
+                    console.log("JOIN");
                     updateState();
                     break;
                 case "QUIT":
-                    console.log("QUIT " + message);
+                    console.log("QUIT");
                     updateState();
                     break;
                 case "TURN":
@@ -119,6 +120,14 @@ const Game = () => {
                     "player_number": player_number,
                     "type": "PASS",
                 })
+            }));
+        }
+
+        const startButton = document.getElementById('start');
+        startButton.onclick = function () {
+            gameSocket.send(JSON.stringify({
+                "event": "START",
+                "message": '',
             }));
         }
 
@@ -214,6 +223,9 @@ const Game = () => {
         const betButton = document.getElementById('bet');
         betButton.onbet(bidValue); 
     }
+    const setStarted = () => {
+        setIsStarted(!isStarted);
+    };
 
     return (
         <div>
@@ -230,21 +242,21 @@ const Game = () => {
             <div className="page">
                 <div className="plansza" id="game_board" game_id={game_id}>
                     <div className="rzad">
-                        <Player id="gracz1" name="chuj" data={playerData[2]} /> 
-                        <Player id="gracz4" name="siur" data={playerData[4]} />
-                        <Player id="gracz6" name="parówa" data={playerData[6]} />
-                        <Player id="gracz8" name="kutas" data={playerData[8]} />
+                        <Player id="gracz1" data={playerData[2]} /> 
+                        <Player id="gracz4" data={playerData[4]} />
+                        <Player id="gracz6" data={playerData[6]} />
+                        <Player id="gracz8" data={playerData[8]} />
                     </div>
                     <div className="rzad" id="ze_stolem">
-                        <Player id="gracz0" name="fiut" data={playerData[0]} />
+                        <Player id="gracz0" data={playerData[0]} />
                         <img src={table} alt="" className="stol"/>
-                        <Player id="gracz1" name="idk" data={playerData[1]} />
+                        <Player id="gracz1" data={playerData[1]} />
                     </div>
                     <div className="rzad">
-                        <Player id="gracz3" name="idk" data={playerData[3]} />
-                        <Player id="gracz5" name="idk" data={playerData[5]} />
-                        <Player id="gracz7" name="idk" data={playerData[7]} />
-                        <Player id="gracz9" name="idk" data={playerData[9]} />
+                        <Player id="gracz3" data={playerData[3]} />
+                        <Player id="gracz5" data={playerData[5]} />
+                        <Player id="gracz7" data={playerData[7]} />
+                        <Player id="gracz9" data={playerData[9]} />
                     </div>
                 </div>
 
@@ -253,6 +265,9 @@ const Game = () => {
                 </div>
 
                 <div className="opcje">
+                    <div className = "host" id="start">
+                       {player_number == 0 && isStarted == false && <button onClick={setStarted} type="submit" id="check">Start</button>}
+                    </div>
                     <button type="submit" id="pass">Pass</button>
                     <button type="submit" id="check">Sprawdź</button>
                     <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
