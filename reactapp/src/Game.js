@@ -159,7 +159,7 @@ const Game = () => {
                 setLastBet(info.last_bet);
                 break;
             case "NEXT":
-                setNextStage(true);
+                setNextStage(false);
                 break;
             case "START":
                 setIsStarted(false);
@@ -177,7 +177,7 @@ const Game = () => {
     }
 
     const onNext = () => {
-        setNextStage(false);
+        setNextStage(true);
         gameBoard.send("NEXT", '');
     }
 
