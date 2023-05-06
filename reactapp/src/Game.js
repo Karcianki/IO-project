@@ -1,5 +1,3 @@
-// 242 243 209
-
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/poker.css";
 import table from './static/images/stol.png';
@@ -160,7 +158,7 @@ const Game = () => {
                 let info = JSON.parse(message);
                 setWhoseTurn(info.player_number);
 
-                let nickname = JSON.parse(JSON.stringify(playerData[whoseTurn])).nickname
+                let nickname = JSON.parse(playerData[whoseTurn]).nickname 
                 console.log(nickname)
                 setNickane(nickname)
 
@@ -205,13 +203,9 @@ const Game = () => {
 
     const onCheck = () => {
         console.log("check " + whoseTurn + player_number);
-
-        // wydaje się dobrze ale ciężko mi było debudować jak tamto nie działa
-        let newData = JSON.parse(JSON.stringify(playerData[player_number]))
-        let value =  lastBet - newData.last_bet
-        console.log(lastBet + " " + newData.last_bet)
-
-
+        let data = JSON.parse(playerData[whoseTurn]).last_bet 
+        let value =  lastBet - data
+        console.log(value)
         if (whoseTurn != player_number) {
             return;
         }
