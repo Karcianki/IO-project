@@ -24,7 +24,7 @@ const Game = () => {
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
     const player_number = searchParams.get('player_number');
-    const [whoseTurn, setWhoseTurn] = useState(3);
+    const [whoseTurn, setWhoseTurn] = useState(0);
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
@@ -148,6 +148,9 @@ const Game = () => {
 
         const betButton = document.getElementById('bet');
         betButton.onbet = function(value) {
+            if (whoseTurn !== player_number) {
+                return;
+            }
             console.log("bet submit");
             console.log(value);
             gameSocket.send(JSON.stringify({
