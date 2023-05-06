@@ -133,6 +133,15 @@ const Game = () => {
             })
         }
 
+        const startButton = document.getElementById('start');
+        startButton.onclick = function () {
+            gameSocket.send(JSON.stringify({
+                "event": "START",
+                "message": '',
+            }));
+        }
+        
+
         const checkButton = document.getElementById('check');
         checkButton.onclick = function() {
             fetch(`http://localhost:8000/api/karcianki/turn/${game_id}/${player_number}`, {
@@ -250,7 +259,7 @@ const Game = () => {
                 </div>
 
                 <div className="opcje">
-                    <div className = "host">
+                    <div className = "host" id="start">
                        {player_number == 0 && isStarted == false && <button onClick={setStarted} type="submit" id="check">Start</button>}
                     </div>
                     <button type="submit" id="pass">Pass</button>
