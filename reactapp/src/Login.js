@@ -63,8 +63,8 @@ const Login = () => {
 
     return (
         <div>
-        <header>Karcianki</header>
-        <div className="panel" id="poker">
+        <header>KARCIANKI</header>
+        <div className="panel" id="poker_login">
             <div className="game_form">
             <div className="game_name">POKER</div>
             <form onSubmit={handleSubmit}>

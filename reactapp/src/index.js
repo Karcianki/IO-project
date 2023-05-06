@@ -5,7 +5,6 @@ import Login from './Login';
 import Host from './Host';
 import Game from './Game';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './static/styles/style.css'
  
   // Set up pages using the React Router Link element for navigation - instead of <a></a>
   

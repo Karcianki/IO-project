@@ -93,9 +93,10 @@ header {
     font-weight: lighter;
     z-index: 3;
     box-shadow: 0px 0px 5px black;
+    position: absolute;
 }
 
-button{
+.app_button{
     background-color: var(--theme-color);
     border: none;
     color: white;
@@ -105,7 +106,7 @@ button{
     box-shadow: 0px 0px 5px black;
     object-fit: contain;
 }
-button:hover{
+.app_button:hover{
     background-color: var(--second-color);
     color: black;
     box-shadow: 0px 0px 10px black;
@@ -133,7 +134,7 @@ button:hover{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: stretch;
+    align-items: center;
     gap: 20px;
 }
 
@@ -172,7 +173,7 @@ button:hover{
     }
 
 
-    button{
+    .app_button{
         padding: 5px;
     }
 }
@@ -194,7 +195,7 @@ button:hover{
         gap: 10px
     }
 
-    button{
+    .app_button{
         margin: 0;
         padding: 10px;
         text-decoration: none;

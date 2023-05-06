@@ -5,7 +5,7 @@ header {
     position: absolute;
 }
 
-button {
+.game_button {
     text-align: center;
     border-radius: 3px;
     cursor: pointer;
@@ -15,9 +15,15 @@ button {
     background-color: var(--second-color);
     margin: 0;
     padding: 0;
+    color: white;
+}
+.game_button:hover{
+    background-color: var(--second-color);
+    color: black;
+    box-shadow: 0px 0px 10px black;
 }
 
-header button {
+header .game_button {
     float: right;
     display: flex;
     position: absolute;
@@ -30,16 +36,17 @@ header button {
     border-radius: 50%;
 }
 
-header button span {
+header .game_button span {
     display: flex;
     font-size: 50%;
 }
 
-.page {
+.page_game {
     width: 100%;
     height: 100%;
     position: absolute;
     display: block;
+    background-color: white;
 }
 
 .plansza {
@@ -71,7 +78,12 @@ header button span {
 }
 
 .gracz.hide {
-    display: none;
+    display: none
+}
+
+#ze_stolem .gracz.hide{
+    visibility: hidden;
+    display: block;
 }
 
 .gracz span {
@@ -210,10 +222,6 @@ header button span {
     .zasady img {
         width: auto;
         height: 1.5em;
-    }
-
-    header {
-        max-height: 15%;
     }
 
     .plansza {
