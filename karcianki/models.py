@@ -1,22 +1,12 @@
 """Module models provides database models."""
-import math
-import decimal
 from random import randint
-
 from django.db import models
-
-from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
 
 class Game(models.Model):
     """Class Game provides database model for created games."""
     MIN_ID  = 100000
     MAX_ID  = 999999
-    DIGITS  = int(math.log10(MAX_ID)) + 1
-    game_id = models.IntegerField(primary_key=True,
-                                  validators=[
-                                      MinValueValidator(MIN_ID),
-                                      MaxValueValidator(MAX_ID)
-                                  ],)
+    game_id = models.IntegerField(primary_key=True)
     start_chips  = models.IntegerField(default=100)
     player_count = models.IntegerField(default=1)
 
@@ -34,10 +24,7 @@ class Game(models.Model):
 
 class Player(models.Model):
     """Class Player provides database model for players."""
-    nickname = models.CharField(max_length=10,
-                                validators=[
-                                    MinLengthValidator(4),
-                                ])
+    nickname = models.CharField(max_length=10)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     player_number = models.IntegerField(default=0)
     chips = models.IntegerField(default=100)

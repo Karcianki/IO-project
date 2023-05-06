@@ -14,9 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import re_path, path, include
-
-from . import views
+from django.urls import re_path, path
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -24,9 +22,7 @@ from django.conf.urls.static import static
 from karcianki.views import game_data, join_game, players_data, create_game, delete_player, update_player, player_data, handle_turn
 
 urlpatterns = [
-    # path('', views.index, name='index'),
     path('admin/', admin.site.urls),
-    path('karcianki/', include('karcianki.urls')),
     re_path(r'^api/karcianki/game/(?P<game_id>[0-9]{6})/$', game_data),
     re_path(r'^api/karcianki/players/(?P<game_id>[0-9]{6})/$', players_data),
     re_path(r'^api/karcianki/player/(?P<game_id>[0-9]{6})/(?P<player_id>[0-9]{1,2})$', player_data),
