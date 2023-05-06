@@ -43,7 +43,7 @@ const Game = () => {
     const connectionString = 'ws://' + django_host + '/ws/karcianki/' + game_id + '/';
 
     useEffect(() => {
-        const gameSocket = new WebSocket(connectionString);
+        let gameSocket = new WebSocket(connectionString);
         gameSocket.onopen = function open() {
             console.log('WebSockets connection created.');
             // on websocket open, send the START event.
@@ -54,8 +54,8 @@ const Game = () => {
         };
 
         gameSocket.onclose = function (e) {
-            console.log('Socket is closed.', e.reason);
-            if (e.reason != "quit") {
+            console.log('Socket is closed.', e.code);
+            if (e.code === 1000) {
                 console.log('Reconnecting...');
                 setTimeout(function () {
                     gameSocket = new WebSocket(connectionString);
@@ -106,7 +106,9 @@ const Game = () => {
                         "event": "JOIN",
                         "message": player_number,
                     }));
-                    gameSocket.close("quit");
+                    gameSocket.onclose({
+                        'code': 3000,
+                    });
                 }
             })
         }
