@@ -62,7 +62,6 @@ def join_game(request):
     nickname = body['nickname']
 
     game = get_object_or_404(Game, game_id=game_id)
-    game.player_count = game.player_count + 1
     game.save()
 
     players = Player.objects.filter(game=game).count()
