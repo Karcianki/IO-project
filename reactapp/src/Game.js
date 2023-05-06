@@ -28,7 +28,7 @@ const Game = () => {
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
-    const [isInTurn, setInTurn] = useState(false);
+    const [nextStage, setNextStage] = useState(false);
 
     const MAX_PLAYERS=10; 
     const chips_per_player = 100;
@@ -73,7 +73,6 @@ const Game = () => {
         gameSocket.onmessage = function (e) {
             // On getting the message from the server
             // Do the appropriate steps on each event.
-
             let data = JSON.parse(e.data);
             data = data["payload"];
             let message = data['message'];
@@ -93,26 +92,10 @@ const Game = () => {
         }
 
         const gameBoard = document.getElementById('game_board');
-        gameBoard.onturn = function(event, message) {
+        gameBoard.send = function(event, message) {
             gameSocket.send(JSON.stringify({
                 "event": event,
                 "message": message,
-            }));
-        }
-
-        const startButton = document.getElementById('start');
-        startButton.onclick = function () {
-            gameSocket.send(JSON.stringify({
-                "event": "START",
-                "message": '',
-            }));
-        }
-
-        const nextTurnButton = document.getElementById('next');
-        nextTurnButton.onclick = function () {
-            gameSocket.send(JSON.stringify({
-                "event": "NEXT",
-                "message": '',
             }));
         }
 
@@ -160,10 +143,6 @@ const Game = () => {
         updatePlayers();
     }, [])
 
-    useEffect(() => {
-        console.log("did update? " + bidValue); 
-    }, [bidValue])
-
     const toggleRules = () => {
         setShowRules(!showRules);
     };
@@ -171,37 +150,35 @@ const Game = () => {
     const gameBoard = document.getElementById('game_board');
 
     const receive = (event, message) => {
+        console.log(event + " -> " + message);
+        updateState();
         switch (event) {
-            case "JOIN":
-                console.log("JOIN");
-                updateState();
-                break;
-            case "QUIT":
-                console.log("QUIT");
-                updateState();
-                break;
             case "TURN":
-                console.log("TURN " + message);
                 let info = JSON.parse(message);
                 setWhoseTurn(info.player_number);
                 setLastBet(info.last_bet);
-                updateState();
                 break;
             case "NEXT":
-                console.log("NEXT");
-                updateState();
+                setNextStage(true);
                 break;
             case "START":
-                console.log("START");
-                updateState();
+                setIsStarted(false);
                 break;
             case "END":
-                console.log("END");
-                updateState();
                 break;
             default:
                 console.log("No event");
         }
+    }
+
+    const onStart = () => {
+        setIsStarted(true);
+        gameBoard.send("START", '');
+    }
+
+    const onNext = () => {
+        setNextStage(false);
+        gameBoard.send("NEXT", '');
     }
 
     const onPass = () => {
@@ -215,10 +192,11 @@ const Game = () => {
             "type": "PASS",
             "bet": 0,
         });
-        gameBoard.onturn("TURN", message);
+        gameBoard.send("TURN", message);
     }
 
     const onCheck = () => {
+        console.log("check " + whoseTurn + player_number);
         if (whoseTurn != player_number) {
             return;
         }
@@ -227,7 +205,7 @@ const Game = () => {
             "type": "CHECK",
             "bet": 0,
         });
-        gameBoard.onturn("TURN", message);
+        gameBoard.send("TURN", message);
     }
 
     const onBidChange = (event) => {
@@ -235,6 +213,7 @@ const Game = () => {
     }
 
     const onBidClick = (event) => {
+        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number )
         if (whoseTurn !== player_number) {
             return;
         }
@@ -243,14 +222,8 @@ const Game = () => {
             "type": "BET",
             "bet": bidValue,
         });
-        gameBoard.onturn("TURN", message); 
+        gameBoard.send("TURN", message); 
     }
-    const setStarted = () => {
-        setIsStarted(!isStarted);
-    };
-    const setTurn = () => {
-        setInTurn(!isInTurn);
-    };
 
     return (
         <div>
@@ -291,10 +264,10 @@ const Game = () => {
 
                 <div className="opcje">
                     <div className = "host" id="start">
-                       {player_number == 0 && isStarted == false && <button onClick={setStarted} type="submit" id="start">Start</button>}
+                       {player_number == 0 && isStarted == false && <button onClick={onStart} type="submit" id="start">Start</button>}
                     </div>
                     <div className = "host_next" id="next">
-                    {player_number == 0 && isInTurn == false && <button onClick={setTurn} type="submit" id="next">Next</button>}
+                    {player_number == 0 && nextStage == false && <button onClick={onNext} type="submit" id="next">Next</button>}
                     </div>
                     <button type="submit" id="pass" onClick={onPass}>Pass</button>
                     <button type="submit" id="check" onClick={onCheck}>Sprawdź</button>
