@@ -234,10 +234,10 @@ const Game = () => {
                 <div>
                     Numer gry {game_id}
                 </div>
-                <button onClick={toggleRules} type="submit" aria-label="info"><span className="fa-solid fa-question"></span></button>
+                <button onClick={toggleRules} type="submit" aria-label="info" className="game_button"><span className="fa-solid fa-question"></span></button>
             </header>
 
-            <div className="page">
+            <div className="page_game">
                 <div className="plansza" id="game_board" game_id={game_id}>
                     <div className="rzad">
                         <Player id="gracz1" data={playerData[2]} /> 
@@ -264,17 +264,17 @@ const Game = () => {
 
                 <div className="opcje">
                     <div className = "host" id="start">
-                       {player_number == 0 && isStarted == false && <button onClick={onStart} type="submit" id="start">Start</button>}
+                       {player_number == 0 && isStarted == false && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
                     </div>
                     <div className = "host_next" id="next">
-                    {player_number == 0 && nextStage == false && <button onClick={onNext} type="submit" id="next">Next</button>}
+                    {player_number == 0 && nextStage == false && <button onClick={onNext} className="game_button poker_button" type="submit" id="next">Next</button>}
                     </div>
-                    <button type="submit" id="pass" onClick={onPass}>Pass</button>
-                    <button type="submit" id="check" onClick={onCheck}>Sprawdź</button>
+                    <button className="game_button poker_button" type="submit" id="pass" onClick={onPass}>Pass</button>
+                    <button className="game_button poker_button" type="submit" id="check" onClick={onCheck}>Sprawdź</button>
                     <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
-                    <button id="bet" onClick={onBidClick}>Postaw</button>
+                    <button className="game_button poker_button" id="bet" onClick={onBidClick}>Postaw</button>
                     <Link to='../'>
-                        <button type="submit" id="quit">Wyjdź</button>
+                        <button className="game_button poker_button" type="submit" id="quit">Wyjdź</button>
                     </Link>
                 </div>
             </div>

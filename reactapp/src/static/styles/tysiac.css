@@ -2,7 +2,7 @@
 /* stylelint-disable media-feature-name-no-unknown */
 
 
-.opcje button{
+.opcje .tysiac_button{
     height: 50px;
     width: 100px;
 }
@@ -14,7 +14,7 @@
 }
 
 @media only screen and ((max-width: 800px) or (max-height: 800px)) {
-    .opcje button{
+    .opcje .tysiac_button{
         height: 25px;
         width: 50px;
     }
