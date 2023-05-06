@@ -73,10 +73,10 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             players = await sync_to_async(Player.objects.all)()
             next_p = -1
             
-            for i in range(player_number, (player_number + player_count) % player_count):
-                if players[i].last_bet != -1:
-                    next_p = players[i].player_number
-                i = i % player_count
+            for i in range(player_number, player_number + player_count):
+                j = i % player_count
+                if players[j].last_bet != -1:
+                    next_p = players[j].player_number
 
             if player_number == game.last_raise and game.stage == 4:
                 await self.channel_layer.group_send(self.game_name, {
@@ -93,6 +93,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             else: 
                 if data.type == "BET":
                     game.last_raise = player.player_number
+                await sync_to_async(game.save)()
 
                 json_data = json.dumps({
                     "player_number": f"${next_p}",
