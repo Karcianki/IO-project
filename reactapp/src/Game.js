@@ -24,6 +24,7 @@ const Game = () => {
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
     const player_number = searchParams.get('player_number');
+    const [isStarted, setIsStarted] = useState(false);
 
     const MAX_PLAYERS=10; 
     const chips_per_player = 100;
@@ -73,15 +74,15 @@ const Game = () => {
             let event = data["event"];
             switch (event) {
                 case "JOIN":
-                    console.log("JOIN " + message);
+                    console.log("JOIN");
                     updateState();
                     break;
                 case "QUIT":
-                    console.log("QUIT " + message);
+                    console.log("QUIT");
                     updateState();
                     break;
                 case "TURN":
-                    console.log("TURN " + message);
+                    console.log("TURN");
                     updateState();
                     break;
                 default:
@@ -103,16 +104,12 @@ const Game = () => {
             .then(() => {
                 if (gameSocket.readyState === WebSocket.OPEN) {
                     gameSocket.send(JSON.stringify({
-                        "event": "QUIT",
+                        "event": "JOIN",
                         "message": player_number,
                     }));
                     gameSocket.onclose({
                         'code': 3000,
                     });
-                }
-                // if host quits game, delete it
-                if (player_number === 0) { 
-                   // TODO: delete game 
                 }
             })
         }
@@ -211,6 +208,9 @@ const Game = () => {
     const toggleRules = () => {
         setShowRules(!showRules);
     };
+    const setStarted = () => {
+        setIsStarted(!isStarted);
+    };
 
     return (
         <div>
@@ -233,7 +233,7 @@ const Game = () => {
                         <Player id="gracz8" data={playerData[8]} />
                     </div>
                     <div className="rzad" id="ze_stolem">
-                        <Player id="gracz0" name="fiut" data={playerData[0]} />
+                        <Player id="gracz0" data={playerData[0]} />
                         <img src={table} alt="" className="stol"/>
                         <Player id="gracz1" data={playerData[1]} />
                     </div>
@@ -250,6 +250,9 @@ const Game = () => {
                 </div>
 
                 <div className="opcje">
+                    <div className = "host">
+                       {player_number == 0 && isStarted == false && <button onClick={setStarted} type="submit" id="check">Start</button>}
+                    </div>
                     <button type="submit" id="pass">Pass</button>
                     <button type="submit" id="check">Sprawdź</button>
                     <form id="bid">
