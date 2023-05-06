@@ -24,6 +24,9 @@ const Game = () => {
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
     const player_number = searchParams.get('player_number');
+    const [whoseTurn, setWhoseTurn] = useState(3);
+    const [lastBet, setLastBet] = useState(0);
+    const [bidValue, setBidValue] = useState(0);
 
     const MAX_PLAYERS=10; 
     const chips_per_player = 100;
@@ -82,6 +85,9 @@ const Game = () => {
                     break;
                 case "TURN":
                     console.log("TURN " + message);
+                    let info = JSON.parse(message);
+                    setWhoseTurn(info.player_number);
+                    setLastBet(info.last_bet);
                     updateState();
                     break;
                 default:
@@ -90,76 +96,58 @@ const Game = () => {
         };
         const quitButton = document.getElementById('quit');
         quitButton.onclick = function() {
-            fetch(`http://localhost:8000/api/karcianki/quit/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    player_number: player_number,
-                    game_id: game_id,
-                }),
-            })
-            .then(() => {
-                if (gameSocket.readyState === WebSocket.OPEN) {
-                    gameSocket.send(JSON.stringify({
-                        "event": "QUIT",
-                        "message": player_number,
-                    }));
-                    gameSocket.onclose({
-                        'code': 3000,
-                    });
-                }
-                // if host quits game, delete it
-                if (player_number === 0) { 
-                   // TODO: delete game 
-                }
-            })
+            gameSocket.send(JSON.stringify({
+                "event": "QUIT",
+                "message": player_number,
+            }));
+            gameSocket.onclose({
+                'code': 3000,
+            });
         }
 
         const passButton = document.getElementById('pass');
         passButton.onclick = function() {
-            fetch(`http://localhost:8000/api/karcianki/turn/${game_id}/${player_number}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    event: "pass",
-                }),
-            })
-            .then(() => {
-                gameSocket.send(JSON.stringify({
-                    "event": "TURN",
-                    "message": player_number,
-                }));
-            })
+            console.log(whoseTurn + ' ' + player_number);
+            if (whoseTurn != player_number) {
+                console.log("returning");
+                return;
+            }
+            console.log("sending TURN to socket");
+            gameSocket.send(JSON.stringify({
+                "event": "TURN",
+                "message": JSON.stringify({
+                    "player_number": player_number,
+                    "type": "PASS",
+                })
+            }));
         }
 
         const checkButton = document.getElementById('check');
         checkButton.onclick = function() {
-            fetch(`http://localhost:8000/api/karcianki/turn/${game_id}/${player_number}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    event: "check",
-                }),
-            })
-            .then(() => {
-                gameSocket.send(JSON.stringify({
-                    "event": "TURN",
-                    "message": player_number,
-                }));
-            })           
-        }
-
-        const bidForm = document.getElementById('bid');
-        bidForm.onSubmit = function() {
+            if (whoseTurn !== player_number) {
+               return; 
+            }
             gameSocket.send(JSON.stringify({
                 "event": "TURN",
-                "message": player_number,
+                "message": JSON.stringify({
+                    "player_number": player_number,
+                    "type": "BET",
+                    "bet": 0,
+                })
+            }));
+        }
+
+        const betButton = document.getElementById('bet');
+        betButton.onbet = function(value) {
+            console.log("bet submit");
+            console.log(value);
+            gameSocket.send(JSON.stringify({
+                "event": "TURN",
+                "message": JSON.stringify({
+                    "player_number": player_number,
+                    "type": "BET",
+                    "bet": value,
+                })
             }));
         }
 
@@ -174,7 +162,6 @@ const Game = () => {
 
     const updatePlayers = () => {
         fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {
-
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -208,9 +195,25 @@ const Game = () => {
         updatePlayers();
     }, [])
 
+    useEffect(() => {
+        console.log("did update? " + bidValue); 
+    }, [bidValue])
+
     const toggleRules = () => {
         setShowRules(!showRules);
     };
+
+    const onBidChange = (event) => {
+        console.log("bid change "  + event.target.value);
+        setBidValue(event.target.value);
+        console.log(bidValue);
+    }
+
+    const onBidClick = (event) => {
+        console.log("sending " + bidValue);
+        const betButton = document.getElementById('bet');
+        betButton.onbet(bidValue); 
+    }
 
     return (
         <div>
@@ -252,10 +255,8 @@ const Game = () => {
                 <div className="opcje">
                     <button type="submit" id="pass">Pass</button>
                     <button type="submit" id="check">Sprawdź</button>
-                    <form id="bid">
-                        <input type="number" step="5" className="licytuj" min="0" max="10000"/>
-                        <button type="submit">Postaw</button>
-                    </form>
+                    <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
+                    <button id="bet" onClick={onBidClick}>Postaw</button>
                     <Link to='../'>
                         <button type="submit" id="quit">Wyjdź</button>
                     </Link>

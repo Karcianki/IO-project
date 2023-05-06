@@ -14,16 +14,14 @@ class Game(models.Model):
     dealer = models.IntegerField(default=0)
 
     @classmethod
-    def create(cls, chips):
+    def create(cls):
         """Function create creates new game with unique game_id."""
         new_id = randint(Game.MIN_ID, Game.MAX_ID)
         game = Game(game_id=new_id)
-        game.start_chips = chips
         return game
 
-    def __str__(self):
+    def str(self):
         return str(self.game_id)
-
 
 class Player(models.Model):
     """Class Player provides database model for players."""
