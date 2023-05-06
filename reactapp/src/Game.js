@@ -39,10 +39,9 @@ const Game = () => {
 
     const django_host = 'localhost:8000'
     const connectionString = 'ws://' + django_host + '/ws/karcianki/' + game_id + '/';
-    let gameSocket;
 
     useEffect(() => {
-        gameSocket = new WebSocket(connectionString);
+        const gameSocket = new WebSocket(connectionString);
         gameSocket.onopen = function open() {
             console.log('WebSockets connection created.');
             // on websocket open, send the START event.
@@ -76,6 +75,29 @@ const Game = () => {
                     console.log("No event");
             }
         };
+        const quitButton = document.getElementById('quit');
+        quitButton.onclick = function() {
+            fetch(`http://localhost:8000/api/karcianki/quit/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    player_number: player_number,
+                    game_id: game_id,
+                }),
+            })
+            .then(() => {
+                if (gameSocket.readyState === WebSocket.OPEN) {
+                    gameSocket.send(JSON.stringify({
+                        "event": "JOIN",
+                        "message": player_number,
+                    }));
+                    gameSocket.close();
+                }
+            })
+        }
+
         if (gameSocket.readyState === WebSocket.OPEN) {
             gameSocket.onopen();
         }
@@ -118,28 +140,6 @@ const Game = () => {
 
     const toggleRules = () => {
         setShowRules(!showRules);
-    };
-
-    const quit = () => {
-        fetch(`http://localhost:8000/api/karcianki/quit/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                player_number: player_number,
-                game_id: game_id,
-            }),
-        })
-        .then(() => {
-            if (gameSocket) {
-                gameSocket.send(JSON.stringify({
-                    "event": "QUIT",
-                    "message": player_number,
-                })); 
-                gameSocket.close();
-            }
-        })
     };
 
     return (
@@ -187,7 +187,7 @@ const Game = () => {
                         <button type="submit">Postaw</button>
                     </form>
                     <Link to='../'>
-                        <button onClick={quit} type="submit" id="quit">Wyjdź</button>
+                        <button type="submit" id="quit">Wyjdź</button>
                     </Link>
                 </div>
             </div>
