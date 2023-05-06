@@ -1,3 +1,4 @@
+# 108 60 ..
 ###Module consumers adds websockets to application"""
 import json
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
@@ -56,6 +57,11 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             data = json.loads(message)
             player_number = int(data['player_number'])
 
+            # zabierane są pieniądze sąsiada a nie swoje -> liczba nad graczem
+            # zmieniłem max na min w max(bet, player.chips)
+            # wydaję mi się, że max(bet, player.chips) nie ma sensu, bo za duzo zabierasz
+            # powinno być według mnie max(bet, player.last_bet) tylko jak tak robie
+            # to wywala socketa -> moze najpierw ustawić an 0 ?
             game         = await sync_to_async(Game.objects.get)(game_id=self.game_id)
             player       = await sync_to_async(Player.objects.get)(game= game, player_number=player_number)
             player_qs    = await sync_to_async(Player.objects.filter)(game=game)
@@ -66,7 +72,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             elif data['type'] == "BET":
                 bet = int(data['bet'])
                 game.pot += bet
-                player.chips -= max(bet, player.chips)
+                player.chips -= min(bet, player.chips)
                 player.last_bet = max(bet, player.chips)
 
             await sync_to_async(player.save)()
@@ -99,6 +105,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                     game.last_raise = player.player_number
                 await sync_to_async(game.save)()
 
+                #wez do json_data dorzuc nickname gracza żeby to wyświetląc bo inaczej nie działa
                 json_data = json.dumps({
                     "player_number": f"{next_p}",
                     "last_bet": f"{data['bet']}"
