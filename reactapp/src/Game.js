@@ -73,15 +73,15 @@ const Game = () => {
             let event = data["event"];
             switch (event) {
                 case "JOIN":
-                    console.log("JOIN");
+                    console.log("JOIN " + message);
                     updateState();
                     break;
                 case "QUIT":
-                    console.log("QUIT");
+                    console.log("QUIT " + message);
                     updateState();
                     break;
                 case "TURN":
-                    console.log("TURN");
+                    console.log("TURN " + message);
                     updateState();
                     break;
                 default:
@@ -103,12 +103,16 @@ const Game = () => {
             .then(() => {
                 if (gameSocket.readyState === WebSocket.OPEN) {
                     gameSocket.send(JSON.stringify({
-                        "event": "JOIN",
+                        "event": "QUIT",
                         "message": player_number,
                     }));
                     gameSocket.onclose({
                         'code': 3000,
                     });
+                }
+                // if host quits game, delete it
+                if (player_number === 0) { 
+                   // TODO: delete game 
                 }
             })
         }
