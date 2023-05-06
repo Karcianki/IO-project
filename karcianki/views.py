@@ -240,3 +240,23 @@ def update_player(request):
 
     if request.method == 'POST':
         return Response()
+
+@api_view(['POST'])
+def handle_turn(request, game_id, player_id):
+    body = json.loads(request.body.decode('utf-8'))
+    player_number = player_id
+    event         = body['event']
+    # chips    = body['chips']
+    # last_bid = body['last_bid']
+    game = get_object_or_404(Game, game_id=game_id)
+    player = get_object_or_404(Player, game=game, player_number=player_number)
+
+    if (event == 'pass'):
+        player.last_bet = 'PASS'
+        player.save()
+    elif (event == 'check'):
+        player.last_bet = 'CHECK'
+        player.save()
+
+    if request.method == 'POST':
+        return Response()

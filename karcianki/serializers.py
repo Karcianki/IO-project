@@ -19,5 +19,6 @@ class PlayerSerializer(serializers.ModelSerializer):
             'nickname',
             'game',
             'player_number',
-            'chips'
+            'chips',
+            'last_bet',
             )

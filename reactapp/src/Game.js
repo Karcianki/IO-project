@@ -9,6 +9,7 @@ class Player extends Component {
             <div className={ JSON.parse(this.props.data).class } id={this.props.id}>
                 <span className="fa-solid fa-circle-user ikona"></span>
                 <div className="dane">
+                    <div>{ JSON.parse(this.props.data).last_bet }</div>
                     <div>{ JSON.parse(this.props.data).nickname }</div>
                     <div>{ JSON.parse(this.props.data).chips }</div>
                 </div>
@@ -31,6 +32,7 @@ const Game = () => {
         class: "gracz hide",
         nickname: "",
         chips: chips_per_player,
+        last_bet: "",
     }
 
     const [playerData, setPlayerData] = useState(
@@ -53,6 +55,13 @@ const Game = () => {
 
         gameSocket.onclose = function (e) {
             console.log('Socket is closed.', e.reason);
+            if (e.reason != "quit") {
+                console.log('Reconnecting...');
+                setTimeout(function () {
+                    gameSocket = new WebSocket(connectionString);
+                    gameSocket.onopen()
+                }, 1000);
+            }
         };
         // Sending the info about the room
         gameSocket.onmessage = function (e) {
@@ -65,11 +74,15 @@ const Game = () => {
             switch (event) {
                 case "JOIN":
                     console.log("JOIN");
-                    updatePlayers();
+                    updateState();
                     break;
                 case "QUIT":
                     console.log("QUIT");
-                    updatePlayers();
+                    updateState();
+                    break;
+                case "TURN":
+                    console.log("TURN");
+                    updateState();
                     break;
                 default:
                     console.log("No event");
@@ -93,15 +106,65 @@ const Game = () => {
                         "event": "JOIN",
                         "message": player_number,
                     }));
-                    gameSocket.close();
+                    gameSocket.close("quit");
                 }
             })
+        }
+
+        const passButton = document.getElementById('pass');
+        passButton.onclick = function() {
+            fetch(`http://localhost:8000/api/karcianki/turn/${game_id}/${player_number}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    event: "pass",
+                }),
+            })
+            .then(() => {
+                gameSocket.send(JSON.stringify({
+                    "event": "TURN",
+                    "message": player_number,
+                }));
+            })
+        }
+
+        const checkButton = document.getElementById('check');
+        checkButton.onclick = function() {
+            fetch(`http://localhost:8000/api/karcianki/turn/${game_id}/${player_number}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    event: "check",
+                }),
+            })
+            .then(() => {
+                gameSocket.send(JSON.stringify({
+                    "event": "TURN",
+                    "message": player_number,
+                }));
+            })           
+        }
+
+        const bidForm = document.getElementById('bid');
+        bidForm.onSubmit = function() {
+            gameSocket.send(JSON.stringify({
+                "event": "TURN",
+                "message": player_number,
+            }));
         }
 
         if (gameSocket.readyState === WebSocket.OPEN) {
             gameSocket.onopen();
         }
     }, [])
+
+    const updateState = () => {
+        updatePlayers();
+    }
 
     const updatePlayers = () => {
         fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {
@@ -126,6 +189,7 @@ const Game = () => {
                         "class": "gracz",
                         "nickname": data[i].nickname,
                         "chips": data[i].chips,
+                        "last_bet": data[i].last_bet,
                     }
                     newData[data[i].player_number] = JSON.stringify(player_data);
                 }
@@ -180,9 +244,9 @@ const Game = () => {
                 </div>
 
                 <div className="opcje">
-                    <button type="submit">Pass</button>
-                    <button type="submit">Sprawdź</button>
-                    <form>
+                    <button type="submit" id="pass">Pass</button>
+                    <button type="submit" id="check">Sprawdź</button>
+                    <form id="bid">
                         <input type="number" step="5" className="licytuj" min="0" max="10000"/>
                         <button type="submit">Postaw</button>
                     </form>
