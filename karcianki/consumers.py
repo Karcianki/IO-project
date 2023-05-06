@@ -1,4 +1,3 @@
-# 108 60 ..
 ###Module consumers adds websockets to application"""
 import json
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
@@ -62,6 +61,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             # wydaję mi się, że max(bet, player.chips) nie ma sensu, bo za duzo zabierasz
             # powinno być według mnie max(bet, player.last_bet) tylko jak tak robie
             # to wywala socketa -> moze najpierw ustawić an 0 ?
+            # trzeba dopisać obsługę check chyba, bo nigdzie tu jej nie widzę i nie zabiera pieniędzy graczom 
             game         = await sync_to_async(Game.objects.get)(game_id=self.game_id)
             player       = await sync_to_async(Player.objects.get)(game= game, player_number=player_number)
             player_qs    = await sync_to_async(Player.objects.filter)(game=game)
@@ -105,10 +105,10 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                     game.last_raise = player.player_number
                 await sync_to_async(game.save)()
 
-                #wez do json_data dorzuc nickname gracza żeby to wyświetląc bo inaczej nie działa
                 json_data = json.dumps({
                     "player_number": f"{next_p}",
-                    "last_bet": f"{data['bet']}"
+                    "last_bet": f"{data['bet']}",
+                    "nickname": player.nickname,
                 })
 
                 await self.channel_layer.group_send(self.game_name, {
@@ -144,7 +144,8 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
 
             json_data = json.dumps({
                 "player_number": f"{(dealer + 3) % player_count}",
-                "last_bet": f"{bet2}"
+                "last_bet": f"{bet2}",
+                "nickname": player1.nickname
             })
 
             await self.channel_layer.group_send(self.game_name, {
