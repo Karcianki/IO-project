@@ -11,6 +11,7 @@ class Game(models.Model):
     pot = models.IntegerField(default=0)
     last_raise = models.IntegerField(null=True)
     stage = models.IntegerField(default=1)
+    dealer = models.IntegerField(default=0)
 
     @classmethod
     def create(cls, chips):

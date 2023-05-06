@@ -10,7 +10,8 @@ class GameSerializer(serializers.ModelSerializer):
             'start_chips',
             'pot',
             'last_raise',
-            'stage'
+            'stage',
+            'dealer'
             )
 
 class PlayerSerializer(serializers.ModelSerializer):

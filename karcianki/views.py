@@ -32,7 +32,10 @@ def create_game(request):
     nickname = body['nickname']
     chips = body['chips']
 
-    game = Game.create(chips=chips)
+    game = Game.create()
+    game.start_chips = chips
+    game.stage = 1
+    game.dealer = 0
     game.save()
 
     player = Player(nickname=nickname, game=game, player_number=0, chips=game.start_chips)
