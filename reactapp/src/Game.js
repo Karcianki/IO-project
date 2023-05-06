@@ -25,7 +25,7 @@ const Game = () => {
     const game_id = searchParams.get('game_id');
     const player_number = searchParams.get('player_number');
     const [whoseTurn, setWhoseTurn] = useState(0);
-    const [player, setNickane ] = useState('')
+    const [player, setNickane ] = useState('') //domyslnie ustawic hosta
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
@@ -158,14 +158,14 @@ const Game = () => {
                 let info = JSON.parse(message);
                 setWhoseTurn(info.player_number);
 
-                let nickname = JSON.parse(playerData[whoseTurn]).nickname 
-                console.log(nickname)
+                let nickname = info.nickname
                 setNickane(nickname)
 
                 setLastBet(info.last_bet);
                 break;
             case "NEXT":
                 setNextStage(false);
+                //ustawic host jako nickname
                 break;
             case "START":
                 setIsStarted(false);
@@ -184,6 +184,7 @@ const Game = () => {
 
     const onNext = () => {
         setNextStage(true);
+        //ustawic kolejna osobe po hoscie
         gameBoard.send("NEXT", '');
     }
 
@@ -205,6 +206,7 @@ const Game = () => {
         console.log("check " + whoseTurn + player_number);
         let data = JSON.parse(playerData[whoseTurn]).last_bet 
         let value =  lastBet - data
+        
         console.log(value)
         if (whoseTurn != player_number) {
             return;
@@ -234,13 +236,12 @@ const Game = () => {
         gameBoard.send("TURN", message); 
     }
     // Maciek w consumers sprawdza i bierze maxa z Twoich żetonów, beta więc tu już nie trzeba tego robic 
-    // aktualnie wypisuje numer gracza, na player w 161 linii przepisuje wartosc
     return (
         <div>
             <header>
                 <div>
-                    Poker
-                    {player}
+                    Poker<br />
+                    {player} <br />
                     {whoseTurn}
                 </div>
                 <div>
