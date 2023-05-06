@@ -28,6 +28,7 @@ const Game = () => {
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
+    const [isInTurn, setInTurn] = useState(false);
 
     const MAX_PLAYERS=10; 
     const chips_per_player = 100;
@@ -131,6 +132,17 @@ const Game = () => {
             }));
         }
 
+        const nextTurnButton = document.getElementById('next');
+        nextTurnButton.onclick = function () {
+            gameSocket.send(JSON.stringify({
+                "event": "NEXT",
+                "message": '',
+            }));
+
+            gameSocket.addEventListener('message', function(event) {
+            });
+        }
+
         const checkButton = document.getElementById('check');
         checkButton.onclick = function() {
             if (whoseTurn !== player_number) {
@@ -229,6 +241,9 @@ const Game = () => {
     const setStarted = () => {
         setIsStarted(!isStarted);
     };
+    const setTurn = () => {
+        setInTurn(!isInTurn);
+    };
 
     return (
         <div>
@@ -270,6 +285,9 @@ const Game = () => {
                 <div className="opcje">
                     <div className = "host" id="start">
                        {player_number == 0 && isStarted == false && <button onClick={setStarted} type="submit" id="check">Start</button>}
+                    </div>
+                    <div className = "host_next" id="next">
+                    {player_number == 0 && isInTurn == false && <button onClick={setTurn} type="submit" id="check">Next</button>}
                     </div>
                     <button type="submit" id="pass">Pass</button>
                     <button type="submit" id="check">Sprawdź</button>
