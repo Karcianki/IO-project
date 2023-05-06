@@ -35,7 +35,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
         response = json.loads(text_data)
         event = response.get("event", None)
         message = response.get("message", None)
-        data = json.parse(message)
+        data = json.loads(message)
         if event == 'JOIN':
             # Send message to room group
             # await self.channel_layer.group_send(self.room_group_name, {
@@ -53,17 +53,28 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 "event": "QUIT"
             })
         elif event == 'TURN':
-            # Send message to room group
-            # await self.channel_layer.group_send(self.room_group_name, {
-            await self.channel_layer.group_send(self.game_name, {
-                'type': 'send_message',
-                'message': message,
-                "event": "TURN"
-            })
-        elif event == 'START':
+            turn_type  = data.type
+            bet = data.bet
+            player_number = data.player_number
+
             game = Game.objects.get(game_id=self.game_id)
             player_count = Player.objects.filter(game=game).count()
 
+            if player_number == game.last_raise and game.stage == 4:
+                await self.channel_layer.group_send(self.game_name, {
+                    "type": "send_message",
+                    "event": "END",
+                    "message": json_data
+                })
+            elif player_number == game.last_raise:
+                await self.channel_layer.group_send(self.game_name, {
+                    "type": "send_message",
+                    "event": "NEXT",
+                    "message": json_data
+                })
+            else: 
+                return
+        elif event == 'START':
             dealer = game.dealer
             player1 = Player.objects.get(game=game, player_number=(dealer + 1) % player_count)
             player2 = Player.objects.get(game=game, player_number=(dealer + 2) % player_count)
