@@ -47,6 +47,7 @@ const Game = () => {
     const django_host = 'localhost:8000'
     const connectionString = 'ws://' + django_host + '/ws/karcianki/' + game_id + '/';
 
+
     useEffect(() => {
         let gameSocket = new WebSocket(connectionString);
         gameSocket.onopen = function open() {
@@ -72,42 +73,14 @@ const Game = () => {
         gameSocket.onmessage = function (e) {
             // On getting the message from the server
             // Do the appropriate steps on each event.
+
             let data = JSON.parse(e.data);
             data = data["payload"];
             let message = data['message'];
             let event = data["event"];
-            switch (event) {
-                case "JOIN":
-                    console.log("JOIN");
-                    updateState();
-                    break;
-                case "QUIT":
-                    console.log("QUIT");
-                    updateState();
-                    break;
-                case "TURN":
-                    console.log("TURN " + message);
-                    let info = JSON.parse(message);
-                    setWhoseTurn(info.player_number);
-                    setLastBet(info.last_bet);
-                    updateState();
-                    break;
-                case "NEXT":
-                    console.log("NEXT");
-                    updateState();
-                    break;
-                case "START":
-                    console.log("START");
-                    updateState();
-                    break;
-                case "END":
-                    console.log("END");
-                    updateState();
-                    break;
-                default:
-                    console.log("No event");
-            }
+            receive(event, message);
         };
+
         const quitButton = document.getElementById('quit');
         quitButton.onclick = function() {
             gameSocket.send(JSON.stringify({
@@ -119,21 +92,11 @@ const Game = () => {
             });
         }
 
-        const passButton = document.getElementById('pass');
-        passButton.onclick = function() {
-            console.log(whoseTurn + ' ' + player_number);
-            if (whoseTurn != player_number) {
-                console.log("returning");
-                return;
-            }
-            console.log("sending TURN to socket");
+        const gameBoard = document.getElementById('game_board');
+        gameBoard.onturn = function(event, message) {
             gameSocket.send(JSON.stringify({
-                "event": "TURN",
-                "message": JSON.stringify({
-                    "player_number": player_number,
-                    "type": "PASS",
-                    "bet": 0,
-                })
+                "event": event,
+                "message": message,
             }));
         }
 
@@ -150,40 +113,6 @@ const Game = () => {
             gameSocket.send(JSON.stringify({
                 "event": "NEXT",
                 "message": '',
-            }));
-        }
-
-        const checkButton = document.getElementById('check');
-        checkButton.onclick = function() {
-            console.log("check clicked");
-            if (whoseTurn !== player_number) {
-               return; 
-            }
-            gameSocket.send(JSON.stringify({
-                "event": "TURN",
-                "message": JSON.stringify({
-                    "player_number": player_number,
-                    "type": "BET",
-                    "bet": 0,
-                })
-            }));
-        }
-
-        const betButton = document.getElementById('bet');
-        betButton.onbet = function(value) {
-            console.log("onbet " + value)
-            if (whoseTurn !== player_number) {
-                return;
-            }
-            console.log("bet submit");
-            console.log(value);
-            gameSocket.send(JSON.stringify({
-                "event": "TURN",
-                "message": JSON.stringify({
-                    "player_number": player_number,
-                    "type": "BET",
-                    "bet": value,
-                })
             }));
         }
 
@@ -239,16 +168,82 @@ const Game = () => {
         setShowRules(!showRules);
     };
 
+    const gameBoard = document.getElementById('game_board');
+
+    const receive = (event, message) => {
+        switch (event) {
+            case "JOIN":
+                console.log("JOIN");
+                updateState();
+                break;
+            case "QUIT":
+                console.log("QUIT");
+                updateState();
+                break;
+            case "TURN":
+                console.log("TURN " + message);
+                let info = JSON.parse(message);
+                setWhoseTurn(info.player_number);
+                setLastBet(info.last_bet);
+                updateState();
+                break;
+            case "NEXT":
+                console.log("NEXT");
+                updateState();
+                break;
+            case "START":
+                console.log("START");
+                updateState();
+                break;
+            case "END":
+                console.log("END");
+                updateState();
+                break;
+            default:
+                console.log("No event");
+        }
+    }
+
+    const onPass = () => {
+        console.log("pass " + whoseTurn + ' ' + player_number);
+        if (whoseTurn != player_number) {
+            return;
+        }
+
+        const message = JSON.stringify({
+            "player_number": player_number,
+            "type": "PASS",
+            "bet": 0,
+        });
+        gameBoard.onturn("TURN", message);
+    }
+
+    const onCheck = () => {
+        if (whoseTurn != player_number) {
+            return;
+        }
+        const message = JSON.stringify({
+            "player_number": player_number,
+            "type": "CHECK",
+            "bet": 0,
+        });
+        gameBoard.onturn("TURN", message);
+    }
+
     const onBidChange = (event) => {
-        console.log("bid change "  + event.target.value);
         setBidValue(event.target.value);
-        console.log(bidValue);
     }
 
     const onBidClick = (event) => {
-        console.log("sending " + bidValue);
-        const betButton = document.getElementById('bet');
-        betButton.onbet(bidValue); 
+        if (whoseTurn !== player_number) {
+            return;
+        }
+        const message = JSON.stringify({
+            "player_number": player_number,
+            "type": "BET",
+            "bet": bidValue,
+        });
+        gameBoard.onturn("TURN", message); 
     }
     const setStarted = () => {
         setIsStarted(!isStarted);
@@ -301,8 +296,8 @@ const Game = () => {
                     <div className = "host_next" id="next">
                     {player_number == 0 && isInTurn == false && <button onClick={setTurn} type="submit" id="next">Next</button>}
                     </div>
-                    <button type="submit" id="pass">Pass</button>
-                    <button type="submit" id="check">Sprawdź</button>
+                    <button type="submit" id="pass" onClick={onPass}>Pass</button>
+                    <button type="submit" id="check" onClick={onCheck}>Sprawdź</button>
                     <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
                     <button id="bet" onClick={onBidClick}>Postaw</button>
                     <Link to='../'>

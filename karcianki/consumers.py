@@ -99,8 +99,8 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 await sync_to_async(game.save)()
 
                 json_data = json.dumps({
-                    "player_number": f"${next_p}",
-                    "last_bet": f"${data['bet']}"
+                    "player_number": f"{next_p}",
+                    "last_bet": f"{data['bet']}"
                 })
 
                 await self.channel_layer.group_send(self.game_name, {
@@ -135,8 +135,8 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             await sync_to_async(game.save)()
 
             json_data = json.dumps({
-                "player_number": f"${(dealer + 3) % player_count}",
-                "last_bet": f"${bet2}"
+                "player_number": f"{(dealer + 3) % player_count}",
+                "last_bet": f"{bet2}"
             })
 
             await self.channel_layer.group_send(self.game_name, {
@@ -163,7 +163,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             await sync_to_async(game.save)()
 
             json_data = json.dumps({
-                "winner_number": f"${data['winner_number']}"
+                "winner_number": f"{data['winner_number']}"
             })
 
             await self.channel_layer.group_send(self.game_name, {
@@ -182,7 +182,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             player_count = await sync_to_async(player_qs.count)()       
 
             json_data = json.dumps({
-                "player_number": f"${(game.last_raise + 1) % player_count}",
+                "player_number": f"{(game.last_raise + 1) % player_count}",
                 "last_bet": "0"
             })
 
