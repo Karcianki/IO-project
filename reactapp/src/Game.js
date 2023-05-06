@@ -1,3 +1,5 @@
+// 242 243 209
+
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/poker.css";
 import table from './static/images/stol.png';
@@ -25,6 +27,7 @@ const Game = () => {
     const game_id = searchParams.get('game_id');
     const player_number = searchParams.get('player_number');
     const [whoseTurn, setWhoseTurn] = useState(0);
+    const [player, setNickane ] = useState('')
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
@@ -156,6 +159,11 @@ const Game = () => {
             case "TURN":
                 let info = JSON.parse(message);
                 setWhoseTurn(info.player_number);
+
+                let nickname = JSON.parse(JSON.stringify(playerData[whoseTurn])).nickname
+                console.log(nickname)
+                setNickane(nickname)
+
                 setLastBet(info.last_bet);
                 break;
             case "NEXT":
@@ -197,13 +205,20 @@ const Game = () => {
 
     const onCheck = () => {
         console.log("check " + whoseTurn + player_number);
+
+        // wydaje się dobrze ale ciężko mi było debudować jak tamto nie działa
+        let newData = JSON.parse(JSON.stringify(playerData[player_number]))
+        let value =  lastBet - newData.last_bet
+        console.log(lastBet + " " + newData.last_bet)
+
+
         if (whoseTurn != player_number) {
             return;
         }
         const message = JSON.stringify({
             "player_number": player_number,
             "type": "CHECK",
-            "bet": 0,
+            "bet": value,
         });
         gameBoard.send("TURN", message);
     }
@@ -224,12 +239,15 @@ const Game = () => {
         });
         gameBoard.send("TURN", message); 
     }
-
+    // Maciek w consumers sprawdza i bierze maxa z Twoich żetonów, beta więc tu już nie trzeba tego robic 
+    // aktualnie wypisuje numer gracza, na player w 161 linii przepisuje wartosc
     return (
         <div>
             <header>
                 <div>
                     Poker
+                    {player}
+                    {whoseTurn}
                 </div>
                 <div>
                     Numer gry {game_id}
