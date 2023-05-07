@@ -271,12 +271,11 @@ const Game = () => {
         <div>
             <header>
                 <div>
-                    Poker<br />
+                    POKER
+                </div>
+                <div className="game_header">
                     player: {player} <br />
                     number: {whoseTurn} <br />
-                    pot: {pot}
-                </div>
-                <div>
                     Numer gry {game_id}
                 </div>
                 <button onClick={toggleRules} type="submit" aria-label="info" className="game_button"><span className="fa-solid fa-question"></span></button>
@@ -323,7 +322,12 @@ const Game = () => {
                     </Link>
                 </div>
             </div>
-        </div>
+
+            <div className="pot">
+                Pot: {pot}
+            </div>
+
+        </div>        
     )
 }
 
