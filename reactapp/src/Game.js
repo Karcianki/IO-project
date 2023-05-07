@@ -9,7 +9,7 @@ class Player extends Component {
             <div className={ JSON.parse(this.props.data).class } id={this.props.id}>
                 <span className="fa-solid fa-circle-user ikona"></span>
                 <div className="dane">
-                    <div>{ JSON.parse(this.props.data).last_bet }</div>
+                    <div>{ JSON.parse(this.props.data).info }</div>
                     <div>{ JSON.parse(this.props.data).nickname }</div>
                     <div>{ JSON.parse(this.props.data).chips }</div>
                 </div>
@@ -131,7 +131,7 @@ const Game = () => {
                         "class": "gracz",
                         "nickname": data[i].nickname,
                         "chips": data[i].chips,
-                        "last_bet": data[i].last_bet,
+                        "info": data[i].info,
                     }
                     newData[data[i].player_number] = JSON.stringify(player_data);
                 }

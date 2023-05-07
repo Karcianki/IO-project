@@ -11,7 +11,9 @@ class GameSerializer(serializers.ModelSerializer):
             'pot',
             'last_raise',
             'stage',
-            'dealer'
+            'dealer',
+            'player_number',
+            'status',
             )
 
 class PlayerSerializer(serializers.ModelSerializer):
@@ -24,4 +26,5 @@ class PlayerSerializer(serializers.ModelSerializer):
             'player_number',
             'chips',
             'last_bet',
+            'info',
             )

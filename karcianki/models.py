@@ -12,6 +12,11 @@ class Game(models.Model):
     last_raise = models.IntegerField(null=True)
     stage = models.IntegerField(default=1)
     dealer = models.IntegerField(default=0)
+    player_number = models.IntegerField(default=-1)
+    status = models.CharField(max_length=5, choices=[('START', 'START'), 
+                                                     ('TURN', 'TURN'), 
+                                                     ('NEXT', 'NEXT'), 
+                                                     ('END', 'END')], default='START')
 
     @classmethod
     def create(cls):
@@ -30,6 +35,7 @@ class Player(models.Model):
     player_number = models.IntegerField(default=0)
     chips = models.IntegerField(default=100)
     last_bet = models.IntegerField(default=0)
+    info = models.CharField(max_length=15, default="")
 
     class Meta:
         "Metadata class."
