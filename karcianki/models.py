@@ -29,7 +29,7 @@ class Player(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     player_number = models.IntegerField(default=0)
     chips = models.IntegerField(default=100)
-    last_bet = models.CharField(max_length=20, default='')
+    last_bet = models.IntegerField(default=0)
 
     class Meta:
         "Metadata class."

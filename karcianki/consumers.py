@@ -56,12 +56,6 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             data = json.loads(message)
             player_number = int(data['player_number'])
 
-            # zabierane są pieniądze sąsiada a nie swoje -> liczba nad graczem
-            # zmieniłem max na min w max(bet, player.chips)
-            # wydaję mi się, że max(bet, player.chips) nie ma sensu, bo za duzo zabierasz
-            # powinno być według mnie max(bet, player.last_bet) tylko jak tak robie
-            # to wywala socketa -> moze najpierw ustawić an 0 ?
-            # trzeba dopisać obsługę check chyba, bo nigdzie tu jej nie widzę i nie zabiera pieniędzy graczom 
             game         = await sync_to_async(Game.objects.get)(game_id=self.game_id)
             player       = await sync_to_async(Player.objects.get)(game= game, player_number=player_number)
             player_qs    = await sync_to_async(Player.objects.filter)(game=game)
@@ -73,8 +67,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 bet = int(data['bet'])
                 game.pot += bet
                 player.chips -= min(bet, player.chips)
-                player.last_bet = max(bet, player.chips)
-
+                player.last_bet = max(bet, player.last_bet)
             await sync_to_async(player.save)()
 
             # players = await sync_to_async(Player.objects.all)()
