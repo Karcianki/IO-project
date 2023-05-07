@@ -103,15 +103,11 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             player_count = await sync_to_async(player_qs.count)()
 
             end = False
-            game.last_bet = int(data['bet'])
             
             if data['type'] == "PASS":
                 player.info = "PASS"
                 player.last_bet = -1
                 player_qs    = await sync_to_async(Player.objects.filter)(~Q(info = "OUT"), ~Q(info = "PASS"))
-                active_players = await sync_to_async(player_qs.count)()
-                if active_players == 1:
-                    end = True
             elif data['type'] == "BET":
                 bet = int(data['bet'])
                 player.info = "BET " + str(bet)
@@ -121,19 +117,24 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 game.last_bet = bet
             elif data['type'] == "CHECK":
                 bet = min(game.last_bet, player.chips)
+                player.info = "CHECK"
                 player.chips -= bet
                 game.pot += bet 
                 player.last_bet = bet
             await sync_to_async(player.save)()
 
+            player_qs    = await sync_to_async(Player.objects.filter)(~Q(info = "OUT"), ~Q(info = "PASS"))
+            active_players = await sync_to_async(player_qs.count)()
+
             next_p = -1
             for i in range(player_number + 1, player_number + player_count):
                 j = i % player_count
                 player = await sync_to_async(Player.objects.get)(game=game, player_number=j)
-                if player.last_bet != -1:
+                if player.info != "PASS" and player.info != "OUT":
                     next_p = j
                     break
-            if (player_number == game.last_raise and game.stage == 4) or end:
+
+            if (player_number == game.last_raise and game.stage == 4) or active_players <= 1:
                 game.status = "END"
                 game.player_number = -1
                 await sync_to_async(game.save)()
@@ -142,7 +143,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                     "event": "END",
                     "message": message
                 })
-            elif player_number == game.last_raise or next_p == -1:
+            elif player_number == game.last_raise:
                 game.status = "NEXT"
                 game.player_number = -1
                 await sync_to_async(game.save)()
@@ -192,9 +193,10 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             player2.info = "BIG BLIND"
 
             game.pot += int(game.start_chips * 3 / 20)
-            game.last_raise = (dealer + 2) % player_count
+            game.last_raise = -1
             game.player_number = (dealer + 3) % player_count
             game.status = "TURN"
+            game.last_bet = bet2
 
             await sync_to_async(player1.save)()
             await sync_to_async(player2.save)()
