@@ -125,7 +125,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
 
             active_players = 0
             for i in range(0, player_count):
-                player = await sync_to_async(Player.objects.get)(game=game, player_number=j)
+                player = await sync_to_async(Player.objects.get)(game=game, player_number=i)
                 if player.info != "PASS" and player.info != "OUT":
                     active_players += 1
 
