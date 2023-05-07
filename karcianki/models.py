@@ -1,23 +1,23 @@
 """Module models provides database models."""
-import math
-import decimal
 from random import randint
-
 from django.db import models
-
-from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator
 
 class Game(models.Model):
     """Class Game provides database model for created games."""
-    MIN_ID = 100000
-    MAX_ID = 999999
-    DIGITS = int(math.log10(MAX_ID)) + 1
-    game_id = models.DecimalField(max_digits=DIGITS, decimal_places=0, primary_key=True,
-                                  validators=[
-                                      MinValueValidator(decimal.Decimal(0)),
-                                      MaxValueValidator(
-                                          decimal.Decimal(MAX_ID))
-                                  ],)
+    MIN_ID  = 100000
+    MAX_ID  = 999999
+    game_id = models.IntegerField(primary_key=True)
+    start_chips  = models.IntegerField(default=100)
+    pot = models.IntegerField(default=0)
+    last_raise = models.IntegerField(null=True)
+    stage = models.IntegerField(default=1)
+    dealer = models.IntegerField(default=0)
+    player_number = models.IntegerField(default=-1)
+    status = models.CharField(max_length=5, choices=[('START', 'START'), 
+                                                     ('TURN', 'TURN'), 
+                                                     ('NEXT', 'NEXT'), 
+                                                     ('END', 'END')], default='START') 
+    last_bet = models.IntegerField(default=0)
 
     @classmethod
     def create(cls):
@@ -26,18 +26,17 @@ class Game(models.Model):
         game = Game(game_id=new_id)
         return game
 
-    def __str__(self):
+    def str(self):
         return str(self.game_id)
-
 
 class Player(models.Model):
     """Class Player provides database model for players."""
-    nickname = models.CharField(max_length=10,
-                                validators=[
-                                    MinLengthValidator(4),
-                                ])
+    nickname = models.CharField(max_length=10)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     player_number = models.IntegerField(default=0)
+    chips = models.IntegerField(default=100)
+    last_bet = models.IntegerField(default=0)
+    info = models.CharField(max_length=15, default="")
 
     class Meta:
         "Metadata class."

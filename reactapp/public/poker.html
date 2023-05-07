@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/poker.css' %}">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://kit.fontawesome.com/f741e76120.js" crossorigin="anonymous"></script>
+
+    <script src="{% static 'plugins/react/react.development.js' %}"></script>
+    <script src="{% static 'plugins/react/react-dom.development.js' %}"></script>
+    <!-- JSX support-->
+    <script src="{% static 'plugins/react/babel.min.js' %}"></script>
+
+    <title>Poker</title>
+</head>
+
+<body>
+
+
+    <header>
+        <div id="root"></div>
+        POKER <br>
+        Numer gry: {{ game_id }}
+        <button type="submit" aria-label="info"><span class="fa-solid fa-question"></span></button>
+    </header>
+    <div class="page">
+        <div class="plansza" id="game_board" game_id={{game_id}}>
+            <div class="rzad">
+                <div class="gracz" id="gracz2">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.2}}
+                        <br>
+                        {{chips_per_player.2 }}
+                    </div>
+                </div>
+                <div class="gracz" id="gracz4">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.4}}
+                        <br>
+                        {{chips_per_player.4 }}
+                    </div>
+                </div>
+                <div class="gracz" id="gracz6">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.6}}
+                        <br>
+                        {{chips_per_player.6 }}
+                    </div>
+                </div>
+                <div class="gracz" id="gracz8">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.8}}
+                        <br>
+                        {{chips_per_player.8 }}
+                    </div>
+                </div>
+            </div>
+            <div class="rzad" id="ze_stolem">
+                <div class="gracz" id="gracz0">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.0}}
+                        <br>
+                        {{chips_per_player.0 }}
+                    </div>
+                </div>
+                <img src="{% static 'images/stol.png' %}" alt="" class="stol">
+                <div class="gracz" id="gracz1">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.1}}
+                        <br>
+                        {{chips_per_player.1 }}
+                    </div>
+                </div>
+            </div>
+            <div class="rzad">
+                <div class="gracz" id="gracz3">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.3}}
+                        <br>
+                        {{chips_per_player.3 }}
+                    </div>
+                </div>
+                <div class="gracz" id="gracz5">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.5}}
+                        <br>
+                        {{chips_per_player.5 }}
+                    </div>
+                </div>
+                <div class="gracz" id="gracz7">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.7}}
+                        <br>
+                        {{chips_per_player.7 }}
+                    </div>
+                </div>
+                <div class="gracz" id="gracz9">
+                    <span class="fa-solid fa-circle-user ikona"></span>
+                    <div class="dane">
+                        {{nicknames.9}}
+                        <br>
+                        {{chips_per_player.9 }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="zasady">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">
+                    układ
+                </th>
+                <th scope="col">
+                    przykład
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    poker królewski
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/Royal_Flush.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    poker
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/Straight_Flush.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    kareta
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/Poker.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    full
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/Full.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    kolor
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/Flush.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    strit
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/Straight.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    trójka
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/Three_of_a_kind.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    dwie pary
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/Two_Pairs.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    para
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/One_Pair.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    wysoka karta
+                </td>
+                <td>
+                    <img src="{% static 'images/poker_hands/No_Pair.png' %}" alt="Błąd w załadowaniu zdjęcia">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p>Etapy rozgrywki: </p>
+        <ol>
+            <li> Jeden z graczy to rozdający, czyli dealer, a dwóch uczestników gry, którzy siedzą po jego lewej
+                stronie, jest zmuszonych, aby włożyć do puli stawkę w ciemno;
+            </li>
+            <li>Pierwszy gracz od lewej wkłada niską stawkę w ciemno, czyli tzw. small blind;
+            </li>
+            <li>Drugi gracz siedzący na lewo od rozdającego wkłada do puli wysoką stawkę w ciemno, czyli big blind;
+            </li>
+            <li>Kolejny etap gry to rozdanie każdemu z graczy po dwie zakryte karty, czyli pocket cards — ich wartość
+                może być znana tylko samym posiadaczom;
+            </li>
+            <li>Następnie przechodzi się do rundy licytacji — rozpoczyna ją pierwszy gracz siedzący po lewej stronie.
+                Wówczas uczestnik ma do dyspozycji trzy ruchy: spasowanie, sprawdzenie lub podbicie;
+            </li>
+            <li>Po części licytacyjnej, w której trakcie każdy z graczy włożył określoną sumę pieniężną do puli,
+                następuje odwrócenie trzeciej karty ze stołu (tzw. flop).
+            </li>
+            <li>Dalszy etap gry to kolejna licytacja. Kiedy gracze znów wykonają swoje ruchy, przechodzi się do
+                wyłożenia na stół czwartej karty, jest to tzw. turn;
+            </li>
+            <li>Następuje trzecia licytacja, kolejne podbicie stawki, a na stole ląduje piąta karta — tzw. river;
+            </li>
+            <li>Kolejny etap rozgrywki to czwarta i zarazem ostatni licytacja.
+            </li>
+            <li>Ostatni krok w rozgrywce to wyłożenie wszystkich kart. Gracze mogą skorzystać z pięciu kart spośród
+                dostępnych siedmiu (do dyspozycji jest 5 community card i dwie własne), by ułożyć najlepiej punktowany
+                układ
+            </li>
+        </ol>
+    </div>
+    <div class="opcje">
+        <button type="submit">Pass</button>
+        <button type="submit">Sprawdź</button>
+        <form>
+            <input type="number" step="5" class="licytuj" min="0" max="10000">
+            <button type="submit">Postaw</button>
+        </form>
+        <form action="../wyjdz/">
+            <button type="submit" id="quit">Wyjdź</button>
+        </form>
+    </div>
+    <div class="wyniki">
+        Zwycięzca:
+        <div class="wygrany">
+            Imię
+        </div>
+    </div>
+
+    <script>
+        $('header button').click(function () {
+            $('.zasady').toggleClass("show");
+        });
+    </script>
+
+
+    <script src = "{% static 'js/game.js' %}"></script>
+</body>
+
+</html>

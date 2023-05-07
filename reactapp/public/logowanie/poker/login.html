@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../static/styles/poker.css">
+    <meta name="viewport" content="width=device-width">
+    <title> Poker - dołącz</title>
+</head>
+<body>
+    <div class="panel" id="poker">
+        <div class="game_form">
+            <div class="game_name">
+                POKER
+            </div>
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <p class="error"> {{ form.non_field_errors }} </p>
+                {% endif %}
+
+                {% for field in form %}
+                    {% if field.errors %}
+                        <p> {{ field.errors}} </p>
+                    {% endif %}
+
+                    {{ field.label_tag }} <br>
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <p> {{ field.help_text }} </p>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+
+                <button type="submit" id="s_button">Dołącz do gry</button>
+            </form>
+        </div>
+    </div>
+    <div class="game_info">
+        Dołączyłeś do gry o numerze:
+        <h1>1234567890</h1>
+        Twój nick to:<br>
+        <h3>xyz</h3>
+        Pozostali gracze:
+        <div class="gamers">
+            <div class="gamer_nick">abc</div>
+            <div class="gamer_nick">def</div>
+            <div class="gamer_nick">ghi</div>
+        </div>
+    </div>
+    <div class="game_info">
+        Podałeś niepoprawny numer gry<br>
+        Spróbuj ponownie
+    </div>
+</body>
+</html>

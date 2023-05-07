@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'karcianki.apps.KarciankiConfig',
+    'karcianki',
+    'channels',
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'ioproject.urls'
@@ -55,7 +60,7 @@ ROOT_URLCONF = 'ioproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'ioproject' / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'reactapp/build'), BASE_DIR / 'ioproject' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +74,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ioproject.wsgi.application'
+
+ASGI_APPLICATION = "ioproject.asgi.application"
 
 
 # Database
@@ -125,3 +132,28 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CHANNEL_LAYERS = {
+    'default': {
+        ### Method 1: Via redis lab
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'CONFIG': {
+        #     "hosts": [
+        #       'redis://h:<password>;@<redis Endpoint>:<port>' 
+        #     ],
+        # },
+
+        ### Method 2: Via local Redis
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'CONFIG': {
+        #      "hosts": [('127.0.0.1', 6379)],
+        # },
+
+        ### Method 3: Via In-memory channel layer
+        ## Using this method.
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    },
+}
+
+# Probably only for testing
+CORS_ORIGIN_ALLOW_ALL = True

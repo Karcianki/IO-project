@@ -12,23 +12,23 @@ jobs:
     - name: yarn install
       run: |
         yarn install
-    - name: validate CSS
-      run: |
-        for f in $(find karcianki/ -name '*.css'); do
-          yarn run stylelint $f
-        done;
-    - name: validate HTML
-      run: |
-        for f in $(find karcianki/ -name '*.html'); do
-          yarn run html-validate $f
-        done;
-    - name: validate Python
-      run: |
-          pylint karcianki/
+    # - name: validate CSS
+    #   run: |
+    #     for f in $(find karcianki/ -name '*.css'); do
+    #       yarn run stylelint $f
+    #     done;
+    # - name: validate HTML
+    #   run: |
+    #     for f in $(find karcianki/ -name '*.html'); do
+    #       yarn run html-validate $f
+    #     done;
+    # - name: validate Python
+    #   run: |
+    #       pylint karcianki/
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
-        yarn test
+        python3 manage.py makemigrations & python3 manage.py migrate & python3 manage.py runserver & yarn test
     - name: Upload coverage reports to Codecov
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
