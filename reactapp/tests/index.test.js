@@ -2,7 +2,7 @@ import React from 'react';
 import { render, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import App from '../src/App';
-import Login from '../src/Login.js';
+import Login from '../src/Login';
 import Host from '../src/Host';
 import Game from '../src/Game';
 import fetchMock from 'jest-fetch-mock';

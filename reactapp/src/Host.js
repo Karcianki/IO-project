@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./static/styles/login.css";
 
+
 const Host = () => {
     const [chips, setChips] = useState("");
     const [nickname, setNickname] = useState("");

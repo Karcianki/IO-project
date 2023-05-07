@@ -8,4 +8,5 @@ module.exports = {
       '/node_modules/',
       '^.+\\.css$',
     ],
+    collectCoverage: true,
   };
