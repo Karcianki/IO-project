@@ -224,7 +224,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
 
             winning_player = await sync_to_async(Player.objects.get)(game = game, player_number=data['winner_number'])
             winning_player.chips += game.pot
-            winning_player.info = "WYGRANA: " + game.pot
+            winning_player.info = "WYGRANA: " + str(game.pot)
             await sync_to_async(winning_player.save)()
 
             for i in range(0, player_count):
