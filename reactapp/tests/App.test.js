@@ -1,12 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import renderer from 'react-test-renderer';
-import { MemoryRouter } from 'react-router-dom';
-import App from '../reactapp/src/App';
-import {Test} from '../reactapp/src/App';
+import App from '../src/App';
+import {Test} from '../src/App';
 import '@testing-library/jest-dom';
 
-jest.mock('../reactapp/src/static/styles/style.css', () => ({}));
+jest.mock('../src/static/styles/style.css', () => ({}));
 
 
 // describe('App', () => {

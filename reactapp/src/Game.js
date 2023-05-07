@@ -49,7 +49,6 @@ const Game = () => {
     const django_host = 'localhost:8000'
     const connectionString = 'ws://' + django_host + '/ws/karcianki/' + game_id + '/';
 
-
     useEffect(() => {
         let gameSocket = new WebSocket(connectionString);
         gameSocket.onopen = function open() {
@@ -133,6 +132,7 @@ const Game = () => {
                 setIsStarted(data.status != "START");
                 setNextStage(data.status != "NEXT");
                 setPot(data.pot);
+                setLastBet(data.last_bet);
             }
             else {
                 alert("Gra się zakończyła.");
@@ -192,7 +192,6 @@ const Game = () => {
                 let nickname = info.nickname
                 setNickname(nickname)
 
-                setLastBet(info.last_bet);
                 break;
             case "NEXT":
                 setNextStage(false);
@@ -238,14 +237,10 @@ const Game = () => {
         if (whoseTurn != player_number) {
             return;
         }
-        
-        let data = JSON.parse(playerData[whoseTurn]).last_bet 
-        let value =  lastBet - data
-        console.log(value)
         const message = JSON.stringify({
             "player_number": player_number,
             "type": "CHECK",
-            "bet": value,
+            "bet": 0,
         });
         gameBoard.send("TURN", message);
     }
@@ -256,7 +251,12 @@ const Game = () => {
 
     const onBidClick = (event) => {
         console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number )
-        if (whoseTurn != player_number) {
+        if (whoseTurn != player_number || bidValue < lastBet) {
+            return;
+        }
+        const player_data = JSON.parse(playerData[player_number]);
+        if (player_data.chips < bidValue) {
+            console.log("Not enough chips.");
             return;
         }
         const message = JSON.stringify({
@@ -266,7 +266,7 @@ const Game = () => {
         });
         gameBoard.send("TURN", message); 
     }
-    // Maciek w consumers sprawdza i bierze maxa z Twoich żetonów, beta więc tu już nie trzeba tego robic 
+
     return (
         <div>
             <header>

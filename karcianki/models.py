@@ -17,6 +17,7 @@ class Game(models.Model):
                                                      ('TURN', 'TURN'), 
                                                      ('NEXT', 'NEXT'), 
                                                      ('END', 'END')], default='START') 
+    last_bet = models.IntegerField(default=0)
 
     @classmethod
     def create(cls):

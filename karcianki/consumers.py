@@ -2,7 +2,9 @@
 import json
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from karcianki.models import Game, Player
+from django.db.models import Q
 from asgiref.sync import sync_to_async
+
 
 class KarciankiConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
@@ -98,17 +100,24 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             game         = await sync_to_async(Game.objects.get)(game_id=self.game_id)
             player       = await sync_to_async(Player.objects.get)(game= game, player_number=player_number)
             player_qs    = await sync_to_async(Player.objects.filter)(game=game)
-            player_count = await sync_to_async(player_qs.count)()    
+            player_count = await sync_to_async(player_qs.count)()
+
+            end = False
+            game.last_bet = int(data['bet'])
+            player_qs    = await sync_to_async(Player.objects.filter)(~Q(info = "OUT"), ~Q(info = "PASS"))
+            active_players = await sync_to_async(player_qs.count)()
             
             if data['type'] == "PASS":
                 player.info = "PASS"
                 player.last_bet = -1
+                if active_players == 1:
+                    end = True
             elif data['type'] == "BET":
                 bet = int(data['bet'])
                 player.info = "BET " + str(bet)
                 game.pot += bet
                 player.chips -= min(bet, player.chips)
-                player.last_bet = max(bet, player.last_bet)
+                player.last_bet = min(bet, player.last_bet)
             await sync_to_async(player.save)()
 
             next_p = -1
@@ -118,8 +127,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 if player.last_bet != -1:
                     next_p = j
                     break
-            print(game.last_raise, player_number)
-            if player_number == game.last_raise and game.stage == 4:
+            if (player_number == game.last_raise and game.stage == 4) or end:
                 game.status = "END"
                 game.player_number = -1
                 await sync_to_async(game.save)()
@@ -178,7 +186,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             player2.info = "BIG BLIND"
 
             game.pot += int(game.start_chips * 3 / 20)
-            game.last_raise = -1
+            game.last_raise = (dealer + 2) % player_count
             game.player_number = (dealer + 3) % player_count
             game.status = "TURN"
 
