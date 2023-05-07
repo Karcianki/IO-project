@@ -28,8 +28,7 @@ jobs:
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
-        python3 manage.py runserver & 
-        yarn test
+        python3 manage.py makemigrations & python3 manage.py migrate & python3 manage.py runserver & yarn test
     - name: Upload coverage reports to Codecov
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
