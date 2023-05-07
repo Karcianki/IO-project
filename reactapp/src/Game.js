@@ -63,11 +63,10 @@ const Game = () => {
 
         gameSocket.onclose = function (e) {
             console.log('Socket is closed.', e.code);
-            if (e.code === 1000) {
+            if (e.code !== 3000) {
                 console.log('Reconnecting...');
                 setTimeout(function () {
-                    gameSocket = new WebSocket(connectionString);
-                    gameSocket.onopen()
+                    window.location.reload(false);
                 }, 1000);
             }
         };
@@ -84,10 +83,12 @@ const Game = () => {
 
         const quitButton = document.getElementById('quit');
         quitButton.onclick = function() {
+            console.log("quitting");
             gameSocket.send(JSON.stringify({
                 "event": "QUIT",
                 "message": player_number,
             }));
+            console.log("QUIT");
             gameSocket.onclose({
                 'code': 3000,
             });

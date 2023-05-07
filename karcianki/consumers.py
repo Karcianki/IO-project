@@ -28,6 +28,39 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             self.channel_name
         )
 
+    async def getNextPlayer(self, number_from):
+        game = await sync_to_async(Game.objects.get)(game_id=self.game_id)
+        player_qs = await sync_to_async(Player.objects.filter)(game=game)
+        player_count = await sync_to_async(player_qs.count)()
+
+        player_number = -1
+        for i in range(number_from + 1, number_from + player_count):
+            j = i % player_count
+            try:
+                player = await sync_to_async(Player.objects.get)(game=game, player_number=j)
+                if player.info != "OUT":
+                    player_number = j
+                    break
+            except Player.DoesNotExist:
+                continue
+
+        return player_number
+
+    async def clearPlayersData(self):
+        game = await sync_to_async(Game.objects.get)(game_id=self.game_id)
+        player_qs = await sync_to_async(Player.objects.filter)(game=game)
+        player_count = await sync_to_async(player_qs.count)()
+
+        for i in range(0, player_count):
+            try:
+                player = await sync_to_async(Player.objects.get)(game=game, 
+                                                                 player_number=i)
+                if player.info != "OUT":
+                    player.info = ""
+                player.last_bet = 0
+            except Player.DoesNotExist:
+                continue
+
     async def receive(self, text_data):
         """
         Receive message from WebSocket.
@@ -47,6 +80,12 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
         elif event == 'QUIT':
             # Send message to room group
             # await self.channel_layer.group_send(self.room_group_name, {
+            player_number = int(json.loads(message))
+            game = await sync_to_async(Game.objects.get)(game_id=self.game_id)
+            player = await sync_to_async(Player.objects.get)(game=game, player_number=player_number)
+            player.info = "OUT"
+            await sync_to_async(player.save)()
+
             await self.channel_layer.group_send(self.game_name, {
                 'type': 'send_message',
                 'message': message,
@@ -72,11 +111,9 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 player.last_bet = max(bet, player.last_bet)
             await sync_to_async(player.save)()
 
-            # players = await sync_to_async(Player.objects.all)()
             next_p = -1
             for i in range(player_number + 1, player_number + player_count):
                 j = i % player_count
-                print(j)
                 player = await sync_to_async(Player.objects.get)(game=game, player_number=j)
                 if player.last_bet != -1:
                     next_p = j
@@ -123,6 +160,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             game = await sync_to_async(Game.objects.get)(game_id=self.game_id)
             player_qs = await sync_to_async(Player.objects.filter)(game=game)
             player_count = await sync_to_async(player_qs.count)()       
+            await self.clearPlayersData()
 
             dealer = game.dealer
             player1 = await sync_to_async(Player.objects.get)(game=game, player_number=(dealer + 1) % player_count)
@@ -133,12 +171,14 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
 
             player1.chips -= bet1
             player1.last_bet = bet1
+            player1.info = "SMALL BLIND"
 
             player2.chips -= bet2
             player2.last_bet = bet2
+            player2.info = "BIG BLIND"
 
             game.pot += int(game.start_chips * 3 / 20)
-            game.last_raise = (dealer + 2) % player_count
+            game.last_raise = -1
             game.player_number = (dealer + 3) % player_count
             game.status = "TURN"
 
@@ -161,25 +201,25 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
         elif event == 'END':
             data = json.loads(message)
             game = await sync_to_async(Game.objects.get)(game_id=self.game_id)
-
-            players = await sync_to_async(Player.objects.filter)(game=game)
-            for player in players:
-                player.info = ""
-                await sync_to_async(player.save)()
+            await self.clearPlayersData()
 
             winning_player = await sync_to_async(Player.objects.get)(game = game, player_number=data['winner_number'])
             winning_player.chips += game.pot
             winning_player.info = "WYGRANA: " + game.pot
             await sync_to_async(winning_player.save)()
 
-            await sync_to_async(Player.objects.filter)(game = game, chips=0).delete()
+            for i in range(0, player_count):
+                player = await sync_to_async(Player.objects.filter)(game=game, player_number=i)
+                player.info="OUT"
+                await sync_to_async(player.save)()
+
             player_qs = await sync_to_async(Player.objects.filter)(game=game)
             player_count = await sync_to_async(player_qs.count)()       
-            
+
             game.stage  = 1
             game.pot    = 0
-            game.dealer = (game.dealer + 1) % player_count
-            game.status = "START"
+            game.dealer = await self.getNextPlayer(game.dealer)
+            game.status = "END"
             game.player_number = -1
             await sync_to_async(game.save)()
 
@@ -193,7 +233,6 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 "message": json_data
             })
 
-
         elif event == 'NEXT':
             game = await sync_to_async(Game.objects.get)(game_id=self.game_id)
 
@@ -202,11 +241,11 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
 
             game.stage += 1
             game.status = "TURN"
-            game.player_number = (game.last_raise + 1) % player_count
+            game.player_number = await self.getNextPlayer(game.last_raise)
             await sync_to_async(game.save)()
 
             json_data = json.dumps({
-                "player_number": f"{(game.last_raise + 1) % player_count}",
+                "player_number": f"{game.player_number}",
                 "last_bet": "0"
             })
 

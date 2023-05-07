@@ -16,7 +16,7 @@ class Game(models.Model):
     status = models.CharField(max_length=5, choices=[('START', 'START'), 
                                                      ('TURN', 'TURN'), 
                                                      ('NEXT', 'NEXT'), 
-                                                     ('END', 'END')], default='START')
+                                                     ('END', 'END')], default='START') 
 
     @classmethod
     def create(cls):
