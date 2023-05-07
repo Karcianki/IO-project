@@ -16,6 +16,17 @@ jest.mock('../src/static/styles/login.css', () => ({}));
 jest.mock('../src/static/styles/poker.css', () => ({}));
 jest.mock('../src/static/images/stol.png', ()=>({}));
 
+jest.mock('../src/static/images/poker_hands/Flush.png', ()=>({}));
+jest.mock('../src/static/images/poker_hands/Full.png', ()=>({}));
+jest.mock('../src/static/images/poker_hands/No_Pair.png', ()=>({}));
+jest.mock('../src/static/images/poker_hands/One_Pair.png', ()=>({}));
+jest.mock('../src/static/images/poker_hands/Poker.png', ()=>({}));
+jest.mock('../src/static/images/poker_hands/Royal_Flush.png', ()=>({}));
+jest.mock('../src/static/images/poker_hands/Straight.png', ()=>({}));
+jest.mock('../src/static/images/poker_hands/Straight_Flush.png', ()=>({}));
+jest.mock('../src/static/images/poker_hands/Three_of_a_kind.png', ()=>({}));
+jest.mock('../src/static/images/poker_hands/Two_Pairs.png', ()=>({}));
+
 describe('App', () => {
     test('renders App component', () => {
         render(

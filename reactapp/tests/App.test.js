@@ -7,12 +7,10 @@ import '@testing-library/jest-dom';
 jest.mock('../src/static/styles/style.css', () => ({}));
 
 
-// describe('App', () => {
+describe('App', () => {
     test('renders with the correct text content', () => {
         render(
-            // <MemoryRouter>
                 <App />
-            // </MemoryRouter>
         );
         
         const headerElement = screen.getByText('KARCIANKI');
@@ -27,10 +25,4 @@ jest.mock('../src/static/styles/style.css', () => ({}));
         const hostButton = screen.getByRole('button', { name: 'Stwórz grę' });
         expect(hostButton).toBeInTheDocument();
     });
-// });
-
-test('test' , () => {
-    render(
-        <Test />
-    );
 });

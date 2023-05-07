@@ -7,3 +7,4 @@ ioproject/__pycache__/
 karcianki/__pycache__/
 karcianki/migrations/
 __pycache__/
+coverage/
