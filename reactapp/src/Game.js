@@ -25,11 +25,12 @@ const Game = () => {
     const game_id = searchParams.get('game_id');
     const player_number = searchParams.get('player_number');
     const [whoseTurn, setWhoseTurn] = useState(0);
-    const [player, setNickane ] = useState('') //domyslnie ustawic hosta
+    const [player, setNickname ] = useState('') //domyslnie ustawic hosta
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
     const [nextStage, setNextStage] = useState(false);
+    const [pot, setPot] = useState(0);
 
     const MAX_PLAYERS=10; 
     const chips_per_player = 100;
@@ -106,7 +107,36 @@ const Game = () => {
     }, [])
 
     const updateState = () => {
+        updateGame();
         updatePlayers();
+    }
+
+    const updateGame = () => {
+        fetch(`http://localhost:8000/api/karcianki/game/${game_id}/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then((response) => {
+            if (response.status === 404) {
+                return null;
+            } else {
+                return response.json();
+            }
+        })
+        .then((data) => {
+            if (data) {
+                setWhoseTurn(data.player_number);
+                console.log(data);
+                setIsStarted(data.status != "START");
+                setNextStage(data.status != "NEXT");
+                setPot(data.pot);
+            }
+            else {
+                alert("Gra się zakończyła.");
+            }
+        })
     }
 
     const updatePlayers = () => {
@@ -159,7 +189,7 @@ const Game = () => {
                 setWhoseTurn(info.player_number);
 
                 let nickname = info.nickname
-                setNickane(nickname)
+                setNickname(nickname)
 
                 setLastBet(info.last_bet);
                 break;
@@ -204,13 +234,13 @@ const Game = () => {
 
     const onCheck = () => {
         console.log("check " + whoseTurn + player_number);
-        let data = JSON.parse(playerData[whoseTurn]).last_bet 
-        let value =  lastBet - data
-        
-        console.log(value)
         if (whoseTurn != player_number) {
             return;
         }
+        
+        let data = JSON.parse(playerData[whoseTurn]).last_bet 
+        let value =  lastBet - data
+        console.log(value)
         const message = JSON.stringify({
             "player_number": player_number,
             "type": "CHECK",
@@ -225,7 +255,7 @@ const Game = () => {
 
     const onBidClick = (event) => {
         console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number )
-        if (whoseTurn !== player_number) {
+        if (whoseTurn != player_number) {
             return;
         }
         const message = JSON.stringify({
@@ -241,8 +271,9 @@ const Game = () => {
             <header>
                 <div>
                     Poker<br />
-                    {player} <br />
-                    {whoseTurn}
+                    player: {player} <br />
+                    number: {whoseTurn} <br />
+                    pot: {pot}
                 </div>
                 <div>
                     Numer gry {game_id}
