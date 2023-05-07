@@ -7,7 +7,7 @@ import { Link, useSearchParams, useLocation } from 'react-router-dom';
 class Player extends Component {
     render() {
         return (
-            <div className={ JSON.parse(this.props.data).class } id={this.props.id}>
+            <div className={ JSON.parse(this.props.data).class } id={this.props.id} onClick={this.props.onClick}>
                 <span className="fa-solid fa-circle-user ikona"></span>
                 <div className="dane">
                     <div>{ JSON.parse(this.props.data).info }</div>
@@ -31,6 +31,7 @@ const Game = () => {
     const [bidValue, setBidValue] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
     const [nextStage, setNextStage] = useState(false);
+    const [waitingForResults, setWaitingForResults] = useState(false);
     const [pot, setPot] = useState(0);
 
     const MAX_PLAYERS=10; 
@@ -132,6 +133,7 @@ const Game = () => {
                 console.log(data);
                 setIsStarted(data.status != "START");
                 setNextStage(data.status != "NEXT");
+                setWaitingForResults(data.status == "END");
                 setPot(data.pot);
                 setLastBet(data.last_bet);
             }
@@ -268,6 +270,17 @@ const Game = () => {
         gameBoard.send("TURN", message); 
     }
 
+    const playerButton = (clicked_player) => () => {
+        console.log("winner: " + clicked_player);
+        if (player_number == 0 && waitingForResults) {
+            const message = JSON.stringify({
+                "player_number": player_number,
+                "winner_number": clicked_player,
+            });
+            gameBoard.send("END", message);
+        }
+    }
+
     return (
         <div>
             <header>
@@ -285,21 +298,21 @@ const Game = () => {
             <div className="page_game">
                 <div className="plansza" id="game_board" game_id={game_id}>
                     <div className="rzad">
-                        <Player id="gracz1" data={playerData[1]} /> 
-                        <Player id="gracz4" data={playerData[2]} />
-                        <Player id="gracz6" data={playerData[3]} />
-                        <Player id="gracz8" data={playerData[4]} />
+                        <Player id="gracz1" data={playerData[1]} onClick={playerButton(1)}/> 
+                        <Player id="gracz4" data={playerData[2]} onClick={playerButton(2)}/>
+                        <Player id="gracz6" data={playerData[3]} onClick={playerButton(3)}/>
+                        <Player id="gracz8" data={playerData[4]} onClick={playerButton(4)}/>
                     </div>
                     <div className="rzad" id="ze_stolem">
-                        <Player id="gracz0" data={playerData[0]} />
+                        <Player id="gracz0" data={playerData[0]} onClick={playerButton(0)} />
                         <img src={table} alt="" className="stol"/>
-                        <Player id="gracz1" data={playerData[5]} />
+                        <Player id="gracz1" data={playerData[5]} onClick={playerButton(5)}/>
                     </div>
                     <div className="rzad">
-                        <Player id="gracz3" data={playerData[9]} />
-                        <Player id="gracz5" data={playerData[8]} />
-                        <Player id="gracz7" data={playerData[7]} />
-                        <Player id="gracz9" data={playerData[6]} />
+                        <Player id="gracz3" data={playerData[9]} onClick={playerButton(9)}/>
+                        <Player id="gracz5" data={playerData[8]} onClick={playerButton(8)}/>
+                        <Player id="gracz7" data={playerData[7]} onClick={playerButton(7)}/>
+                        <Player id="gracz9" data={playerData[6]} onClick={playerButton(6)}/>
                     </div>
                 </div>
 
