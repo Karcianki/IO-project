@@ -227,13 +227,14 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             winning_player.info = "WYGRANA: " + str(game.pot)
             await sync_to_async(winning_player.save)()
 
-            for i in range(0, player_count):
-                player = await sync_to_async(Player.objects.filter)(game=game, player_number=i)
-                player.info="OUT"
-                await sync_to_async(player.save)()
-
             player_qs = await sync_to_async(Player.objects.filter)(game=game)
-            player_count = await sync_to_async(player_qs.count)()       
+            player_count = await sync_to_async(player_qs.count)()
+
+            for i in range(0, player_count):
+                player = await sync_to_async(Player.objects.get)(game=game, player_number=i)
+                if player.chips == 0:
+                    player.info="OUT"
+                    await sync_to_async(player.save)()
 
             game.stage  = 1
             game.pot    = 0
