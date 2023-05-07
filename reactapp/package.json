@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "yarn jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -36,5 +36,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0"
   }
 }

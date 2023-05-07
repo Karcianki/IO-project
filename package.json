@@ -7,8 +7,7 @@
   "author": "piter12345 <piotrek.blinowski@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "pytest --cov=karcianki/",
-    "jstest": "jest",
+    "test": "yarn jest",
     "postinstall": "pip install pytest && pip install selenium && pip install webdriver_manager && pip install pytest-cov && pip install django && pip install pylint && pip install pylint-django && pip install pytest-django && pip install djangorestframework && npm install bootstrap reactstrap axios --save && pip install channels==3.0.5 && pip install channels_redis==3.2 && pip install django-cors-headers"
   },
   "dependencies": {
@@ -19,6 +18,7 @@
     "html-validate": "^7.13.3",
     "pytest": "^1.0.0",
     "pytest-cov": "^0.0.1",
+    "react": "^18.2.0",
     "react-native": "^0.71.7",
     "react-native-web": "^0.19.4",
     "react-router-dom": "^6.11.1",
@@ -35,8 +35,12 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "babel-jest": "^29.5.0",
+    "install": "^0.13.0",
+    "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
+    "jest-fetch-mock": "^3.0.3",
     "jest-transform-stub": "^2.0.0",
+    "node-fetch": "^3.3.1",
     "react-router-dom": "^6.11.1",
     "react-test-renderer": "^18.2.0",
     "stylelint-config-recommended": "^11.0.0",
