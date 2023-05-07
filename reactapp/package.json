@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "yarn jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
