@@ -25,6 +25,9 @@ jobs:
     # - name: validate Python
     #   run: |
     #       pylint karcianki/
+    - name: run server
+      run: |
+        python3 manage.py runserver
     - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
