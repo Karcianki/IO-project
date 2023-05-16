@@ -69,7 +69,7 @@ class TPlayer(models.Model):
     nickname = models.CharField(max_length=10)
     game = models.ForeignKey(TGame, on_delete=models.CASCADE)
     player_number = models.IntegerField(default=0)
-    points = models.IntegerField(default=100)
+    points = models.IntegerField(default=0)
     info = models.CharField(max_length=15, default="")
 
     def __str__(self):

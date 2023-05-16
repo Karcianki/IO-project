@@ -277,7 +277,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             await sync_to_async(game.save)()
 
             json_data = json.dumps({
-                "player_number": f"{(game.player100 + 2)}",
+                "player_number": f"{((game.player100)%player_count)}",
                 "last_bet": "100",
             })
 
@@ -295,17 +295,18 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             player       = await sync_to_async(TPlayer.objects.get)(game= game, player_number=player_number)
             player_qs    = await sync_to_async(TPlayer.objects.filter)(game=game)
             player_count = await sync_to_async(player_qs.count)()
-
             if data['type'] == "PASS":
                 player.info = "PASS"
             if data['type'] == "BET":
                 game.last_bet = data['bet']
-                game.playing = player
-
+                game.playing = player.player_number
+            game.status = "TURN"
             active_players = 0
+            await sync_to_async(player.save)()
             for i in range(0, player_count):
                 player = await sync_to_async(TPlayer.objects.get)(game=game, player_number=i)
                 if player.info != "PASS":
+                    print(player)
                     active_players += 1
 
             next_p = -1
@@ -318,7 +319,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 
             await sync_to_async(game.save)()
             await sync_to_async(player.save)()
-
+            print(active_players)
             if active_players > 1:
                 json_data = json.dumps({
                     "player_number": f"{(next_p)}",
@@ -339,12 +340,13 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             data = json.loads(message)
             game = await sync_to_async(TGame.objects.get)(game_id=self.game_id)
             players = data['players']
-
+            game.status = "START"
             for player in players:
-                plr = await sync_to_async(Player.objects.get)(game = game, player_number=player['id'])
+                plr = await sync_to_async(TPlayer.objects.get)(game = game, player_number=player['id'])
                 plr.points += player['points']
-                await sync_to_async(player.save)
+                await sync_to_async(plr.save)()
 
+            await sync_to_async(game.save)()
             await self.channel_layer.group_send(self.game_name, {
                     "type": "send_message",
                     "event": "START",

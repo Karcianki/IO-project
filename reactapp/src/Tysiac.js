@@ -4,7 +4,7 @@ import table from './static/images/stol.png';
 // import {RulesTysiac} from './Rules'
 import { Link, useSearchParams} from 'react-router-dom';
 
-class Player extends Component {
+class TPlayer extends Component {
     render() {
         return (
             <div className={ JSON.parse(this.props.data).class } id={this.props.id}>
@@ -34,8 +34,8 @@ const GameTysiac = () => {
     const default_player_data = {
         class: "gracz hide",
         nickname: "",
-        points: "",
-        last_bet: "",
+        points: 0,
+        last_bet: 0,
     }
     const MAX_PLAYERS=4; 
     const [playerData, setPlayerData] = useState(
@@ -122,8 +122,6 @@ const GameTysiac = () => {
         })
         .then((data) => {
             if (data) {
-                setWhoseTurn(data.player_number);
-                console.log(data);
                 setWaitForStart(data.status == "START");
                 setLastBet(data.last_bet);
             }
@@ -176,19 +174,17 @@ const GameTysiac = () => {
     const gameBoard = document.getElementById('game_board');
 
     const receive = (event, message) => {
-        console.log("sieeema");
         console.log(event + " -> " + message);
         updateState();
         switch (event) {
             case "TURN":
-                console.log("hej");
                 let info = JSON.parse(message);
                 setWhoseTurn(info.player_number);
                 let nickname = info.nickname;
                 setNickname(nickname);
                 break;
             case "START":
-                console.log("ops");
+                setWaitForStart(true);
                 break;
             case "END":
                 console.log("tak");
@@ -220,7 +216,6 @@ const GameTysiac = () => {
         gameBoard.send("TPLAY", message);
     }
 
-    //dać hostowi mozliwosc wpisania punktow
 
     const onPass = () => {
         console.log("pass " + whoseTurn + ' ' + player_number);
@@ -245,11 +240,6 @@ const GameTysiac = () => {
         if (whoseTurn != player_number || bidValue < lastBet) {
             return;
         }
-        const player_data = JSON.parse(playerData[player_number]);
-        if (player_data.chips < bidValue) {
-            console.log("Not enough chips.");
-            return;
-        }
         const message = JSON.stringify({
             "player_number": player_number,
             "type": "BET",
@@ -258,6 +248,23 @@ const GameTysiac = () => {
         gameBoard.send("TTURN", message); 
     }
 
+    const playerButton = () => {
+        //zrobić tak żeby podac tyle argumentów ile jest graczy
+        console.log("winner: ");
+        const players = [
+         { id: 0, points: 100 },
+         { id: 1, points: 100 },
+        //  { id: 3, points: 100 },
+        //  { id: 4, points: 100 },
+       ];
+        if (player_number == 0) {
+            const message = JSON.stringify({
+                "players": players, 
+            });
+            gameBoard.send("TEND", message);
+        }
+    };
+    
     return (
         <div>
           <header>
@@ -274,26 +281,20 @@ const GameTysiac = () => {
           <div className="page_game">
             <div className="plansza" id="game_board" game_id={game_id}>
                 <div className="rzad">
-                    <Player id="gracz1" data={playerData[1]} /> 
-                    {/* <Player id="gracz4" data={playerData[2]} /> */}
-                    {/* <Player id="gracz6" data={playerData[3]} /> */}
-                    {/* <Player id="gracz8" data={playerData[4]} /> */}
+                    <TPlayer id="gracz1" data={playerData[1]} /> 
                 </div>
                 <div className="rzad" id="ze_stolem">
-                    <Player id="gracz0" data={playerData[0]} />
+                    <TPlayer id="gracz0" data={playerData[0]} />
                     <img src={table} alt="" className="stol"/>
-                    <Player id="gracz2" data={playerData[2]} />
+                    <TPlayer id="gracz2" data={playerData[2]} />
                 </div>
                 <div className="rzad">
-                    <Player id="gracz3" data={playerData[3]} />
-                    {/* <Player id="gracz5" data={playerData[8]} /> */}
-                    {/* <Player id="gracz7" data={playerData[7]} /> */}
-                    {/* <Player id="gracz9" data={playerData[6]} /> */}
+                    <TPlayer id="gracz3" data={playerData[3]} />
                     </div>
                 </div>
             </div>
             <div className={showRules? "zasady show" : "zasady"}>
-                    {/* <RulesTysiac /> */}
+                    <RulesTysiac />
             </div>
             <div className="opcje">
                 <div className = "host" id="start">
@@ -310,6 +311,7 @@ const GameTysiac = () => {
                     {/* </form> */}
                     {/* } */}
                 </div>
+                <button className="game_button tysiac_button" type="submit" id="pass" onClick={() => playerButton()}>wyniki</button>
                 <button className="game_button tysiac_button" type="submit" id="pass" onClick={onPass}>Pass</button>
                 <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
                 <button className="game_button tysiac_button" id="bet" onClick={onBidClick}>Przebij</button>
