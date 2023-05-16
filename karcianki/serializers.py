@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from karcianki.models import Game, Player
+from karcianki.models import Game, Player, TGame, TPlayer
 
 class GameSerializer(serializers.ModelSerializer):
 
@@ -27,5 +27,29 @@ class PlayerSerializer(serializers.ModelSerializer):
             'player_number',
             'chips',
             'last_bet',
+            'info',
+            )
+        
+class TGameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TGame
+        fields = (
+            'game_id',
+            'status',
+            'last_bet',
+            'player100',
+            'playing'
+            )
+
+class TPlayerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TPlayer
+        fields = (
+            'nickname',
+            'game',
+            'player_number',
+            'points',
             'info',
             )
