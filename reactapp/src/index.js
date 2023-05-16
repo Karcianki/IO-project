@@ -14,8 +14,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
     <div>
         <Routes>
             <Route path='' element={<App/>} />
-            <Route path='/login' element={<Login/>} />
-            <Route path='/host' element={<Host/>} />
+            <Route path='poker/login' element={<Login id="poker" name="POKER"/>} />
+            <Route path='poker/host' element={<Host id="poker" name="POKER"/>} />
+            <Route path='tysiac/login' element={<Login id="tysiac" name="TYSIĄC"/>} />
+            <Route path='tysiac/host' element={<Host id="tysiac" name="TYSIĄC"/>} />
+            <Route path='brydz/login' element={<Login id="brydz" name="BRYDŻ"/>} />
+            <Route path='brydz/host' element={<Host id="brydz" name="BRYDŻ"/>} />
             <Route path='/poker' element={<Game name="POKER" />} />
             <Route path='/tysiac' element={<Game name="TYSIĄC"/>} />
             <Route path='/brydz' element={<Game name="BRYDZ"/>} />
