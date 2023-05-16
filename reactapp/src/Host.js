@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./static/styles/login.css";
 
 
-const Host = () => {
+function Host(props) {
     const [chips, setChips] = useState("");
     const [nickname, setNickname] = useState("");
     const [isValid, setIsValid] = useState(true);
@@ -36,18 +36,21 @@ const Host = () => {
             })
             .then((response) => response.json())
             .then((data) => {
-                window.location.href = `/poker?game_id=${data.game_id}&player_number=${0}`;
+                window.location.href = `/${props.id}?game_id=${data.game_id}&player_number=${0}`;
             })
         }
     };
 
+    const classId = `${props.id}_login`;
+
     return (
         <div>
         <header>KARCIANKI</header>
-        <div className="panel" id="poker_login">
+        <div className="panel" id={classId}>
             <div className="game_form">
-            <div className="game_name">POKER</div>
+            <div className="game_name">{props.name}</div>
             <form onSubmit={handleSubmit}>
+                { props.id == "poker" &&
                 <div>
                 <label htmlFor="chips">Podaj liczbę żetonów:</label>
                 <input
@@ -59,6 +62,7 @@ const Host = () => {
                     onChange={handleInputChange}
                 />
                 </div>
+                }
                 <div>
                 <label htmlFor="nickname">Podaj swój nick:</label>
                 <input
@@ -69,9 +73,15 @@ const Host = () => {
                     value={nickname}
                     onChange={handleInputChange}
                 />
+                </div>
+                { props.id == "poker" &&
+                <div>
                 <p className="help-text">
                     Liczba żetonów powinna być z zakresu od 10 do 1000000
                 </p>
+                </div>
+                }
+                <div>
                 <p className="help-text">
                     Twój nick powinien zawierać tylko małe litery i mieć długość od 4 do
                     10 znaków
