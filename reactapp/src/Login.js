@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./static/styles/login.css";
 
-const Login = () => {
+function Login(props) {
     const [game_id, setGameId]    = useState("");
     const [nickname, setNickname] = useState("");
     const [is_valid, setIsValid]  = useState(true);
@@ -50,24 +50,26 @@ const Login = () => {
                         body: JSON.stringify({
                             nickname: nickname,
                             game_id: game_id,
-                            type: "POKER"
+                            type: props.id.toUpperCase(),
                         }),
                     })
                     .then((response) => response.json())
                     .then((data) => {
-                        window.location.href = `/poker?game_id=${game_id}&player_number=${data.player_number}`;
+                        window.location.href = `/${props.id}?game_id=${game_id}&player_number=${data.player_number}`;
                     })
                 }
             });
         }
     };
 
+    const classId = `${props.id}_login`;
+
     return (
         <div>
         <header>KARCIANKI</header>
-        <div className="panel" id="poker_login">
+        <div className="panel" id={classId}>
             <div className="game_form">
-            <div className="game_name">POKER</div>
+            <div className="game_name">{props.name}</div>
             <form onSubmit={handleSubmit}>
                 <div>
                 <label htmlFor="game_id">Podaj numer gry:</label>
