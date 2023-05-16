@@ -23,7 +23,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
             <Route path='brydz/host' element={<Host id="brydz" name="BRYDŻ"/>} />
             <Route path='/poker' element={<GamePoker />} />
             <Route path='/tysiac' element={<GameTysiac/>} />
-            <Route path='/brydz' element={<GameBrydz/>} />
+            {/* <Route path='/brydz' element={<GameBrydz/>} /> */}
         </Routes>       
       </div>
     </BrowserRouter>
