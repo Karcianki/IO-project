@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/tysiac.css";
 import table from './static/images/stol.png';
-import RulesTysiac from './Rules'
+import {RulesTysiac} from './Rules'
 import { Link, useSearchParams} from 'react-router-dom';
 
 class Player extends Component {
@@ -37,6 +37,7 @@ const GameTysiac = () => {
         points: "",
         last_bet: "",
     }
+    const MAX_PLAYERS=4; 
     const [playerData, setPlayerData] = useState(
         Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data))
     );
@@ -198,7 +199,7 @@ const GameTysiac = () => {
         gameBoard.send("TSTART", '');
     }
     const onWriteResults = () => {
-        players =' ';
+        let players =' ';
         for (let i = 0; i < 4; i++) {
             let player = {
                 "id": i,
@@ -315,4 +316,4 @@ const GameTysiac = () => {
         </div>
       );
 }
-export default Game;
+export default GameTysiac;

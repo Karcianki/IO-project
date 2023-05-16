@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/poker.css";
 import table from './static/images/stol.png';
-import RulesPoker from './Rules'
+import {RulesPoker} from './Rules'
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 
 class Player extends Component {
@@ -343,4 +343,4 @@ const GamePoker = () => {
     )
 }
 
-export default Game;
+export default GamePoker;
