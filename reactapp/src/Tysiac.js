@@ -30,6 +30,7 @@ const GameTysiac = () => {
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
     const [waitForStart, setWaitForStart] = useState(false);
+    const [waitingForResults, setWaitingForResults] = useState(false);
  
     const default_player_data = {
         class: "gracz hide",
@@ -122,8 +123,10 @@ const GameTysiac = () => {
         })
         .then((data) => {
             if (data) {
+                console.log(data);
                 setWaitForStart(data.status == "START");
                 setLastBet(data.last_bet);
+                setWaitingForResults(data.status == "END");
             }
             else {
                 alert("Gra się zakończyła.");
@@ -248,7 +251,7 @@ const GameTysiac = () => {
         gameBoard.send("TTURN", message); 
     }
 
-    const playerButton = () => {
+    const setPoints = () => {
         //zrobić tak żeby podac tyle argumentów ile jest graczy
         console.log("winner: ");
         const players = [
@@ -295,24 +298,13 @@ const GameTysiac = () => {
             </div>
             <div className={showRules? "zasady show" : "zasady"}>
                     {/* <RulesTysiac /> */}
-                    {/*  */}
             </div>
             <div className="opcje">
                 <div className = "host" id="start">
                     {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button tysiac_button" type="submit" id="start">Start</button>}
-                    {/* {player_number == 0 &&  */}
-                     {/* <form> */}
-                        {/* Pierwszy :<input type="number" step="5" className="licytuj" onChange={onBidChange(1)}></input>  */}
-                        {/* Drugi: <input type="number" step="5" className="licytuj"></input>  */}
-                        {/* Trzeci: <input type="number" step="5" className="licytuj"></input>  */}
-                        {/* Czwarty: <input type="number" step="5" className="licytuj"></input>  */}
-                    {/* <button onClick={onWriteResults}  */}
-                    {/* className="result_button tysiac_button" */}
-                    {/* type="submit" id="start">Wysślij</button> */}
-                    {/* </form> */}
-                    {/* } */}
+                    {player_number == 0 && waitingForResults == true && <button onClick={() => setPoints()} className="game_button tysiac_button" type="submit" id="start">Wyniki</button>}
                 </div>
-                <button className="game_button tysiac_button" type="submit" id="pass" onClick={() => playerButton()}>wyniki</button>
+                {/* <button className="game_button tysiac_button" type="submit" id="pass" onClick={() => playerButton()}>wyniki</button> */}
                 <button className="game_button tysiac_button" type="submit" id="pass" onClick={onPass}>Pass</button>
                 <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
                 <button className="game_button tysiac_button" id="bet" onClick={onBidClick}>Przebij</button>
