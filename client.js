@@ -7,5 +7,3 @@ const pgclient = new Client({
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB
 });
-
-pgclient.connect();
