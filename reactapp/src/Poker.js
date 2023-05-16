@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/poker.css";
 import table from './static/images/stol.png';
-import Rules from './Rules'
+import RulesPoker from './Rules'
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 
 class Player extends Component {
@@ -19,7 +19,7 @@ class Player extends Component {
     }
 }
 
-const Game = () => {
+const GamePoker = () => {
     const [showRules, setShowRules] = useState(false);
     
     const [searchParams] = useSearchParams();
@@ -315,7 +315,7 @@ const Game = () => {
                 </div>
 
                 <div className={showRules? "zasady show" : "zasady"}>
-                    <Rules />
+                    <RulesPoker />
                 </div>
 
                 <div className="opcje">
