@@ -6,7 +6,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    container: node:latest
     services:
       postgres:
         image: postgres:12
@@ -23,17 +23,21 @@ jobs:
     - name: yarn install
       run: |
         yarn install
-    - name: setup database
-      run: |
-        sudo -u postgres psql
-        CREATE DATABASE ${{ secrets.POSTGRES_DB }};
-        CREATE USER ${{ secrets.POSTGRES_USER }} WITH PASSWORD ${{ secrets.POSTGRES_PASSWORD }};
-        ALTER ROLE ${{ secrets.POSTGRES_USER }} SET client_encoding TO 'utf8';
-        ALTER ROLE ${{ secrets.POSTGRES_USER }} SET default_transaction_isolation TO 'read committed';
-        ALTER ROLE ${{ secrets.POSTGRES_USER }} SET timezone TO 'UTC';
-        GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};
-        \q
+    # - name: setup database
+    #   run: |
+    #     sudo -u postgres psql
+    #     CREATE DATABASE ${{ secrets.POSTGRES_DB }};
+    #     CREATE USER ${{ secrets.POSTGRES_USER }} WITH PASSWORD ${{ secrets.POSTGRES_PASSWORD }};
+    #     ALTER ROLE ${{ secrets.POSTGRES_USER }} SET client_encoding TO 'utf8';
+    #     ALTER ROLE ${{ secrets.POSTGRES_USER }} SET default_transaction_isolation TO 'read committed';
+    #     ALTER ROLE ${{ secrets.POSTGRES_USER }} SET timezone TO 'UTC';
+    #     GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};
+    #     \q
     - name: run tests
+      env:
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       run: |
         python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver &
     - name: Upload coverage reports to Codecov
