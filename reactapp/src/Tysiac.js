@@ -295,6 +295,7 @@ const GameTysiac = () => {
             </div>
             <div className={showRules? "zasady show" : "zasady"}>
                     {/* <RulesTysiac /> */}
+                    {/*  */}
             </div>
             <div className="opcje">
                 <div className = "host" id="start">
