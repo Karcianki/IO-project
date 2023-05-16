@@ -111,15 +111,17 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             elif data['type'] == "BET":
                 bet = int(data['bet'])
                 player.info = "BET " + str(bet)
-                game.pot += bet
-                player.chips -= bet
+                delta_bet = bet - player.last_bet
+                game.pot += delta_bet
+                player.chips -= delta_bet
                 player.last_bet = bet
                 game.last_bet = bet
             elif data['type'] == "CHECK":
-                bet = min(game.last_bet, player.chips)
+                bet = game.last_bet
                 player.info = "CHECK"
-                player.chips -= bet
-                game.pot += bet 
+                delta_bet = min(player.chips, bet - player.last_bet)
+                player.chips -= delta_bet
+                game.pot += delta_bet 
                 player.last_bet = bet
             await sync_to_async(player.save)()
 
@@ -173,6 +175,8 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                     "event": "TURN",
                     "message": json_data
                 })
+
+            print(game.last_bet)
 
         elif event == 'START':
             game = await sync_to_async(Game.objects.get)(game_id=self.game_id)
@@ -239,7 +243,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             game.stage  = 1
             game.pot    = 0
             game.dealer = await self.getNextPlayer(game.dealer)
-            game.status = "END"
+            game.status = "START"
             game.player_number = -1
             await sync_to_async(game.save)()
 

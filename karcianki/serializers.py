@@ -14,6 +14,7 @@ class GameSerializer(serializers.ModelSerializer):
             'dealer',
             'player_number',
             'status',
+            'last_bet',
             )
 
 class PlayerSerializer(serializers.ModelSerializer):
