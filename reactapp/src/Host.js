@@ -31,7 +31,8 @@ const Host = () => {
                 },
                 body: JSON.stringify({
                     nickname: nickname,
-                    chips: chips
+                    chips: chips,
+                    type: "POKER"
                 }),
             })
             .then((response) => response.json())

@@ -38,14 +38,37 @@ class Player(models.Model):
     last_bet = models.IntegerField(default=0)
     info = models.CharField(max_length=15, default="")
 
-    class Meta:
-        "Metadata class."
-        constraints = [
-            models.UniqueConstraint(
-                fields=['nickname', 'game_id'], name='unique nickname in game'),
-            models.UniqueConstraint(
-                fields=['player_number', 'game_id'], name='unique player number in game'),
-        ]
+    def __str__(self):
+        return str(self.nickname)
+
+class TGame(models.Model):
+    """Class Game provides database model for created games."""
+    MIN_ID  = 100000
+    MAX_ID  = 999999
+    game_id = models.IntegerField(primary_key=True)
+    status = models.CharField(max_length=5, choices=[('START', 'START'), 
+                                                     ('TURN', 'TURN'),
+                                                     ('END', 'END')], default='START') 
+    last_bet = models.IntegerField(default=100)
+    player100 = models.IntegerField(default=0)
+
+    @classmethod
+    def create(cls):
+        """Function create creates new game with unique game_id."""
+        new_id = randint(TGame.MIN_ID, TGame.MAX_ID)
+        game = TGame(game_id=new_id)
+        return game
+
+    def str(self):
+        return str(self.game_id)
+
+class TPlayer(models.Model):
+    """Class Player provides database model for players."""
+    nickname = models.CharField(max_length=10)
+    game = models.ForeignKey(TGame, on_delete=models.CASCADE)
+    player_number = models.IntegerField(default=0)
+    points = models.IntegerField(default=100)
+    info = models.CharField(max_length=15, default="")
 
     def __str__(self):
         return str(self.nickname)

@@ -49,7 +49,8 @@ const Login = () => {
                         },
                         body: JSON.stringify({
                             nickname: nickname,
-                            game_id: game_id
+                            game_id: game_id,
+                            type: "POKER"
                         }),
                     })
                     .then((response) => response.json())
