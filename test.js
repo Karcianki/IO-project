@@ -1,4 +1,4 @@
-fetch(`http://localhost:8000/api/karcianki/create/`, {
+fetch(`${process.env.DATABASE_URL}/api/karcianki/create/`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
