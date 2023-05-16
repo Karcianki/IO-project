@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/tysiac.css";
 import table from './static/images/stol.png';
-import Rules from './Rules'
+import RulesTysiac from './Rules'
 import { Link, useSearchParams} from 'react-router-dom';
 
 class Player extends Component {
@@ -18,7 +18,7 @@ class Player extends Component {
         )
     }
 }
-const Game = () => {
+const GameTysiac = () => {
 
     const [showRules, setShowRules] = useState(false);
     
@@ -197,22 +197,25 @@ const Game = () => {
         setIsStarted(true);
         gameBoard.send("TSTART", '');
     }
+    const onWriteResults = () => {
+        players =' ';
+        for (let i = 0; i < 4; i++) {
+            let player = {
+                "id": i,
+                "points": 100,
+            }
+            players.append(player);
+            // newData[data[i].player_number] = JSON.stringify(player_data);
+        }
+        
+        const message = JSON.stringify({
+            "players": players
+        });
+
+        gameBoard.send("TPLAY", message);
+    }
 
     //dać hostowi mozliwosc wpisania punktow
-    //obsluzyc TPLay
-    const onPlay = () => {
-        console.log("pass " + whoseTurn + ' ' + player_number);
-        if (whoseTurn != player_number) {
-            return;
-        }
-
-        const message = JSON.stringify({
-            "player_number": player_number,
-            "type": "PASS",
-            "bet": 0,
-        });
-        gameBoard.send("TTURN", message);
-    }
 
     const onPass = () => {
         console.log("pass " + whoseTurn + ' ' + player_number);
@@ -285,11 +288,22 @@ const Game = () => {
                 </div>
             </div>
             <div className={showRules? "zasady show" : "zasady"}>
-                    <Rules />
+                    <RulesTysiac />
             </div>
             <div className="opcje">
                 <div className = "host" id="start">
                     {player_number == 0 && isStarted == false && <button onClick={onStart} className="game_button tysiac_button" type="submit" id="start">Start</button>}
+                    {player_number == 0 && 
+                    <form>
+                        Pierwszy :<input type="number" step="5" className="licytuj" onChange={onBidChange(1)}></input> 
+                        Drugi: <input type="number" step="5" className="licytuj"></input> 
+                        Trzeci: <input type="number" step="5" className="licytuj"></input> 
+                        Czwarty: <input type="number" step="5" className="licytuj"></input> 
+                    <button onClick={onWriteResults} 
+                    className="result_button tysiac_button"
+                    type="submit" id="start">Wysślij</button>
+                    </form>
+                    }
                 </div>
                 <button className="game_button tysiac_button" type="submit" id="pass" onClick={onPass}>Pass</button>
                 <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
