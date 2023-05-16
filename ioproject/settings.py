@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-o$00%)8rn1gsczwqgye0e$v6zw3lfm6pyt^2@rewg*!ich^fd4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -83,8 +83,12 @@ ASGI_APPLICATION = "ioproject.asgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ioproject',
+        'USER': 'root',
+        'PASSWORD': '12345',
+        'HOST': 'localhost',
+        'PORT': '5432',
         'ATOMIC_REQUESTS': True,
     }
 }
