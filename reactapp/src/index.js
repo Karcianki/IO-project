@@ -17,6 +17,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
             <Route path='/login' element={<Login/>} />
             <Route path='/host' element={<Host/>} />
             <Route path='/poker' element={<Game name="POKER" />} />
+            <Route path='/tysiac' element={<Game name="TYSIĄC"/>} />
+            <Route path='/brydz' element={<Game name="BRYDZ"/>} />
         </Routes>       
       </div>
     </BrowserRouter>
