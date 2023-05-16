@@ -29,7 +29,7 @@ const Game = () => {
     const [player, setNickname ] = useState('') //domyslnie ustawic hosta
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
-    const [isStarted, setIsStarted] = useState(false);
+    const [waitForStart, setWaitForStart] = useState(false);
     const [nextStage, setNextStage] = useState(false);
     const [waitingForResults, setWaitingForResults] = useState(false);
     const [pot, setPot] = useState(0);
@@ -41,7 +41,7 @@ const Game = () => {
         class: "gracz hide",
         nickname: "",
         chips: chips_per_player,
-        last_bet: "",
+        last_bet: 0,
     }
 
     const [playerData, setPlayerData] = useState(
@@ -131,7 +131,7 @@ const Game = () => {
             if (data) {
                 setWhoseTurn(data.player_number);
                 console.log(data);
-                setIsStarted(data.status != "START");
+                setWaitForStart(data.status == "START");
                 setNextStage(data.status != "NEXT");
                 setWaitingForResults(data.status == "END");
                 setPot(data.pot);
@@ -197,11 +197,9 @@ const Game = () => {
 
                 break;
             case "NEXT":
-                setNextStage(false);
                 //ustawic host jako nickname
                 break;
             case "START":
-                setIsStarted(false);
                 break;
             case "END":
                 break;
@@ -211,7 +209,7 @@ const Game = () => {
     }
 
     const onStart = () => {
-        setIsStarted(true);
+        setWaitForStart(false);
         gameBoard.send("START", '');
     }
 
@@ -253,7 +251,7 @@ const Game = () => {
     }
 
     const onBidClick = (event) => {
-        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number )
+        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number  + lastBet)
         if (whoseTurn != player_number || bidValue < lastBet) {
             return;
         }
@@ -322,7 +320,7 @@ const Game = () => {
 
                 <div className="opcje">
                     <div className = "host" id="start">
-                       {player_number == 0 && isStarted == false && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
+                       {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
                     </div>
                     <div className = "host_next" id="next">
                     {player_number == 0 && nextStage == false && <button onClick={onNext} className="game_button poker_button" type="submit" id="next">Next</button>}
