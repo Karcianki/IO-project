@@ -90,7 +90,7 @@ def join_game(request):
         player = Player(nickname=nickname, game=game, player_number=players, chips=game.start_chips)
         player.save()
         serializer = PlayerSerializer(player)
-    elif game_type == "TYISAC":
+    elif game_type == "TYSIAC":
         game = get_object_or_404(TGame, game_id=game_id)
 
         players = TPlayer.objects.filter(game=game).count()

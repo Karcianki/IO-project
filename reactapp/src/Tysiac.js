@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/tysiac.css";
 import table from './static/images/stol.png';
-import {RulesTysiac} from './Rules'
+// import {RulesTysiac} from './Rules'
 import { Link, useSearchParams} from 'react-router-dom';
 
 class Player extends Component {
@@ -12,7 +12,7 @@ class Player extends Component {
                 <div className="dane">
                     <div>{ JSON.parse(this.props.data).info }</div>
                     <div>{ JSON.parse(this.props.data).nickname }</div>
-                    <div>{ JSON.parse(this.props.data).chips }</div>
+                    <div>{ JSON.parse(this.props.data).points }</div>
                 </div>
             </div>
         )
@@ -29,7 +29,7 @@ const GameTysiac = () => {
     const [whoseTurn, setWhoseTurn] = useState(0);
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
-    const [isStarted, setIsStarted] = useState(false);
+    const [waitForStart, setWaitForStart] = useState(false);
  
     const default_player_data = {
         class: "gracz hide",
@@ -107,7 +107,7 @@ const GameTysiac = () => {
     }
 
     const updateGame = () => {
-        fetch(`http://localhost:8000/api/karcianki/game/${game_id}/tysiac`, {
+        fetch(`http://localhost:8000/api/karcianki/game/${game_id}/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -124,7 +124,7 @@ const GameTysiac = () => {
             if (data) {
                 setWhoseTurn(data.player_number);
                 console.log(data);
-                setIsStarted(data.status != "START");
+                setWaitForStart(data.status == "START");
                 setLastBet(data.last_bet);
             }
             else {
@@ -134,7 +134,7 @@ const GameTysiac = () => {
     }
 
     const updatePlayers = () => {
-        fetch(`http://localhost:8000/api/karcianki/players/${game_id}/tysiac`, {
+        fetch(`http://localhost:8000/api/karcianki/players/${game_id}/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -152,10 +152,11 @@ const GameTysiac = () => {
             if(data) {
                 for (let i = 0; i < data.length; i++) {
                     let player_data = {
-                        "class": "gracz",
-                        "nickname": data[i].nickname,
-                        "points": data[i].points,
-                        "last_bet": data[i].last_bet,
+                        'nickname' :data[i].nickname,
+                        'game' : data[i].game,
+                        'player_number' : data[i].player_number,
+                        'points' : data[i].points,
+                        'info': data[i].info
                     }
                     newData[data[i].player_number] = JSON.stringify(player_data);
                 }
@@ -175,19 +176,22 @@ const GameTysiac = () => {
     const gameBoard = document.getElementById('game_board');
 
     const receive = (event, message) => {
+        console.log("sieeema");
         console.log(event + " -> " + message);
         updateState();
         switch (event) {
-            case "TTURN":
+            case "TURN":
+                console.log("hej");
                 let info = JSON.parse(message);
                 setWhoseTurn(info.player_number);
-                let nickname = info.nickname
-                setNickname(nickname)
+                let nickname = info.nickname;
+                setNickname(nickname);
                 break;
-            case "TSTART":
-                setIsStarted(false);
+            case "START":
+                console.log("ops");
                 break;
-            case "TEND":
+            case "END":
+                console.log("tak");
                 break;
             default:
                 console.log("No event");
@@ -195,7 +199,7 @@ const GameTysiac = () => {
     }
 
     const onStart = () => {
-        setIsStarted(true);
+        setWaitForStart(false);
         gameBoard.send("TSTART", '');
     }
     const onWriteResults = () => {
@@ -289,22 +293,22 @@ const GameTysiac = () => {
                 </div>
             </div>
             <div className={showRules? "zasady show" : "zasady"}>
-                    <RulesTysiac />
+                    {/* <RulesTysiac /> */}
             </div>
             <div className="opcje">
                 <div className = "host" id="start">
-                    {player_number == 0 && isStarted == false && <button onClick={onStart} className="game_button tysiac_button" type="submit" id="start">Start</button>}
-                    {player_number == 0 && 
-                    <form>
-                        Pierwszy :<input type="number" step="5" className="licytuj" onChange={onBidChange(1)}></input> 
-                        Drugi: <input type="number" step="5" className="licytuj"></input> 
-                        Trzeci: <input type="number" step="5" className="licytuj"></input> 
-                        Czwarty: <input type="number" step="5" className="licytuj"></input> 
-                    <button onClick={onWriteResults} 
-                    className="result_button tysiac_button"
-                    type="submit" id="start">Wysślij</button>
-                    </form>
-                    }
+                    {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button tysiac_button" type="submit" id="start">Start</button>}
+                    {/* {player_number == 0 &&  */}
+                     {/* <form> */}
+                        {/* Pierwszy :<input type="number" step="5" className="licytuj" onChange={onBidChange(1)}></input>  */}
+                        {/* Drugi: <input type="number" step="5" className="licytuj"></input>  */}
+                        {/* Trzeci: <input type="number" step="5" className="licytuj"></input>  */}
+                        {/* Czwarty: <input type="number" step="5" className="licytuj"></input>  */}
+                    {/* <button onClick={onWriteResults}  */}
+                    {/* className="result_button tysiac_button" */}
+                    {/* type="submit" id="start">Wysślij</button> */}
+                    {/* </form> */}
+                    {/* } */}
                 </div>
                 <button className="game_button tysiac_button" type="submit" id="pass" onClick={onPass}>Pass</button>
                 <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />

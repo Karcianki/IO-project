@@ -52,6 +52,7 @@ class TGame(models.Model):
     last_bet  = models.IntegerField(default=100)
     player100 = models.IntegerField(default=0)
     playing   = models.IntegerField(default=0)
+    player_number= models.IntegerField(default=0)
 
     @classmethod
     def create(cls):

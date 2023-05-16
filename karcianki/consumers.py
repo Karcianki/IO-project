@@ -273,6 +273,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             game.player100 = (game.player100 + 1) % player_count
             game.last_bet  = 100
             game.playing   = game.player100
+            game.status = "TURN"
             await sync_to_async(game.save)()
 
             json_data = json.dumps({
