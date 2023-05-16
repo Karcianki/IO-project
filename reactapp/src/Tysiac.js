@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import "./static/styles/tysiac.css";
 import table from './static/images/stol.png';
 import Rules from './Rules'
-import { Link, useSearchParams, useLocation } from 'react-router-dom';
+import { Link, useSearchParams} from 'react-router-dom';
 
 class Player extends Component {
     render() {
@@ -106,7 +106,7 @@ const Game = () => {
     }
 
     const updateGame = () => {
-        fetch(`http://localhost:8000/api/karcianki/game/${game_id}/TYSIAC`, {
+        fetch(`http://localhost:8000/api/karcianki/game/${game_id}/tysiac`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -124,8 +124,6 @@ const Game = () => {
                 setWhoseTurn(data.player_number);
                 console.log(data);
                 setIsStarted(data.status != "START");
-                // setNextStage(data.status != "NEXT");
-                // setPot(data.pot);
                 setLastBet(data.last_bet);
             }
             else {
@@ -135,7 +133,7 @@ const Game = () => {
     }
 
     const updatePlayers = () => {
-        fetch(`http://localhost:8000/api/karcianki/players/${game_id}/TYSIAC`, {
+        fetch(`http://localhost:8000/api/karcianki/players/${game_id}/tysiac`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -179,16 +177,16 @@ const Game = () => {
         console.log(event + " -> " + message);
         updateState();
         switch (event) {
-            case "TURN":
+            case "TTURN":
                 let info = JSON.parse(message);
                 setWhoseTurn(info.player_number);
                 let nickname = info.nickname
                 setNickname(nickname)
                 break;
-            case "START":
+            case "TSTART":
                 setIsStarted(false);
                 break;
-            case "END":
+            case "TEND":
                 break;
             default:
                 console.log("No event");
@@ -197,7 +195,23 @@ const Game = () => {
 
     const onStart = () => {
         setIsStarted(true);
-        gameBoard.send("START", '');
+        gameBoard.send("TSTART", '');
+    }
+
+    //dać hostowi mozliwosc wpisania punktow
+    //obsluzyc TPLay
+    const onPlay = () => {
+        console.log("pass " + whoseTurn + ' ' + player_number);
+        if (whoseTurn != player_number) {
+            return;
+        }
+
+        const message = JSON.stringify({
+            "player_number": player_number,
+            "type": "PASS",
+            "bet": 0,
+        });
+        gameBoard.send("TTURN", message);
     }
 
     const onPass = () => {
@@ -253,17 +267,17 @@ const Game = () => {
             <div className="plansza" id="game_board" game_id={game_id}>
                 <div className="rzad">
                     <Player id="gracz1" data={playerData[1]} /> 
-                    <Player id="gracz4" data={playerData[2]} />
-                    <Player id="gracz6" data={playerData[3]} />
-                    <Player id="gracz8" data={playerData[4]} />
+                    {/* <Player id="gracz4" data={playerData[2]} /> */}
+                    {/* <Player id="gracz6" data={playerData[3]} /> */}
+                    {/* <Player id="gracz8" data={playerData[4]} /> */}
                 </div>
                 <div className="rzad" id="ze_stolem">
-                    {/* <Player id="gracz0" data={playerData[0]} /> */}
+                    <Player id="gracz0" data={playerData[0]} />
                     <img src={table} alt="" className="stol"/>
-                    {/* <Player id="gracz1" data={playerData[5]} /> */}
+                    <Player id="gracz2" data={playerData[2]} />
                 </div>
                 <div className="rzad">
-                    {/* <Player id="gracz3" data={playerData[9]} /> */}
+                    <Player id="gracz3" data={playerData[3]} />
                     {/* <Player id="gracz5" data={playerData[8]} /> */}
                     {/* <Player id="gracz7" data={playerData[7]} /> */}
                     {/* <Player id="gracz9" data={playerData[6]} /> */}
@@ -275,11 +289,11 @@ const Game = () => {
             </div>
             <div className="opcje">
                 <div className = "host" id="start">
-                    {player_number == 0 && isStarted == false && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
+                    {player_number == 0 && isStarted == false && <button onClick={onStart} className="game_button tysiac_button" type="submit" id="start">Start</button>}
                 </div>
                 <button className="game_button tysiac_button" type="submit" id="pass" onClick={onPass}>Pass</button>
                 <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
-                <button className="game_button tysiac_button" id="bet" onClick={onBidClick}>Postaw</button>
+                <button className="game_button tysiac_button" id="bet" onClick={onBidClick}>Przebij</button>
                 <Link to='../'>
                     <button className="game_button tysiac_button" type="submit" id="quit">Wyjdź</button>
                 </Link>
