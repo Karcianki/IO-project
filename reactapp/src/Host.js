@@ -21,7 +21,7 @@ function Host(props) {
         const chipsReg = /^\d{2,6}$/;
         const nickReg = /^[a-z]{4,10}$/;
 
-        if (!chipsReg.test(chips) || !nickReg.test(nickname)) {
+        if ((!chipsReg.test(chips) && props.id=="poker") || !nickReg.test(nickname)) {
             setIsValid(false);
         } else {
             fetch(`http://localhost:8000/api/karcianki/create/`, {
