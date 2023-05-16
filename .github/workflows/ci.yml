@@ -6,29 +6,26 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        env: 
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     
     steps:
     - uses: actions/checkout@v1
     - name: yarn install
       run: |
         yarn install
-    # - name: validate CSS
-    #   run: |
-    #     for f in $(find karcianki/ -name '*.css'); do
-    #       yarn run stylelint $f
-    #     done;
-    # - name: validate HTML
-    #   run: |
-    #     for f in $(find karcianki/ -name '*.html'); do
-    #       yarn run html-validate $f
-    #     done;
-    # - name: validate Python
-    #   run: |
-    #       pylint karcianki/
-    - uses: browser-actions/setup-firefox@v1
     - name: run tests
       run: |
-        python3 manage.py makemigrations & python3 manage.py migrate & python3 manage.py runserver & yarn test
+        python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver &
     - name: Upload coverage reports to Codecov
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

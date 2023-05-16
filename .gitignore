@@ -8,3 +8,7 @@ karcianki/__pycache__/
 karcianki/migrations/
 __pycache__/
 coverage/
+yarn-error.log
+io/
+reactapp/package-lock.json
+reactapp/yarn.lock

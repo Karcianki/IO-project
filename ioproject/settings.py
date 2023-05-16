@@ -83,10 +83,10 @@ ASGI_APPLICATION = "ioproject.asgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ioproject',
-        'USER': 'root',
-        'PASSWORD': '12345',
+        'ENGINE': 'django.db.backends.postgresql_',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432',
         'ATOMIC_REQUESTS': True,
