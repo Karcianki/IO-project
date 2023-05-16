@@ -50,7 +50,7 @@ function Login(props) {
                         body: JSON.stringify({
                             nickname: nickname,
                             game_id: game_id,
-                            game_type: props.id.toUpperCase(),
+                            type: props.id.toUpperCase(),
                         }),
                     })
                     .then((response) => response.json())

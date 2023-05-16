@@ -31,7 +31,8 @@ function Host(props) {
                 },
                 body: JSON.stringify({
                     nickname: nickname,
-                    chips: chips
+                    chips: chips,
+                    type: props.id.toUpperCase(),
                 }),
             })
             .then((response) => response.json())
