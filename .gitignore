@@ -12,3 +12,5 @@ yarn-error.log
 io/
 reactapp/package-lock.json
 reactapp/yarn.lock
+yarn.lock
+package-lock.json
