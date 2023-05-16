@@ -38,7 +38,8 @@ class TGameSerializer(serializers.ModelSerializer):
             'game_id',
             'status',
             'last_bet',
-            'player100'
+            'player100',
+            'playing'
             )
 
 class TPlayerSerializer(serializers.ModelSerializer):

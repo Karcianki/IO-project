@@ -49,8 +49,9 @@ class TGame(models.Model):
     status = models.CharField(max_length=5, choices=[('START', 'START'), 
                                                      ('TURN', 'TURN'),
                                                      ('END', 'END')], default='START') 
-    last_bet = models.IntegerField(default=100)
+    last_bet  = models.IntegerField(default=100)
     player100 = models.IntegerField(default=0)
+    playing   = models.IntegerField(default=0)
 
     @classmethod
     def create(cls):
