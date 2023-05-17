@@ -276,9 +276,14 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             game.status = "TURN"
             await sync_to_async(game.save)()
 
+
+            player = await sync_to_async(TPlayer.objects.get)(game=game, player_number=game.player100)
+
             json_data = json.dumps({
                 "player_number": f"{((game.player100)%player_count)}",
                 "last_bet": "100",
+                "nickname": player.nickname,
+                "player_count": player_count
             })
 
             await self.channel_layer.group_send(self.game_name, {
@@ -305,9 +310,11 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             await sync_to_async(player.save)()
             for i in range(0, player_count):
                 player = await sync_to_async(TPlayer.objects.get)(game=game, player_number=i)
+                print(player.info)
                 if player.info != "PASS":
                     # print(player)
                     active_players += 1
+                    index = i
 
             next_p = -1
             for i in range(player_number + 1, player_number + player_count):
@@ -320,9 +327,11 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             await sync_to_async(game.save)()
             await sync_to_async(player.save)()
             if active_players > 1:
+                nickname = await sync_to_async(TPlayer.objects.get)(game=game, player_number=next_p)
                 json_data = json.dumps({
                     "player_number": f"{(next_p)}",
                     "last_bet": game.last_bet,
+                    "nickname": nickname.nickname
                 })
 
                 await self.channel_layer.group_send(self.game_name, {
@@ -338,6 +347,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                     "event": "END",
                 })
         elif event == "TEND":
+            print("->")
             data = json.loads(message)
             game = await sync_to_async(TGame.objects.get)(game_id=self.game_id)
             players = data['players']
@@ -345,7 +355,9 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             for player in players:
                 plr = await sync_to_async(TPlayer.objects.get)(game = game, player_number=player['id'])
                 plr.points += player['points']
+                plr.info = ''
                 await sync_to_async(plr.save)()
+                print("siema")
 
             await sync_to_async(game.save)()
             await self.channel_layer.group_send(self.game_name, {

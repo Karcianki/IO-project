@@ -197,7 +197,6 @@ const GamePoker = () => {
 
                 break;
             case "NEXT":
-                //ustawic host jako nickname
                 break;
             case "START":
                 break;
@@ -215,7 +214,6 @@ const GamePoker = () => {
 
     const onNext = () => {
         setNextStage(true);
-        //ustawic kolejna osobe po hoscie
         gameBoard.send("NEXT", '');
     }
 
