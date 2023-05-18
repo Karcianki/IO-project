@@ -21,10 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o$00%)8rn1gsczwqgye0e$v6zw3lfm6pyt^2@rewg*!ich^fd4'
+# SECRET_KEY = 'django-insecure-o$00%)8rn1gsczwqgye0e$v6zw3lfm6pyt^2@rewg*!ich^fd4'
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-o$00%)8rn1gsczwqgye0e$v6zw3lfm6pyt^2@rewg*!ich^fd4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = []
 
@@ -46,6 +49,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -124,7 +128,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = BASE_DIR
+STATIC_ROOT = BASE_DIR / 'static_files'
 
 STATIC_URL = '/static/'
 
@@ -157,3 +161,10 @@ CHANNEL_LAYERS = {
 
 # Probably only for testing
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Update database configuration from $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

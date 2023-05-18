@@ -1,53 +1,49 @@
 import React, { Component, useEffect, useState } from "react";
-import "./static/styles/poker.css";
+import "./static/styles/tysiac.css";
 import table from './static/images/stol.png';
-import Rules from './Rules'
-import { Link, useSearchParams, useLocation } from 'react-router-dom';
+import {RulesTysiac} from './Rules'
+import { Link, useSearchParams} from 'react-router-dom';
 
-class Player extends Component {
+class TPlayer extends Component {
     render() {
         return (
-            <div className={ JSON.parse(this.props.data).class } id={this.props.id} onClick={this.props.onClick}>
+            <div className={ JSON.parse(this.props.data).class } id={this.props.id}>
                 <span className="fa-solid fa-circle-user ikona"></span>
                 <div className="dane">
                     <div>{ JSON.parse(this.props.data).info }</div>
                     <div>{ JSON.parse(this.props.data).nickname }</div>
-                    <div>{ JSON.parse(this.props.data).chips }</div>
+                    <div>{ JSON.parse(this.props.data).points }</div>
                 </div>
             </div>
         )
     }
 }
+const GameTysiac = () => {
 
-const Game = () => {
     const [showRules, setShowRules] = useState(false);
     
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
+    const [player, setNickname ] = useState('')
     const player_number = searchParams.get('player_number');
     const [whoseTurn, setWhoseTurn] = useState(0);
-    const [player, setNickname ] = useState('') //domyslnie ustawic hosta
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
     const [waitForStart, setWaitForStart] = useState(false);
-    const [nextStage, setNextStage] = useState(false);
     const [waitingForResults, setWaitingForResults] = useState(false);
-    const [pot, setPot] = useState(0);
-
-    const MAX_PLAYERS=10; 
-    const chips_per_player = 100;
-
+    const [playerCounter, setPlayerCounter] = useState(0);
+    const [isSetPlayerCounter,setIsSetPlayerCounter] = useState(false);
+ 
     const default_player_data = {
         class: "gracz hide",
         nickname: "",
-        chips: chips_per_player,
+        points: 0,
         last_bet: 0,
     }
-
+    const MAX_PLAYERS=4; 
     const [playerData, setPlayerData] = useState(
         Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data))
     );
-
     const django_host = 'localhost:8000'
     const connectionString = 'ws://' + django_host + '/ws/karcianki/' + game_id + '/';
 
@@ -129,13 +125,10 @@ const Game = () => {
         })
         .then((data) => {
             if (data) {
-                setWhoseTurn(data.player_number);
                 console.log(data);
                 setWaitForStart(data.status == "START");
-                setNextStage(data.status != "NEXT");
-                setWaitingForResults(data.status == "END");
-                setPot(data.pot);
                 setLastBet(data.last_bet);
+                setWaitingForResults(data.status == "END");
             }
             else {
                 alert("Gra się zakończyła.");
@@ -162,10 +155,12 @@ const Game = () => {
             if(data) {
                 for (let i = 0; i < data.length; i++) {
                     let player_data = {
-                        "class": "gracz",
-                        "nickname": data[i].nickname,
-                        "chips": data[i].chips,
-                        "info": data[i].info,
+                        'nickname' :data[i].nickname,
+                        'game' : data[i].game,
+                        'player_number' : data[i].player_number,
+                        'points' : data[i].points,
+                        'info': data[i].info,
+                        'class': "gracz"
                     }
                     newData[data[i].player_number] = JSON.stringify(player_data);
                 }
@@ -191,17 +186,23 @@ const Game = () => {
             case "TURN":
                 let info = JSON.parse(message);
                 setWhoseTurn(info.player_number);
-
-                let nickname = info.nickname
-                setNickname(nickname)
-
-                break;
-            case "NEXT":
-                //ustawic host jako nickname
+                console.log(message);
+                console.log(info.player_count);
+                let nickname = info.nickname;
+                setNickname(nickname);
+                if(!isSetPlayerCounter && info.player_count != null){
+                    console.log("wszedlem");
+                    setPlayerCounter(info.player_count);
+                    setIsSetPlayerCounter(true);
+                }
                 break;
             case "START":
+                setWaitForStart(true);
+                // let info = JSON.parse(message);
+                setPlayerCounter()
                 break;
             case "END":
+                console.log("tak");
                 break;
             default:
                 console.log("No event");
@@ -210,13 +211,7 @@ const Game = () => {
 
     const onStart = () => {
         setWaitForStart(false);
-        gameBoard.send("START", '');
-    }
-
-    const onNext = () => {
-        setNextStage(true);
-        //ustawic kolejna osobe po hoscie
-        gameBoard.send("NEXT", '');
+        gameBoard.send("TSTART", '');
     }
 
     const onPass = () => {
@@ -230,20 +225,7 @@ const Game = () => {
             "type": "PASS",
             "bet": 0,
         });
-        gameBoard.send("TURN", message);
-    }
-
-    const onCheck = () => {
-        console.log("check " + whoseTurn + player_number);
-        if (whoseTurn != player_number) {
-            return;
-        }
-        const message = JSON.stringify({
-            "player_number": player_number,
-            "type": "CHECK",
-            "bet": 0,
-        });
-        gameBoard.send("TURN", message);
+        gameBoard.send("TTURN", message);
     }
 
     const onBidChange = (event) => {
@@ -251,13 +233,8 @@ const Game = () => {
     }
 
     const onBidClick = (event) => {
-        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number  + lastBet)
-        if (whoseTurn != player_number || bidValue < lastBet) {
-            return;
-        }
-        const player_data = JSON.parse(playerData[player_number]);
-        if (player_data.chips < bidValue) {
-            console.log("Not enough chips.");
+        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number )
+        if (whoseTurn != player_number || bidValue <= lastBet) {
             return;
         }
         const message = JSON.stringify({
@@ -265,82 +242,105 @@ const Game = () => {
             "type": "BET",
             "bet": bidValue,
         });
-        gameBoard.send("TURN", message); 
+        gameBoard.send("TTURN", message); 
     }
 
-    const playerButton = (clicked_player) => () => {
-        console.log("winner: " + clicked_player);
-        if (player_number == 0 && waitingForResults) {
-            const message = JSON.stringify({
-                "player_number": player_number,
-                "winner_number": clicked_player,
-            });
-            gameBoard.send("END", message);
+    const onSetPoints = () => {
+        console.log("winner: ");
+        var gracz0Input = document.getElementById('Gracz0');
+        var gracz1Input = document.getElementById('Gracz1');
+        var gracz0Value = parseInt(gracz0Input.value, 10);
+        var gracz1Value = parseInt(gracz1Input.value, 10);
+        const players = [
+            { id: 0, points: gracz0Value },
+            { id: 1, points: gracz1Value },
+          ];
+        if (playerCounter == 3){
+            var gracz2Input = document.getElementById('Gracz2');
+            var gracz2Value = parseInt(gracz2Input.value, 10);
+            players.push( { id: 2, points: gracz2Value})
         }
-    }
-
+        console.log(players);
+        if (player_number == 0) {
+            const message = JSON.stringify({
+                "players": players, 
+            });
+            gameBoard.send("TEND", message);
+        }
+    };
+    
     return (
         <div>
-            <header>
+          <header>
+            <div>
+            TYSIĄC
+            </div>
+            <div className="game_header">
+                player: {player} <br />
+                number: {whoseTurn} <br />
+                Numer gry {game_id} <br />
+                {playerCounter}
+            </div>
+            <button onClick={toggleRules} type="submit" aria-label="info" className="game_button"><span className="fa-solid fa-question"></span></button>
+          </header>
+          <div className="page_game">
+            <div className="plansza" id="game_board" game_id={game_id}>
+                <div className="rzad">
+                    <TPlayer id="gracz1" data={playerData[1]} /> 
+                </div>
+                <div className="rzad" id="ze_stolem">
+                    <TPlayer id="gracz0" data={playerData[0]} />
+                    <img src={table} alt="" className="stol"/>
+                    <TPlayer id="gracz2" data={playerData[2]} />
+                </div>
+                <div className="rzad">
+                    <TPlayer id="gracz3" data={playerData[3]} />
+                    </div>
+                </div>
+            </div>
+            <div className={showRules? "zasady show" : "zasady"}>
+                    <RulesTysiac />
+            </div>
+            <div className="opcje">
+                <div className = "host" id="start">
+                    {player_number == 0 && waitForStart == true &&
+                     <button onClick={onStart} className="game_button tysiac_button" type="submit" id="start">Start</button>
+                     }
+                        
+                </div>
+                {/* <button className="game_button tysiac_button" type="submit" id="pass" onClick={() => playerButton()}>wyniki</button> */}
+                <button className="game_button tysiac_button" type="submit" id="pass" onClick={onPass}>Pass</button>
+                <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
+                <button className="game_button tysiac_button" id="bet" onClick={onBidClick}>Przebij</button>
+                <Link to='../'>
+                    <button className="game_button tysiac_button" type="submit" id="quit">Wyjdź</button>
+                </Link>
+            </div>
+            {player_number == 0 && waitingForResults == true &&  
+            <div class="tysiac_wyniki">
+                <p>Wprowadź wyniki</p>
+
                 <div>
-                    POKER
-                </div>
-                <div className="game_header">
-                    player: {player} <br />
-                    number: {whoseTurn} <br />
-                    Numer gry {game_id}
-                </div>
-                <button onClick={toggleRules} type="submit" aria-label="info" className="game_button"><span className="fa-solid fa-question"></span></button>
-            </header>
-
-            <div className="page_game">
-                <div className="plansza" id="game_board" game_id={game_id}>
-                    <div className="rzad">
-                        <Player id="gracz1" data={playerData[1]} onClick={playerButton(1)}/> 
-                        <Player id="gracz4" data={playerData[2]} onClick={playerButton(2)}/>
-                        <Player id="gracz6" data={playerData[3]} onClick={playerButton(3)}/>
-                        <Player id="gracz8" data={playerData[4]} onClick={playerButton(4)}/>
-                    </div>
-                    <div className="rzad" id="ze_stolem">
-                        <Player id="gracz0" data={playerData[0]} onClick={playerButton(0)} />
-                        <img src={table} alt="" className="stol"/>
-                        <Player id="gracz1" data={playerData[5]} onClick={playerButton(5)}/>
-                    </div>
-                    <div className="rzad">
-                        <Player id="gracz3" data={playerData[9]} onClick={playerButton(9)}/>
-                        <Player id="gracz5" data={playerData[8]} onClick={playerButton(8)}/>
-                        <Player id="gracz7" data={playerData[7]} onClick={playerButton(7)}/>
-                        <Player id="gracz9" data={playerData[6]} onClick={playerButton(6)}/>
-                    </div>
+                <label htmlFor="Gracz0">Gracz1</label><br />
+                <input type="number" id="Gracz0" name="Gracz0" required /> <br /><br />
                 </div>
 
-                <div className={showRules? "zasady show" : "zasady"}>
-                    <Rules />
+                <div> 
+                <label htmlFor="Gracz1">Gracz2</label><br />
+                <input type="number" id="Gracz1" name="Gracz1" required/><br /><br />
                 </div>
 
-                <div className="opcje">
-                    <div className = "host" id="start">
-                       {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
-                    </div>
-                    <div className = "host_next" id="next">
-                    {player_number == 0 && nextStage == false && <button onClick={onNext} className="game_button poker_button" type="submit" id="next">Next</button>}
-                    </div>
-                    <button className="game_button poker_button" type="submit" id="pass" onClick={onPass}>Pass</button>
-                    <button className="game_button poker_button" type="submit" id="check" onClick={onCheck}>Sprawdź</button>
-                    <input type="number" step="5" className="licytuj" min="0" max="10000" onChange={onBidChange} />
-                    <button className="game_button poker_button" id="bet" onClick={onBidClick}>Postaw</button>
-                    <Link to='../'>
-                        <button className="game_button poker_button" type="submit" id="quit">Wyjdź</button>
-                    </Link>
+                {playerCounter == 3 &&
+                <div>
+                <label htmlFor="Gracz2">Gracz3</label><br />
+                <input type="number" id="Gracz2" name="Gracz2" required/><br /><br />
                 </div>
+                }
+
+                <button onClick={() => onSetPoints()} className="game_button tysiac_button" type="submit" id="start">Wprowadź wyniki</button> 
             </div>
-
-            <div className="pot">
-                Pot: {pot}
-            </div>
-
-        </div>        
-    )
+            }
+        </div>
+      );
 }
-
-export default Game;
+export default GameTysiac;
