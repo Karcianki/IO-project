@@ -344,6 +344,3 @@ const GameTysiac = () => {
       );
 }
 export default GameTysiac;
-
-// naprawić jakiś losowy corner case
-//wykryć zwyciężce
