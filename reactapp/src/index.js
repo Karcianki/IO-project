@@ -5,6 +5,7 @@ import Login from './Login';
 import Host from './Host';
 import GamePoker from './Poker';
 import GameTysiac from './Tysiac';
+import GameBrydz from './Brydz';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
  
   // Set up pages using the React Router Link element for navigation - instead of <a></a>
@@ -23,7 +24,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
             <Route path='brydz/host' element={<Host id="brydz" name="BRYDŻ"/>} />
             <Route path='/poker' element={<GamePoker />} />
             <Route path='/tysiac' element={<GameTysiac/>} />
-            {/* <Route path='/brydz' element={<GameBrydz/>} /> */}
+            <Route path='/brydz' element={<GameBrydz/>} />
         </Routes>       
       </div>
     </BrowserRouter>

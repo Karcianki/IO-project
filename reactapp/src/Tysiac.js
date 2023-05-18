@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/tysiac.css";
 import table from './static/images/stol.png';
-// import {RulesTysiac} from './Rules'
+import {RulesTysiac} from './Rules'
 import { Link, useSearchParams} from 'react-router-dom';
 
 class TPlayer extends Component {
@@ -299,7 +299,7 @@ const GameTysiac = () => {
                 </div>
             </div>
             <div className={showRules? "zasady show" : "zasady"}>
-                    {/* <RulesTysiac /> */}
+                    <RulesTysiac />
             </div>
             <div className="opcje">
                 <div className = "host" id="start">
