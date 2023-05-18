@@ -13,6 +13,34 @@
     gap:20px
 }
 
+.tysiac_wyniki{
+    color: white;
+    font-weight: 100;
+    position: absolute;
+    background-color: var(--theme-color);
+    border-radius: 2em;
+    padding: 3em;
+    max-height: 60%;
+    max-width: 100%;
+    text-align: center;
+    overflow-x: hidden;
+    box-shadow: 0px 0px 5px black;
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tysiac_wyniki p{
+    font-size: 1.5em;
+    padding: 0;
+    margin-top: 0;
+}
+
+.tysiac_wyniki .tysiac_button {
+    padding: 10px;
+}
+
 @media only screen and ((max-width: 800px) or (max-height: 800px)) {
     .opcje .tysiac_button{
         height: 25px;
@@ -25,3 +53,4 @@
         gap:10px
     }
 }
+

@@ -159,7 +159,8 @@ const GameTysiac = () => {
                         'game' : data[i].game,
                         'player_number' : data[i].player_number,
                         'points' : data[i].points,
-                        'info': data[i].info
+                        'info': data[i].info,
+                        'class': "gracz"
                     }
                     newData[data[i].player_number] = JSON.stringify(player_data);
                 }
@@ -305,21 +306,6 @@ const GameTysiac = () => {
                     {player_number == 0 && waitForStart == true &&
                      <button onClick={onStart} className="game_button tysiac_button" type="submit" id="start">Start</button>
                      }
-
-                     {/* {player_number == 0 && waitingForResults == true &&   */}
-
-                      <label htmlFor="Gracz0">Gracz1</label> 
-                      <input type="number" id="Gracz0" name="Gracz0" required /> <br /><br />
-                      
-                      <label htmlFor="Gracz1">Gracz2</label>
-                      <input type="number" id="Gracz1" name="Gracz1" required/><br /><br />
- 
-                      <label htmlFor="Gracz2">Gracz3</label>
-                      <input type="number" id="Gracz2" name="Gracz2" required/><br /><br /> 
-
-                       {/* jest zmienna playerCounter*/}
-                      {/* &&   */}
-                       <button onClick={() => onSetPoints()} className="game_button tysiac_button" type="submit" id="start">Wyniki</button> 
                         
                 </div>
                 {/* <button className="game_button tysiac_button" type="submit" id="pass" onClick={() => playerButton()}>wyniki</button> */}
@@ -330,6 +316,30 @@ const GameTysiac = () => {
                     <button className="game_button tysiac_button" type="submit" id="quit">Wyjdź</button>
                 </Link>
             </div>
+            {player_number == 0 && waitingForResults == true &&  
+            <div class="tysiac_wyniki">
+                <p>Wprowadź wyniki</p>
+
+                <div>
+                <label htmlFor="Gracz0">Gracz1</label><br />
+                <input type="number" id="Gracz0" name="Gracz0" required /> <br /><br />
+                </div>
+
+                <div> 
+                <label htmlFor="Gracz1">Gracz2</label><br />
+                <input type="number" id="Gracz1" name="Gracz1" required/><br /><br />
+                </div>
+
+                {playerCounter == 3 &&
+                <div>
+                <label htmlFor="Gracz2">Gracz3</label><br />
+                <input type="number" id="Gracz2" name="Gracz2" required/><br /><br />
+                </div>
+                }
+
+                <button onClick={() => onSetPoints()} className="game_button tysiac_button" type="submit" id="start">Wprowadź wyniki</button> 
+            </div>
+            }
         </div>
       );
 }
