@@ -8,3 +8,15 @@ karcianki/__pycache__/
 karcianki/migrations/
 __pycache__/
 coverage/
+io/
+yarn-error.log
+yarn.lock
+package-lock.json
+admin/
+rest_framework/
+
+# Text backup files
+*.bak
+
+# Database
+*.sqlite3
