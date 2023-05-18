@@ -303,16 +303,16 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             if data['type'] == "PASS":
                 player.info = "PASS"
             if data['type'] == "BET":
+                bet = data['bet']
                 game.last_bet = data['bet']
+                player.info = str(bet)
                 game.playing = player.player_number
             game.status = "TURN"
             active_players = 0
             await sync_to_async(player.save)()
             for i in range(0, player_count):
                 player = await sync_to_async(TPlayer.objects.get)(game=game, player_number=i)
-                print(player.info)
                 if player.info != "PASS":
-                    # print(player)
                     active_players += 1
                     index = i
 
@@ -357,7 +357,6 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 plr.points += player['points']
                 plr.info = ''
                 await sync_to_async(plr.save)()
-                print("siema")
 
             await sync_to_async(game.save)()
             await self.channel_layer.group_send(self.game_name, {
