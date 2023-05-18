@@ -37,7 +37,7 @@ jobs:
         POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         DATABASE_URL: 'postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:8000'
       run: |
-        python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver &
+        python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver & sleep 10 && node test.js
     - name: run test
       env:
         POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
