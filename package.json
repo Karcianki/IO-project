@@ -7,6 +7,7 @@
   "author": "piter12345 <piotrek.blinowski@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "start": ""
   },
   "dependencies": {
     "axios": "^1.4.0",
