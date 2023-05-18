@@ -7,7 +7,6 @@
   "author": "piter12345 <piotrek.blinowski@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "python3 manage.py runserver"
   },
   "dependencies": {
     "axios": "^1.4.0",
