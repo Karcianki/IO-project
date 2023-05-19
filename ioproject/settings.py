@@ -30,8 +30,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-o$00%)8rn1gscz
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['io-project-production.up.railway.app', '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = ['https://io-project-production.up.railway.app']
+# ALLOWED_HOSTS = ['io-project-production.up.railway.app', '127.0.0.1']
+# CSRF_TRUSTED_ORIGINS = ['https://io-project-production.up.railway.app']
 
 # Application definition
 
@@ -161,7 +161,7 @@ CHANNEL_LAYERS = {
 }
 
 # Probably only for testing
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
 
 # Update database configuration from $DATABASE_URL.
 import dj_database_url
