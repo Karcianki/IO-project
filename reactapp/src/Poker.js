@@ -4,7 +4,7 @@ import table from './static/images/stol.png';
 import {RulesPoker} from './Rules'
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 
-class Player extends Component {
+export class Player extends Component {
     render() {
         return (
             <div className={ JSON.parse(this.props.data).class } id={this.props.id} onClick={this.props.onClick}>
