@@ -4,7 +4,7 @@ import table from './static/images/stol.png';
 import {RulesTysiac} from './Rules'
 import { Link, useSearchParams} from 'react-router-dom';
 
-class TPlayer extends Component {
+export class TPlayer extends Component {
     render() {
         return (
             <div className={ JSON.parse(this.props.data).class } id={this.props.id}>
