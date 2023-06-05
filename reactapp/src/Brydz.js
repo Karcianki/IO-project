@@ -306,33 +306,38 @@ const GameBrydz = () => {
                 </div>
             </div>
             <div className={showRules? "zasady show" : "zasady"}>
-                    {/* <RulesBrydz /> */}
+                    <RulesBrydz />
             </div>
-      <div className="opcje">
+      <div className="brydz opcje">
         <div className="duzy">
-          <button type="submit"> Pass </button>
+          <button type="submit" className="game_button" id="pass"> Pass </button>
         </div>
         <div className="wybor">
           <div className="lewy">
-            <button type="submit"> 1 </button>
-            <button type="submit"> 2 </button>
-            <button type="submit"> 3 </button>
-            <button type="submit"> 4 </button>
-            <button type="submit"> 5 </button>
-            <button type="submit"> 6 </button>
-            <button type="submit"> 7 </button>
+            <button type="submit" className="game_button"> 1 </button>
+            <button type="submit" className="game_button"> 2 </button>
+            <button type="submit" className="game_button"> 3 </button>
+            <button type="submit" className="game_button"> 4 </button>
+            <button type="submit" className="game_button"> 5 </button>
+            <button type="submit" className="game_button"> 6 </button>
+            <button type="submit" className="game_button"> 7 </button>
           </div>
           <div className="atut">
-            <button type="submit"> <img src="{% static 'images/clubs.png' %}" alt="trefl" width="30" height="30" /> </button>
-            <button type="submit"> <img src="{% static 'images/diamonds.png' %}" alt="karo" width="30" height="30" /> </button>
-            <button type="submit"> <img src="{% static 'images/hearts.png' %}" alt="kier" width="30" height="30" /> </button>
-            <button type="submit"> <img src="{% static 'images/spades.png' %}" alt="pik" width="30" height="30" /> </button>
-            <button type="submit"> BA </button>
+            <button type="submit" className="game_button"> <img src={trefl} alt="trefl" width="30" height="30" /> </button>
+            <button type="submit" className="game_button"> <img src={karo} alt="karo" width="30" height="30" /> </button>
+            <button type="submit" className="game_button"> <img src={kier} alt="kier" width="30" height="30" /> </button>
+            <button type="submit" className="game_button"> <img src={pik} alt="pik" width="30" height="30" /> </button>
+            <button type="submit" className="game_button"> BA </button>
           </div>
         </div>
+        <div className="duzy">
+          <button type="submit" className="game_button" id="zatwierdz"> Zatwierdz </button>
+        </div>
+        <div className="duzy">
         <Link to='../'>
-          <button className="game_button tysiac_button" type="submit" id="quit">Wyjdź</button>
+          <button className="game_button" type="submit" id="quit">Wyjdź</button>
         </Link>
+        </div>
       </div>
 
       {player_number == 0 && waitingForResults == true &&  

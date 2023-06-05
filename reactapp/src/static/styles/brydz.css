@@ -1,44 +1,45 @@
 /* stylelint-disable media-feature-name-no-unknown */
 @import url("gry.css");
 
-.opcje {
+.brydz.opcje {
     box-sizing: border-box;
     justify-content: center;
     align-items: center;
 }
-.opcje .duzy {
+.brydz.opcje .duzy {
     height: 100%;
 }
-.opcje button{
+.brydz.opcje button{
     height: 30px;
 }
 
-.opcje button span {
+
+.brydz.opcje button span {
     font-size: 50%;
     color: black;
 }
 
-.opcje .lewy button {
+.brydz.opcje .lewy button {
     width: 70px;
 }
 
-.opcje .atut button {
+.brydz.opcje .atut button {
     width: 100px;
 }
 
-.opcje .duzy button {
+.brydz.opcje .duzy button {
     height: 65px;
     width: 100px;
 }
 
-.opcje .wybor {
+.brydz.opcje .wybor {
     display: flex;
     flex-direction: column;
     gap: 5px;
     object-fit: scale-down;
 }
 
-.opcje .wybor >  div {
+.brydz.opcje .wybor >  div {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -60,11 +61,11 @@ ol.etapy{
 }
 
 @media only screen and ((max-width: 800px) or (max-height: 800px)) {
-    .opcje {
+    .brydz.opcje {
         gap: 10px;
     }
 
-    .opcje .wybor button {
+    .brydz.opcje .wybor button {
         width: 25px;
         height: 25px;
     }
@@ -74,28 +75,28 @@ ol.etapy{
         height: 100%;
     }
 
-    .opcje .duzy button {
+    .brydz.opcje .duzy button {
         height: 55px;
         width: 50px;
     }
         
-    .opcje .wybor >  div {
+    .brydz.opcje .wybor >  div {
         justify-content: center;
         align-items: center;
     }
 }
 
 @media only screen and (orientation:landscape) and ((max-width: 800px) or (max-height: 800px)){
-    .opcje {
+    .brydz.opcje {
         gap: 25px;
     }
     
-    .opcje .wybor {
+    .brydz.opcje .wybor {
         flex-direction: row;
         gap: 25px;
     }
 
-    .opcje .duzy button {
+    .brydz.opcje .duzy button {
         height: 25px;
     }
 }
