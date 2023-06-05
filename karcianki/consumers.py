@@ -1,7 +1,7 @@
 ###Module consumers adds websockets to application"""
 import json
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from karcianki.models import Game, Player, TGame, TPlayer
+from karcianki.models import Game, Player, TGame, TPlayer, BGame, BPlayer
 from django.db.models import Q
 from asgiref.sync import sync_to_async
 
@@ -354,6 +354,107 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
             game.status = "START"
             for player in players:
                 plr = await sync_to_async(TPlayer.objects.get)(game = game, player_number=player['id'])
+                plr.points += player['points']
+                plr.info = ''
+                await sync_to_async(plr.save)()
+
+            await sync_to_async(game.save)()
+            await self.channel_layer.group_send(self.game_name, {
+                    "type": "send_message",
+                    "event": "START",
+                })
+        elif event == "BSTART":
+            print("BSTART")
+            game = await sync_to_async(BGame.objects.get)(game_id=self.game_id)
+            player_qs = await sync_to_async(BPlayer.objects.filter)(game=game)
+            player_count = await sync_to_async(player_qs.count)()
+
+            game.player100 = (game.player100 + 1) % player_count
+            game.last_bet  = 0
+            game.playing   = game.player100
+            game.status = "TURN"
+            await sync_to_async(game.save)()
+
+
+            player = await sync_to_async(BPlayer.objects.get)(game=game, player_number=game.player100)
+
+            json_data = json.dumps({
+                "player_number": f"{((game.player100)%player_count)}",
+                "last_bet": "0",
+                "nickname": player.nickname,
+                "player_count": player_count
+            })
+
+            await self.channel_layer.group_send(self.game_name, {
+                "type": "send_message",
+                "event": "TURN",
+                "message": json_data
+            })
+    
+        elif event == "BTURN":
+            print("BTURN")
+            data = json.loads(message)
+            player_number = int(data['player_number'])
+
+            game         = await sync_to_async(BGame.objects.get)(game_id=self.game_id)
+            player       = await sync_to_async(BPlayer.objects.get)(game= game, player_number=player_number)
+            player_qs    = await sync_to_async(BPlayer.objects.filter)(game=game)
+            player_count = await sync_to_async(player_qs.count)()
+            if data['type'] == "PASS":
+                player.info = "PASS"
+            if data['type'] == "BET":
+                bet = data['bet']
+                game.last_bet = data['bet']
+                player.info = str(bet)
+                game.playing = player.player_number
+            game.status = "TURN"
+            active_players = 0
+            await sync_to_async(player.save)()
+            for i in range(0, player_count):
+                player = await sync_to_async(BPlayer.objects.get)(game=game, player_number=i)
+                if player.info != "PASS":
+                    active_players += 1
+                    index = i
+
+            next_p = -1
+            for i in range(player_number + 1, player_number + player_count):
+                j = i % player_count
+                player = await sync_to_async(BPlayer.objects.get)(game=game, player_number=j)
+                if player.info != "PASS":
+                    next_p = j
+                    break
+                
+            await sync_to_async(game.save)()
+            await sync_to_async(player.save)()
+            if active_players > 1:
+                nickname = await sync_to_async(BPlayer.objects.get)(game=game, player_number=next_p)
+                json_data = json.dumps({
+                    "player_number": f"{(next_p)}",
+                    "last_bet": game.last_bet,
+                    "nickname": nickname.nickname
+                })
+
+                await self.channel_layer.group_send(self.game_name, {
+                    "type": "send_message",
+                    "event": "TURN",
+                    "message": json_data
+                })
+            else:
+                game.status = "END"
+                await sync_to_async(game.save)()
+                await self.channel_layer.group_send(self.game_name, {
+                    "type": "send_message",
+                    "event": "END",
+                })
+        elif event == "BEND":
+            print("BEND")
+            print("->")
+            data = json.loads(message)
+            game = await sync_to_async(BGame.objects.get)(game_id=self.game_id)
+            players = data['players']
+            game.status = "START"
+            for player in players:
+                plr = await sync_to_async(BPlayer.objects.get)(game = game, player_number=player['id'])
                 plr.points += player['points']
                 plr.info = ''
                 await sync_to_async(plr.save)()

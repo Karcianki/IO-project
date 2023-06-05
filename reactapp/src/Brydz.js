@@ -34,7 +34,8 @@ const GameBrydz = () => {
     const player_number = searchParams.get('player_number');
     const [whoseTurn, setWhoseTurn] = useState(0);
     const [lastBet, setLastBet] = useState(0);
-    const [bidValue, setBidValue] = useState(0);
+    const [color, setColorValue] = useState(0);
+    const [trick, setTrickValue] = useState(0);
     const [waitForStart, setWaitForStart] = useState(false);
     const [waitingForResults, setWaitingForResults] = useState(false);
     const [playerCounter, setPlayerCounter] = useState(0);
@@ -233,13 +234,26 @@ const GameBrydz = () => {
         gameBoard.send("BTURN", message);
     }
 
-    const onBidChange = (event) => {
-        //TU TRZEBA BĘDZIE NAPISAC 
-        setBidValue(event.target.value);
+    const handleNumberClick = (event) => {
+        // const id = event.target.id;
+        // console.log(id); 
+        // console.log(event.target.id);
+        setTrickValue(event.target.id);
+    }
+
+    const handleColorClick = (event) => {
+        // const id = event.target.id;
+        // console.log(id);  
+        // console.log(event);
+        // console.log(event.target.id);
+        setColorValue(event.target.id);
     }
 
     const onBidClick = (event) => {
-        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number )
+        // console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number );
+        console.log(lastBet)
+        let bidValue = parseInt(trick) + parseInt(color);
+        console.log(bidValue);
         if (whoseTurn != player_number || bidValue <= lastBet) {
             return;
         }
@@ -255,17 +269,17 @@ const GameBrydz = () => {
       console.log("winner: ");
       var gracz0Input = document.getElementById('Gracz0');
       var gracz1Input = document.getElementById('Gracz1');
-      var gracz2Input = document.getElementById('Gracz2');
-      var gracz3Input = document.getElementById('Gracz3');
+    //   var gracz2Input = document.getElementById('Gracz2');
+    //   var gracz3Input = document.getElementById('Gracz3');
       var gracz0Value = parseInt(gracz0Input.value, 10);
       var gracz1Value = parseInt(gracz1Input.value, 10);
-      var gracz2Value = parseInt(gracz2Input.value, 10);
-      var gracz3Value = parseInt(gracz3Input.value, 10);
+    //   var gracz2Value = parseInt(gracz2Input.value, 10);
+    //   var gracz3Value = parseInt(gracz3Input.value, 10);
       const players = [
           { id: 0, points: gracz0Value },
           { id: 1, points: gracz1Value },
-          { id: 2, points: gracz2Value },
-          { id: 3, points: gracz3Value },
+        //   { id: 2, points: gracz2Value },
+        //   { id: 3, points: gracz3Value },
         ];
       if (player_number == 0) {
           const message = JSON.stringify({
@@ -285,7 +299,6 @@ const GameBrydz = () => {
                 player: {player} <br />
                 number: {whoseTurn} <br />
                 Numer gry {game_id} <br />
-                {playerCounter}
             </div>
             <button onClick={toggleRules} type="submit" aria-label="info" className="game_button"><span className="fa-solid fa-question"></span></button>
       </header>
@@ -310,28 +323,31 @@ const GameBrydz = () => {
             </div>
       <div className="brydz opcje">
         <div className="duzy">
-          <button type="submit" className="game_button" id="pass"> Pass </button>
+          <button type="submit" className="game_button" id="pass" onClick={onPass} > Pass </button>
         </div>
+        {player_number == 0 && waitForStart == true &&
+            <button onClick={onStart} className="game_button brydz_button" type="submit" id="start">Start</button>
+        }
         <div className="wybor">
           <div className="lewy">
-            <button type="submit" className="game_button"> 1 </button>
-            <button type="submit" className="game_button"> 2 </button>
-            <button type="submit" className="game_button"> 3 </button>
-            <button type="submit" className="game_button"> 4 </button>
-            <button type="submit" className="game_button"> 5 </button>
-            <button type="submit" className="game_button"> 6 </button>
-            <button type="submit" className="game_button"> 7 </button>
+            <button type="submit" id="10" onClick={handleNumberClick} className="game_button"> 1 </button>
+            <button type="submit" id="20" onClick={handleNumberClick} className="game_button"> 2 </button>
+            <button type="submit" id="30" onClick={handleNumberClick} className="game_button"> 3 </button>
+            <button type="submit" id="40" onClick={handleNumberClick} className="game_button"> 4 </button>
+            <button type="submit" id="50" onClick={handleNumberClick} className="game_button"> 5 </button>
+            <button type="submit" id="60" onClick={handleNumberClick} className="game_button"> 6 </button>
+            <button type="submit" id="70" onClick={handleNumberClick} className="game_button"> 7 </button>
           </div>
           <div className="atut">
-            <button type="submit" className="game_button"> <img src={trefl} alt="trefl" width="30" height="30" /> </button>
-            <button type="submit" className="game_button"> <img src={karo} alt="karo" width="30" height="30" /> </button>
-            <button type="submit" className="game_button"> <img src={kier} alt="kier" width="30" height="30" /> </button>
-            <button type="submit" className="game_button"> <img src={pik} alt="pik" width="30" height="30" /> </button>
-            <button type="submit" className="game_button"> BA </button>
+            <button type="submit" onClick={handleColorClick} className="game_button"> <img src={trefl} alt="trefl" width="30" height="30"  id ="1" /> </button>
+            <button type="submit" onClick={handleColorClick} className="game_button"> <img src={karo} alt="karo" width="30" height="30" id="2"/> </button>
+            <button type="submit" onClick={handleColorClick} className="game_button"> <img src={kier} alt="kier" width="30" height="30" id="3"/> </button>
+            <button type="submit" onClick={handleColorClick} className="game_button"> <img src={pik} alt="pik" width="30" height="30" id="4"/> </button>
+            <button type="submit" id="5" onClick={handleColorClick} className="game_button"> BA </button>
           </div>
         </div>
         <div className="duzy">
-          <button type="submit" className="game_button" id="zatwierdz"> Zatwierdz </button>
+          <button type="submit" className="game_button" id="zatwierdz" onClick={onBidClick}> Zatwierdz </button>
         </div>
         <div className="duzy">
         <Link to='../'>
@@ -352,7 +368,7 @@ const GameBrydz = () => {
               <label htmlFor="Gracz1">Gracz2</label><br />
               <input type="number" id="Gracz1" name="Gracz1" required/><br /><br />
             </div>
-
+{/* 
             <div> 
               <label htmlFor="Gracz2">Gracz3</label><br />
               <input type="number" id="Gracz2" name="Gracz2" required/><br /><br />
@@ -361,7 +377,7 @@ const GameBrydz = () => {
             <div> 
               <label htmlFor="Gracz3">Gracz4</label><br />
               <input type="number" id="Gracz3" name="Gracz3" required/><br /><br />
-            </div>
+            </div> */}
             <button onClick={() => onSetPoints()} className="game_button tysiac_button" type="submit" id="start">Wprowadź wyniki</button> 
         </div>
       }
