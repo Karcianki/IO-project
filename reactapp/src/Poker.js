@@ -1,18 +1,18 @@
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/poker.css";
 import table from './static/images/stol.png';
-import {RulesPoker} from './Rules'
+import { RulesPoker } from './Rules'
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 
 export class Player extends Component {
     render() {
         return (
-            <div className={ JSON.parse(this.props.data).class } id={this.props.id} onClick={this.props.onClick}>
+            <div className={JSON.parse(this.props.data).class} id={this.props.id} onClick={this.props.onClick}>
                 <span className="fa-solid fa-circle-user ikona"></span>
                 <div className="dane">
-                    <div>{ JSON.parse(this.props.data).info }</div>
-                    <div>{ JSON.parse(this.props.data).nickname }</div>
-                    <div>{ JSON.parse(this.props.data).chips }</div>
+                    <div>{JSON.parse(this.props.data).info}</div>
+                    <div>{JSON.parse(this.props.data).nickname}</div>
+                    <div>{JSON.parse(this.props.data).chips}</div>
                 </div>
             </div>
         )
@@ -21,12 +21,12 @@ export class Player extends Component {
 
 const GamePoker = () => {
     const [showRules, setShowRules] = useState(false);
-    
+
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
     const player_number = searchParams.get('player_number');
     const [whoseTurn, setWhoseTurn] = useState(0);
-    const [player, setNickname ] = useState('') //domyslnie ustawic hosta
+    const [player, setNickname] = useState('') //domyslnie ustawic hosta
     const [lastBet, setLastBet] = useState(0);
     const [bidValue, setBidValue] = useState(0);
     const [waitForStart, setWaitForStart] = useState(false);
@@ -34,7 +34,7 @@ const GamePoker = () => {
     const [waitingForResults, setWaitingForResults] = useState(false);
     const [pot, setPot] = useState(0);
 
-    const MAX_PLAYERS=10; 
+    const MAX_PLAYERS = 10;
     const chips_per_player = 100;
 
     const default_player_data = {
@@ -83,7 +83,7 @@ const GamePoker = () => {
         };
 
         const quitButton = document.getElementById('quit');
-        quitButton.onclick = function() {
+        quitButton.onclick = function () {
             console.log("quitting");
             gameSocket.send(JSON.stringify({
                 "event": "QUIT",
@@ -96,7 +96,7 @@ const GamePoker = () => {
         }
 
         const gameBoard = document.getElementById('game_board');
-        gameBoard.send = function(event, message) {
+        gameBoard.send = function (event, message) {
             gameSocket.send(JSON.stringify({
                 "event": event,
                 "message": message,
@@ -120,27 +120,27 @@ const GamePoker = () => {
                 "Content-Type": "application/json",
             }
         })
-        .then((response) => {
-            if (response.status === 404) {
-                return null;
-            } else {
-                return response.json();
-            }
-        })
-        .then((data) => {
-            if (data) {
-                setWhoseTurn(data.player_number);
-                console.log(data);
-                setWaitForStart(data.status == "START");
-                setNextStage(data.status != "NEXT");
-                setWaitingForResults(data.status == "END");
-                setPot(data.pot);
-                setLastBet(data.last_bet);
-            }
-            else {
-                alert("Gra się zakończyła.");
-            }
-        })
+            .then((response) => {
+                if (response.status === 404) {
+                    return null;
+                } else {
+                    return response.json();
+                }
+            })
+            .then((data) => {
+                if (data) {
+                    setWhoseTurn(data.player_number);
+                    console.log(data);
+                    setWaitForStart(data.status == "START");
+                    setNextStage(data.status != "NEXT");
+                    setWaitingForResults(data.status == "END");
+                    setPot(data.pot);
+                    setLastBet(data.last_bet);
+                }
+                else {
+                    alert("Gra się zakończyła.");
+                }
+            })
     }
 
     const updatePlayers = () => {
@@ -150,28 +150,28 @@ const GamePoker = () => {
                 "Content-Type": "application/json",
             }
         })
-        .then((response) => {
-            if (response.status === 404) {
-                return null;
-            } else {
-                return response.json();
-            }
-        })
-        .then((data) => {
-            let newData = Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data)); 
-            if(data) {
-                for (let i = 0; i < data.length; i++) {
-                    let player_data = {
-                        "class": "gracz",
-                        "nickname": data[i].nickname,
-                        "chips": data[i].chips,
-                        "info": data[i].info,
-                    }
-                    newData[data[i].player_number] = JSON.stringify(player_data);
+            .then((response) => {
+                if (response.status === 404) {
+                    return null;
+                } else {
+                    return response.json();
                 }
-            }
-            setPlayerData(newData);    
-        })  
+            })
+            .then((data) => {
+                let newData = Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data));
+                if (data) {
+                    for (let i = 0; i < data.length; i++) {
+                        let player_data = {
+                            "class": "gracz",
+                            "nickname": data[i].nickname,
+                            "chips": data[i].chips,
+                            "info": data[i].info,
+                        }
+                        newData[data[i].player_number] = JSON.stringify(player_data);
+                    }
+                }
+                setPlayerData(newData);
+            })
     }
 
     useEffect(() => {
@@ -181,6 +181,15 @@ const GamePoker = () => {
     const toggleRules = () => {
         setShowRules(!showRules);
     };
+
+    const showResults = (message) => {
+        console.log(message);
+        message = JSON.parse(message);
+        var content = message['winner'] + '<br/><br/>';
+        document.getElementById('pot').style.display = "none";
+        document.getElementById('results').innerHTML = content;
+        document.getElementById('results_block').style.display = "block";
+      }
 
     const gameBoard = document.getElementById('game_board');
 
@@ -203,7 +212,7 @@ const GamePoker = () => {
             case "END":
                 break;
             case "END_GAME":
-                console.log("KONIEC");
+                showResults(message);
                 break;
             default:
                 console.log("No event");
@@ -252,7 +261,7 @@ const GamePoker = () => {
     }
 
     const onBidClick = (event) => {
-        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number  + lastBet)
+        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number + lastBet)
         if (whoseTurn != player_number || bidValue < lastBet) {
             return;
         }
@@ -266,7 +275,7 @@ const GamePoker = () => {
             "type": "BET",
             "bet": bidValue,
         });
-        gameBoard.send("TURN", message); 
+        gameBoard.send("TURN", message);
     }
 
     const playerButton = (clicked_player) => () => {
@@ -297,35 +306,35 @@ const GamePoker = () => {
             <div className="page_game">
                 <div className="plansza" id="game_board" game_id={game_id}>
                     <div className="rzad">
-                        <Player id="gracz1" data={playerData[1]} onClick={playerButton(1)}/> 
-                        <Player id="gracz4" data={playerData[2]} onClick={playerButton(2)}/>
-                        <Player id="gracz6" data={playerData[3]} onClick={playerButton(3)}/>
-                        <Player id="gracz8" data={playerData[4]} onClick={playerButton(4)}/>
+                        <Player id="gracz1" data={playerData[1]} onClick={playerButton(1)} />
+                        <Player id="gracz4" data={playerData[2]} onClick={playerButton(2)} />
+                        <Player id="gracz6" data={playerData[3]} onClick={playerButton(3)} />
+                        <Player id="gracz8" data={playerData[4]} onClick={playerButton(4)} />
                     </div>
                     <div className="rzad" id="ze_stolem">
                         <Player id="gracz0" data={playerData[0]} onClick={playerButton(0)} />
-                        <img src={table} alt="" className="stol"/>
-                        <Player id="gracz1" data={playerData[5]} onClick={playerButton(5)}/>
+                        <img src={table} alt="" className="stol" />
+                        <Player id="gracz1" data={playerData[5]} onClick={playerButton(5)} />
                     </div>
                     <div className="rzad">
-                        <Player id="gracz3" data={playerData[9]} onClick={playerButton(9)}/>
-                        <Player id="gracz5" data={playerData[8]} onClick={playerButton(8)}/>
-                        <Player id="gracz7" data={playerData[7]} onClick={playerButton(7)}/>
-                        <Player id="gracz9" data={playerData[6]} onClick={playerButton(6)}/>
+                        <Player id="gracz3" data={playerData[9]} onClick={playerButton(9)} />
+                        <Player id="gracz5" data={playerData[8]} onClick={playerButton(8)} />
+                        <Player id="gracz7" data={playerData[7]} onClick={playerButton(7)} />
+                        <Player id="gracz9" data={playerData[6]} onClick={playerButton(6)} />
                     </div>
                 </div>
 
-                <div className={showRules? "zasady show" : "zasady"}>
+                <div className={showRules ? "zasady show" : "zasady"}>
                     <RulesPoker />
                 </div>
 
                 <div className="opcje">
-                    <div className = "host" id="start">
-                    {/* {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>} */}
-                       {player_number == 0 && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
+                    <div className="host" id="start">
+                        {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
+                        {/* {player_number == 0 && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>} */}
                     </div>
-                    <div className = "host_next" id="next">
-                    {player_number == 0 && nextStage == false && <button onClick={onNext} className="game_button poker_button" type="submit" id="next">Next</button>}
+                    <div className="host_next" id="next">
+                        {player_number == 0 && nextStage == false && <button onClick={onNext} className="game_button poker_button" type="submit" id="next">Next</button>}
                     </div>
                     <button className="game_button poker_button" type="submit" id="pass" onClick={onPass}>Pass</button>
                     <button className="game_button poker_button" type="submit" id="check" onClick={onCheck}>Sprawdź</button>
@@ -337,11 +346,19 @@ const GamePoker = () => {
                 </div>
             </div>
 
-            <div className="pot">
+            <div className="pot" id="pot">
                 Pot: {pot}
             </div>
 
-        </div>        
+            <div className="wyniki" id="results_block">
+                <p>Zwycięzca</p>
+                <div id="results"></div>
+                <Link to='../'>
+                    <button className="game_button" type="submit" id="quit">Wyjdź</button>
+                </Link>
+            </div>
+
+        </div>
     )
 }
 

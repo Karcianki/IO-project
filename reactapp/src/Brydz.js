@@ -8,7 +8,7 @@ import pik from './static/images/spades.png';
 import { RulesBrydz } from './Rules'
 import { Link, useSearchParams } from 'react-router-dom';
 
-class TPlayer extends Component {
+class BPlayer extends Component {
   render() {
     return (
       <div className={JSON.parse(this.props.data).class} id={this.props.id}>
@@ -35,8 +35,8 @@ const GameBrydz = () => {
   const [trick, setTrickValue] = useState(0);
   const [waitForStart, setWaitForStart] = useState(false);
   const [waitingForResults, setWaitingForResults] = useState(false);
-  const [playerCounter, setPlayerCounter] = useState(0);
-  const [isSetPlayerCounter, setIsSetPlayerCounter] = useState(false);
+  const [playerCounter, seBPlayerCounter] = useState(0);
+  const [isSeBPlayerCounter, setIsSeBPlayerCounter] = useState(false);
 
   const default_player_data = {
     class: "gracz hide",
@@ -45,7 +45,7 @@ const GameBrydz = () => {
     last_bet: 0,
   }
   const MAX_PLAYERS = 4;
-  const [playerData, setPlayerData] = useState(
+  const [playerData, seBPlayerData] = useState(
     Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data))
   );
   const django_host = 'localhost:8000'
@@ -169,7 +169,7 @@ const GameBrydz = () => {
             newData[data[i].player_number] = JSON.stringify(player_data);
           }
         }
-        setPlayerData(newData);
+        seBPlayerData(newData);
       })
   }
 
@@ -180,6 +180,25 @@ const GameBrydz = () => {
   const toggleRules = () => {
     setShowRules(!showRules);
   };
+
+  const showResults = (message) => {
+    message = JSON.parse(message);
+    var content = "<table>";
+    message = message['results'];
+    console.log(message);
+    for (let i = 0; i < message.length; i+= 2) {
+      content += "<tr><th>";
+      content += i/2;
+      content += "</th><th>";
+      content += message[i]['player_name'] + ' i ' + message[i+1]['player_name'];
+      content += "</th><th>";
+      content += message[i]['points'];
+      content += "</th></tr>";
+    }
+    content += "</table>";
+    document.getElementById('results').innerHTML = content;
+    document.getElementById('results_block').style.display = "block";
+  }
 
   const gameBoard = document.getElementById('game_board');
 
@@ -194,22 +213,23 @@ const GameBrydz = () => {
         // console.log(info.player_count);
         let nickname = info.nickname;
         setNickname(nickname);
-        if (!isSetPlayerCounter && info.player_count != null) {
+        if (!isSeBPlayerCounter && info.player_count != null) {
           // console.log("wszedlem");
-          setPlayerCounter(info.player_count);
-          setIsSetPlayerCounter(true);
+          seBPlayerCounter(info.player_count);
+          setIsSeBPlayerCounter(true);
         }
         break;
       case "START":
         setWaitForStart(true);
-        setPlayerCounter()
+        seBPlayerCounter()
         break;
       case "END":
         // console.log("tak");
         break;
       case "END_GAME":
-        console.log("Koniec"); 
-    
+        showResults(message);
+        console.log("Koniec");
+
       default:
         console.log("No event");
     }
@@ -291,15 +311,15 @@ const GameBrydz = () => {
 
   const onSetPoints = () => {
     console.log("winner: ");
-    var gracz0Input = document.getElementById('Gracz0');
-    var gracz1Input = document.getElementById('Gracz1');
-    var gracz0Value = parseInt(gracz0Input.value, 10);
-    var gracz1Value = parseInt(gracz1Input.value, 10);
+    var para0Input = document.getElementById('Para0');
+    var para1Input = document.getElementById('Para1');
+    var para0Value = parseInt(para0Input.value, 10);
+    var para1Value = parseInt(para1Input.value, 10);
     const players = [
-      { id: 0, points: gracz0Value },
-      { id: 1, points: gracz1Value },
-      { id: 2, points: gracz0Value },
-      { id: 3, points: gracz1Value },
+      { id: 0, points: para0Value },
+      { id: 1, points: para1Value },
+      { id: 2, points: para0Value },
+      { id: 3, points: para1Value },
     ];
     if (player_number == 0) {
       const message = JSON.stringify({
@@ -308,6 +328,14 @@ const GameBrydz = () => {
       gameBoard.send("BEND", message);
     }
   };
+
+  const pairName = (index) => {
+    var name = "";
+    name += JSON.parse(playerData[0 + index]).nickname;
+    name += " i ";
+    name += JSON.parse(playerData[2 + index]).nickname;
+    return name;
+  }
 
   return (
     <div>
@@ -326,15 +354,15 @@ const GameBrydz = () => {
       <div className="page_game" >
         <div className="plansza" id="game_board" game_id={game_id}>
           <div className="rzad">
-            <TPlayer id="gracz1" data={playerData[1]} />
+            <BPlayer id="gracz1" data={playerData[1]} />
           </div>
           <div className="rzad" id="ze_stolem">
-            <TPlayer id="gracz0" data={playerData[0]} />
+            <BPlayer id="gracz0" data={playerData[0]} />
             <img src={table} alt="" className="stol" />
-            <TPlayer id="gracz2" data={playerData[2]} />
+            <BPlayer id="gracz2" data={playerData[2]} />
           </div>
           <div className="rzad">
-            <TPlayer id="gracz3" data={playerData[3]} />
+            <BPlayer id="gracz3" data={playerData[3]} />
           </div>
         </div>
       </div>
@@ -369,7 +397,7 @@ const GameBrydz = () => {
           </div>
         </div>
         <div className="duzy">
-          <button type="submit" className="game_button" id="zatwierdz" onClick={onBidClick} style={{display:'none'}}> Zatwierdź </button>
+          <button type="submit" className="game_button" id="zatwierdz" onClick={onBidClick} style={{ display: 'none' }}> Zatwierdź </button>
         </div>
         <div className="duzy">
           <Link to='../'>
@@ -382,26 +410,23 @@ const GameBrydz = () => {
         <div class="tysiac_wyniki">
           <p>Wprowadź wyniki</p>
           <div>
-            <label htmlFor="Gracz0">Gracz1</label><br />
-            <input type="number" id="Gracz0" name="Gracz0" required /> <br /><br />
-          </div>
-
-          <div>
-            <label htmlFor="Gracz1">Gracz2</label><br />
-            <input type="number" id="Gracz1" name="Gracz1" required /><br /><br />
+            <label htmlFor="Para2">{pairName(0)}</label><br />
+            <input type="number" id="Para0" name="Para0" required /> <br /><br />
           </div>
           <div>
-            <label htmlFor="Gracz2">Gracz3</label><br />
-            <input type="number" id="Gracz2" name="Gracz2" required /><br /><br />
-          </div>
-
-          <div>
-            <label htmlFor="Gracz3">Gracz4</label><br />
-            <input type="number" id="Gracz3" name="Gracz3" required /><br /><br />
+            <label htmlFor="Para1">{pairName(1)}</label><br />
+            <input type="number" id="Para1" name="Para1" required /><br /><br />
           </div>
           <button onClick={() => onSetPoints()} className="game_button tysiac_button" type="submit" id="start">Wprowadź wyniki</button>
         </div>
       }
+      <div className="wyniki" id="results_block">
+        <p>Wyniki</p>
+        <div id="results"></div>
+        <Link to='../'>
+          <button className="game_button" type="submit" id="quit">Wyjdź</button>
+        </Link>
+      </div>
     </div>
   );
 }

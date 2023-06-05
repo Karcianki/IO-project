@@ -362,7 +362,7 @@ const GameTysiac = () => {
                     <button onClick={() => onSetPoints()} className="game_button tysiac_button" type="submit" id="start">Wprowadź wyniki</button>
                 </div>
             }
-            <div class="wyniki" id="results_block">
+            <div className="wyniki" id="results_block">
                 <p>Wyniki</p>
                 <div id="results"></div>
                 <Link to='../'>
