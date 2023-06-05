@@ -202,6 +202,9 @@ const GamePoker = () => {
                 break;
             case "END":
                 break;
+            case "END_GAME":
+                console.log("KONIEC");
+                break;
             default:
                 console.log("No event");
         }
@@ -318,7 +321,8 @@ const GamePoker = () => {
 
                 <div className="opcje">
                     <div className = "host" id="start">
-                       {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
+                    {/* {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>} */}
+                       {player_number == 0 && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
                     </div>
                     <div className = "host_next" id="next">
                     {player_number == 0 && nextStage == false && <button onClick={onNext} className="game_button poker_button" type="submit" id="next">Next</button>}

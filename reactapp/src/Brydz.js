@@ -207,6 +207,9 @@ const GameBrydz = () => {
       case "END":
         // console.log("tak");
         break;
+      case "END_GAME":
+        console.log("Koniec"); 
+    
       default:
         console.log("No event");
     }
@@ -290,17 +293,13 @@ const GameBrydz = () => {
     console.log("winner: ");
     var gracz0Input = document.getElementById('Gracz0');
     var gracz1Input = document.getElementById('Gracz1');
-    var gracz2Input = document.getElementById('Gracz2');
-    var gracz3Input = document.getElementById('Gracz3');
     var gracz0Value = parseInt(gracz0Input.value, 10);
     var gracz1Value = parseInt(gracz1Input.value, 10);
-    var gracz2Value = parseInt(gracz2Input.value, 10);
-    var gracz3Value = parseInt(gracz3Input.value, 10);
     const players = [
       { id: 0, points: gracz0Value },
       { id: 1, points: gracz1Value },
-      { id: 2, points: gracz2Value },
-      { id: 3, points: gracz3Value },
+      { id: 2, points: gracz0Value },
+      { id: 3, points: gracz1Value },
     ];
     if (player_number == 0) {
       const message = JSON.stringify({
