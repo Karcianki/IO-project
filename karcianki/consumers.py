@@ -227,13 +227,13 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 if player.chips == 0:
                     player.info="OUT"
                     await sync_to_async(player.save)()
-                else :
+                elif player.chips > 0 :
                     counter = counter + 1
                     winner = player
 
             if counter == 1:
                 json_data = json.dumps({
-                    "results": winner
+                    "winner": winner.nickname
                 })
                 await self.channel_layer.group_send(self.game_name, {
                     "type": "send_message",
