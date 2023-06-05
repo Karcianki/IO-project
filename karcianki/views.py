@@ -2,7 +2,7 @@
 from django.shortcuts import get_object_or_404
 import json
 
-from karcianki.models import Game, Player, TGame, TPlayer
+from karcianki.models import Game, Player, TGame, TPlayer, BGame, BPlayer
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -23,6 +23,12 @@ def game_data(request, game_id):
     except:
         None
     
+    try:
+        game = get_object_or_404(BGame, game_id=game_id)
+        serializer = BGameSerializer(game)
+    except:
+        None
+    
     if request.method == 'GET':
         return Response(serializer.data)
 
@@ -39,6 +45,13 @@ def players_data(request, game_id):
         game = get_object_or_404(TGame, game_id=game_id)
         players = TPlayer.objects.filter(game=game)
         serializer = TPlayerSerializer(players, many=True)
+    except:
+        None
+
+    try:
+        game = get_object_or_404(BGame, game_id=game_id)
+        players = BPlayer.objects.filter(game=game)
+        serializer = BPlayerSerializer(players, many=True)
     except:
         None
 
@@ -73,6 +86,15 @@ def create_game(request):
         
         serializer = TGameSerializer(game)
 
+    elif game_type == "BRYDZ":
+        game = BGame.create()
+        game.save()
+
+        player = BPlayer(nickname=nickname, game=game, player_number=0)
+        player.save()
+        
+        serializer = BGameSerializer(game)
+
     if request.method == 'POST':
             return Response(serializer.data)
     
@@ -97,6 +119,13 @@ def join_game(request):
         player = TPlayer(nickname=nickname, game=game, player_number=players)
         player.save()
         serializer = TPlayerSerializer(player)
+    elif game_type == "BRYDZ":
+        game = get_object_or_404(BGame, game_id=game_id)
+
+        players = BPlayer.objects.filter(game=game).count()
+        player = BPlayer(nickname=nickname, game=game, player_number=players)
+        player.save()
+        serializer = BPlayerSerializer(player)
 
     if request.method == 'POST':
         return Response(serializer.data)

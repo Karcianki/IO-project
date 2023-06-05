@@ -74,3 +74,37 @@ class TPlayer(models.Model):
 
     def __str__(self):
         return str(self.nickname)
+
+class BGame(models.Model):
+    """Class Game provides database model for created games."""
+    MIN_ID  = 100000
+    MAX_ID  = 999999
+    game_id = models.IntegerField(primary_key=True)
+    status = models.CharField(max_length=5, choices=[('START', 'START'), 
+                                                     ('TURN', 'TURN'),
+                                                     ('END', 'END')], default='START') 
+    last_bet  = models.IntegerField(default=100)
+    player100 = models.IntegerField(default=0)
+    playing   = models.IntegerField(default=0)
+    player_number= models.IntegerField(default=0)
+
+    @classmethod
+    def create(cls):
+        """Function create creates new game with unique game_id."""
+        new_id = randint(BGame.MIN_ID, BGame.MAX_ID)
+        game = BGame(game_id=new_id)
+        return game
+
+    def str(self):
+        return str(self.game_id)
+
+class BPlayer(models.Model):
+    """Class Player provides database model for players."""
+    nickname = models.CharField(max_length=10)
+    game = models.ForeignKey(BGame, on_delete=models.CASCADE)
+    player_number = models.IntegerField(default=0)
+    points = models.IntegerField(default=0)
+    info = models.CharField(max_length=15, default="")
+
+    def __str__(self):
+        return str(self.nickname)

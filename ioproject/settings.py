@@ -16,7 +16,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+os.environ.setdefault('DATABASE_URL', 'sqlite:///db.sqlite3')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -29,9 +29,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-o$00%)8rn1gscz
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-# ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['io-project-production.up.railway.app', '127.0.0.1']
-# CSRF_TRUSTED_ORIGINS = ['https://io-project-production.up.railway.app']
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'corsheaders',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -132,7 +132,7 @@ USE_TZ = True
 STATIC_ROOT = BASE_DIR / 'static_files'
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -161,7 +161,7 @@ CHANNEL_LAYERS = {
 }
 
 # Probably only for testing
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Update database configuration from $DATABASE_URL.
 import dj_database_url
