@@ -1,18 +1,18 @@
 import React, { Component, useEffect, useState } from "react";
 import "./static/styles/tysiac.css";
 import table from './static/images/stol.png';
-import {RulesTysiac} from './Rules'
-import { Link, useSearchParams} from 'react-router-dom';
+import { RulesTysiac } from './Rules'
+import { Link, useSearchParams } from 'react-router-dom';
 
 export class TPlayer extends Component {
     render() {
         return (
-            <div className={ JSON.parse(this.props.data).class } id={this.props.id}>
+            <div className={JSON.parse(this.props.data).class} id={this.props.id}>
                 <span className="fa-solid fa-circle-user ikona"></span>
                 <div className="dane">
-                    <div>{ JSON.parse(this.props.data).info }</div>
-                    <div>{ JSON.parse(this.props.data).nickname }</div>
-                    <div>{ JSON.parse(this.props.data).points }</div>
+                    <div>{JSON.parse(this.props.data).info}</div>
+                    <div>{JSON.parse(this.props.data).nickname}</div>
+                    <div>{JSON.parse(this.props.data).points}</div>
                 </div>
             </div>
         )
@@ -21,10 +21,10 @@ export class TPlayer extends Component {
 const GameTysiac = () => {
 
     const [showRules, setShowRules] = useState(false);
-    
+
     const [searchParams] = useSearchParams();
     const game_id = searchParams.get('game_id');
-    const [player, setNickname ] = useState('')
+    const [player, setNickname] = useState('')
     const player_number = searchParams.get('player_number');
     const [whoseTurn, setWhoseTurn] = useState(0);
     const [lastBet, setLastBet] = useState(0);
@@ -32,15 +32,15 @@ const GameTysiac = () => {
     const [waitForStart, setWaitForStart] = useState(false);
     const [waitingForResults, setWaitingForResults] = useState(false);
     const [playerCounter, setPlayerCounter] = useState(0);
-    const [isSetPlayerCounter,setIsSetPlayerCounter] = useState(false);
- 
+    const [isSetPlayerCounter, setIsSetPlayerCounter] = useState(false);
+
     const default_player_data = {
         class: "gracz hide",
         nickname: "",
         points: 0,
         last_bet: 0,
     }
-    const MAX_PLAYERS=4; 
+    const MAX_PLAYERS = 4;
     const [playerData, setPlayerData] = useState(
         Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data))
     );
@@ -79,7 +79,7 @@ const GameTysiac = () => {
         };
 
         const quitButton = document.getElementById('quit');
-        quitButton.onclick = function() {
+        quitButton.onclick = function () {
             console.log("quitting");
             gameSocket.send(JSON.stringify({
                 "event": "QUIT",
@@ -92,7 +92,7 @@ const GameTysiac = () => {
         }
 
         const gameBoard = document.getElementById('game_board');
-        gameBoard.send = function(event, message) {
+        gameBoard.send = function (event, message) {
             gameSocket.send(JSON.stringify({
                 "event": event,
                 "message": message,
@@ -116,24 +116,24 @@ const GameTysiac = () => {
                 "Content-Type": "application/json",
             }
         })
-        .then((response) => {
-            if (response.status === 404) {
-                return null;
-            } else {
-                return response.json();
-            }
-        })
-        .then((data) => {
-            if (data) {
-                console.log(data);
-                setWaitForStart(data.status == "START");
-                setLastBet(data.last_bet);
-                setWaitingForResults(data.status == "END");
-            }
-            else {
-                alert("Gra się zakończyła.");
-            }
-        })
+            .then((response) => {
+                if (response.status === 404) {
+                    return null;
+                } else {
+                    return response.json();
+                }
+            })
+            .then((data) => {
+                if (data) {
+                    console.log(data);
+                    setWaitForStart(data.status == "START");
+                    setLastBet(data.last_bet);
+                    setWaitingForResults(data.status == "END");
+                }
+                else {
+                    alert("Gra się zakończyła.");
+                }
+            })
     }
 
     const updatePlayers = () => {
@@ -143,30 +143,30 @@ const GameTysiac = () => {
                 "Content-Type": "application/json",
             }
         })
-        .then((response) => {
-            if (response.status === 404) {
-                return null;
-            } else {
-                return response.json();
-            }
-        })
-        .then((data) => {
-            let newData = Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data)); 
-            if(data) {
-                for (let i = 0; i < data.length; i++) {
-                    let player_data = {
-                        'nickname' :data[i].nickname,
-                        'game' : data[i].game,
-                        'player_number' : data[i].player_number,
-                        'points' : data[i].points,
-                        'info': data[i].info,
-                        'class': "gracz"
-                    }
-                    newData[data[i].player_number] = JSON.stringify(player_data);
+            .then((response) => {
+                if (response.status === 404) {
+                    return null;
+                } else {
+                    return response.json();
                 }
-            }
-            setPlayerData(newData);    
-        })  
+            })
+            .then((data) => {
+                let newData = Array(MAX_PLAYERS).fill(JSON.stringify(default_player_data));
+                if (data) {
+                    for (let i = 0; i < data.length; i++) {
+                        let player_data = {
+                            'nickname': data[i].nickname,
+                            'game': data[i].game,
+                            'player_number': data[i].player_number,
+                            'points': data[i].points,
+                            'info': data[i].info,
+                            'class': "gracz"
+                        }
+                        newData[data[i].player_number] = JSON.stringify(player_data);
+                    }
+                }
+                setPlayerData(newData);
+            })
     }
 
     useEffect(() => {
@@ -179,6 +179,25 @@ const GameTysiac = () => {
 
     const gameBoard = document.getElementById('game_board');
 
+    const showResults = (message) => {
+        message = JSON.parse(message);
+        var content = "<table>";
+        message = message['results'];
+        console.log(message);
+        for (let i = 0; i < message.length; i++) {
+            content += "<tr><th>";
+            content += message[i]['position'];
+            content += "</th><th>";
+            content += message[i]['player_name'];
+            content += "</th><th>";
+            content += message[i]['points'];
+            content += "</th></tr>";
+        }
+        content += "</table>";
+        document.getElementById('results').innerHTML = content;
+        document.getElementById('results_block').style.display = "block";
+    }
+
     const receive = (event, message) => {
         console.log(event + " -> " + message);
         updateState();
@@ -190,7 +209,7 @@ const GameTysiac = () => {
                 console.log(info.player_count);
                 let nickname = info.nickname;
                 setNickname(nickname);
-                if(!isSetPlayerCounter && info.player_count != null){
+                if (!isSetPlayerCounter && info.player_count != null) {
                     console.log("wszedlem");
                     setPlayerCounter(info.player_count);
                     setIsSetPlayerCounter(true);
@@ -204,9 +223,9 @@ const GameTysiac = () => {
                 console.log("tak");
                 break;
             case "END_GAME":
-                // let info1 = JSON.parse(message);
-                // console.log(info1);
+                showResults(message);
                 console.log("KONIEC");
+                break;
             default:
                 console.log("No event");
         }
@@ -236,7 +255,7 @@ const GameTysiac = () => {
     }
 
     const onBidClick = (event) => {
-        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number )
+        console.log("bid " + bidValue + ' ' + whoseTurn + ' ' + player_number)
         if (whoseTurn != player_number || bidValue <= lastBet) {
             return;
         }
@@ -245,7 +264,7 @@ const GameTysiac = () => {
             "type": "BET",
             "bet": bidValue,
         });
-        gameBoard.send("TTURN", message); 
+        gameBoard.send("TTURN", message);
     }
 
     const onSetPoints = () => {
@@ -257,59 +276,59 @@ const GameTysiac = () => {
         const players = [
             { id: 0, points: gracz0Value },
             { id: 1, points: gracz1Value },
-          ];
-        if (playerCounter == 3){
+        ];
+        if (playerCounter == 3) {
             var gracz2Input = document.getElementById('Gracz2');
             var gracz2Value = parseInt(gracz2Input.value, 10);
-            players.push( { id: 2, points: gracz2Value})
+            players.push({ id: 2, points: gracz2Value })
         }
         console.log(players);
         if (player_number == 0) {
             const message = JSON.stringify({
-                "players": players, 
+                "players": players,
             });
             gameBoard.send("TEND", message);
         }
     };
-    
+
     return (
         <div>
-          <header>
-            <div>
-            TYSIĄC
-            </div>
-            <div className="game_header">
-                player: {player} <br />
-                number: {whoseTurn} <br />
-                Numer gry {game_id} <br />
-                {playerCounter}
-            </div>
-            <button onClick={toggleRules} type="submit" aria-label="info" className="game_button"><span className="fa-solid fa-question"></span></button>
-          </header>
-          <div className="page_game">
-            <div className="plansza" id="game_board" game_id={game_id}>
-                <div className="rzad">
-                    <TPlayer id="gracz1" data={playerData[1]} /> 
+            <header>
+                <div>
+                    TYSIĄC
                 </div>
-                <div className="rzad" id="ze_stolem">
-                    <TPlayer id="gracz0" data={playerData[0]} />
-                    <img src={table} alt="" className="stol"/>
-                    <TPlayer id="gracz2" data={playerData[2]} />
+                <div className="game_header">
+                    player: {player} <br />
+                    number: {whoseTurn} <br />
+                    Numer gry {game_id} <br />
+                    {playerCounter}
                 </div>
-                <div className="rzad">
-                    <TPlayer id="gracz3" data={playerData[3]} />
+                <button onClick={toggleRules} type="submit" aria-label="info" className="game_button"><span className="fa-solid fa-question"></span></button>
+            </header>
+            <div className="page_game">
+                <div className="plansza" id="game_board" game_id={game_id}>
+                    <div className="rzad">
+                        <TPlayer id="gracz1" data={playerData[1]} />
+                    </div>
+                    <div className="rzad" id="ze_stolem">
+                        <TPlayer id="gracz0" data={playerData[0]} />
+                        <img src={table} alt="" className="stol" />
+                        <TPlayer id="gracz2" data={playerData[2]} />
+                    </div>
+                    <div className="rzad">
+                        <TPlayer id="gracz3" data={playerData[3]} />
                     </div>
                 </div>
             </div>
-            <div className={showRules? "zasady show" : "zasady"}>
-                    <RulesTysiac />
+            <div className={showRules ? "zasady show" : "zasady"}>
+                <RulesTysiac />
             </div>
             <div className="opcje">
-                <div className = "host" id="start">
+                <div className="host" id="start">
                     {player_number == 0 && waitForStart == true &&
-                     <button onClick={onStart} className="game_button tysiac_button" type="submit" id="start">Start</button>
-                     }
-                        
+                        <button onClick={onStart} className="game_button tysiac_button" type="submit" id="start">Start</button>
+                    }
+
                 </div>
                 {/* <button className="game_button tysiac_button" type="submit" id="pass" onClick={() => playerButton()}>wyniki</button> */}
                 <button className="game_button tysiac_button" type="submit" id="pass" onClick={onPass}>Pass</button>
@@ -319,31 +338,38 @@ const GameTysiac = () => {
                     <button className="game_button tysiac_button" type="submit" id="quit">Wyjdź</button>
                 </Link>
             </div>
-            {player_number == 0 && waitingForResults == true &&  
-            <div class="tysiac_wyniki">
-                <p>Wprowadź wyniki</p>
+            {player_number == 0 && waitingForResults == true &&
+                <div class="tysiac_wyniki">
+                    <p>Wprowadź wyniki</p>
 
-                <div>
-                <label htmlFor="Gracz0">Gracz1</label><br />
-                <input type="number" id="Gracz0" name="Gracz0" required /> <br /><br />
+                    <div>
+                        <label htmlFor="Gracz0">Gracz1</label><br />
+                        <input type="number" id="Gracz0" name="Gracz0" required /> <br /><br />
+                    </div>
+
+                    <div>
+                        <label htmlFor="Gracz1">Gracz2</label><br />
+                        <input type="number" id="Gracz1" name="Gracz1" required /><br /><br />
+                    </div>
+
+                    {playerCounter == 3 &&
+                        <div>
+                            <label htmlFor="Gracz2">Gracz3</label><br />
+                            <input type="number" id="Gracz2" name="Gracz2" required /><br /><br />
+                        </div>
+                    }
+
+                    <button onClick={() => onSetPoints()} className="game_button tysiac_button" type="submit" id="start">Wprowadź wyniki</button>
                 </div>
-
-                <div> 
-                <label htmlFor="Gracz1">Gracz2</label><br />
-                <input type="number" id="Gracz1" name="Gracz1" required/><br /><br />
-                </div>
-
-                {playerCounter == 3 &&
-                <div>
-                <label htmlFor="Gracz2">Gracz3</label><br />
-                <input type="number" id="Gracz2" name="Gracz2" required/><br /><br />
-                </div>
-                }
-
-                <button onClick={() => onSetPoints()} className="game_button tysiac_button" type="submit" id="start">Wprowadź wyniki</button> 
-            </div>
             }
+            <div class="wyniki" id="results_block">
+                <p>Wyniki</p>
+                <div id="results"></div>
+                <Link to='../'>
+                    <button className="game_button tysiac_button" type="submit" id="quit">Wyjdź</button>
+                </Link>
+            </div>
         </div>
-      );
+    );
 }
 export default GameTysiac;
