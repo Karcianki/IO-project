@@ -329,9 +329,15 @@ const GamePoker = () => {
                 </div>
 
                 <div className="opcje">
+<<<<<<< HEAD
                     <div className="host" id="start">
                         {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
                         {/* {player_number == 0 && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>} */}
+=======
+                    <div className = "host" id="start">
+                    {player_number == 0 && waitForStart == true && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>}
+                       {/* {player_number == 0 && <button onClick={onStart} className="game_button poker_button" type="submit" id="start">Start</button>} */}
+>>>>>>> 169b52a81aff97544779c586bdd96a579905d7c6
                     </div>
                     <div className="host_next" id="next">
                         {player_number == 0 && nextStage == false && <button onClick={onNext} className="game_button poker_button" type="submit" id="next">Next</button>}
