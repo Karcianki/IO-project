@@ -198,12 +198,15 @@ const GameTysiac = () => {
                 break;
             case "START":
                 setWaitForStart(true);
-                // let info = JSON.parse(message);
                 setPlayerCounter()
                 break;
             case "END":
                 console.log("tak");
                 break;
+            case "END_GAME":
+                // let info1 = JSON.parse(message);
+                // console.log(info1);
+                console.log("KONIEC");
             default:
                 console.log("No event");
         }

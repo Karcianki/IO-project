@@ -347,19 +347,39 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                     "event": "END",
                 })
         elif event == "TEND":
-            print("->")
             data = json.loads(message)
             game = await sync_to_async(TGame.objects.get)(game_id=self.game_id)
             players = data['players']
             game.status = "START"
+            end = 0
+            players_points = []
             for player in players:
                 plr = await sync_to_async(TPlayer.objects.get)(game = game, player_number=player['id'])
                 plr.points += player['points']
+                if (plr.points >= 1000 ):
+                    end = 1
                 plr.info = ''
                 await sync_to_async(plr.save)()
+                players_points.append({'player_name': plr.nickname, 'points': plr.points})
 
-            await sync_to_async(game.save)()
-            await self.channel_layer.group_send(self.game_name, {
+            if end == 1:
+                players_points.sort(key=lambda x: x['points'], reverse=True)
+                for i, player in enumerate(players_points):
+                    player['position'] = i + 1
+
+                await sync_to_async(game.save)()
+                json_data = json.dumps({
+                    "results": players_points
+                })
+                await self.channel_layer.group_send(self.game_name, {
+                    "type": "send_message",
+                    "event": "END_GAME",
+                    "message": json_data
+                })
+
+            else:
+                await sync_to_async(game.save)()
+                await self.channel_layer.group_send(self.game_name, {
                     "type": "send_message",
                     "event": "START",
                 })
