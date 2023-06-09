@@ -227,11 +227,7 @@ class KarciankiConsumer(AsyncJsonWebsocketConsumer):
                 if player.chips == 0:
                     player.info="OUT"
                     await sync_to_async(player.save)()
-<<<<<<< HEAD
                 elif player.chips > 0:
-=======
-                elif player.chips > 0 :
->>>>>>> 169b52a81aff97544779c586bdd96a579905d7c6
                     counter = counter + 1
                     winner = player
 
