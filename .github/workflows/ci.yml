@@ -28,10 +28,10 @@ jobs:
     - uses: browser-actions/setup-firefox@v1
     - name: run server
       run: |
-        python3 manage.py runserver & sleep 10
+        python3 manage.py runserver &
     - name: run tests
       run: |
-        yarn test
+        sleep 5 && yarn test
     - name: Upload coverage reports to Codecov
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
